@@ -3,6 +3,7 @@
 
 @theme {
 	--color-scheme: light dark;
+	--font-family: "Inconsolata", monospace;
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -14,6 +15,13 @@
 
 :root.dark {
 	color-scheme: dark;
+}
+
+/* Apply Inconsolata font globally */
+body {
+	font-family: "Inconsolata", monospace;
+	font-optical-sizing: auto;
+	font-variation-settings: "wdth" 100;
 }
 
 /* Optional: Add smooth transitions for theme changes */
