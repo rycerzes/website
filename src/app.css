@@ -1,2 +1,22 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--color-scheme: light dark;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Theme base styles */
+:root {
+	color-scheme: light;
+}
+
+:root.dark {
+	color-scheme: dark;
+}
+
+/* Optional: Add smooth transitions for theme changes */
+* {
+	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
