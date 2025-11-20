@@ -1,13 +1,14 @@
 <script lang="ts">
 	import './layout.css';
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import favicon from '$lib/assets/favicon.ico';
 	import ThemeToggle from '$lib/ThemeToggle.svelte';
 
 	let { children } = $props();
 </script>
 
 <svelte:head>
+	<title>swappy</title>
 	<link rel="icon" href={favicon} />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
