@@ -18,10 +18,15 @@
 	/>
 </svelte:head>
 
-<div class="min-h-screen" style="background: var(--background); color: var(--foreground);">
+<div
+	class="flex min-h-screen flex-col"
+	style="background: var(--background); color: var(--foreground);"
+>
 	<header class="fixed top-4 right-4 z-50">
 		<ThemeToggle />
 	</header>
 
-	{@render children()}
+	<main class="container flex-1 px-4 pt-24">
+		{@render children()}
+	</main>
 </div>
