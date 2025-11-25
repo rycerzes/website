@@ -3,6 +3,7 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.ico';
 	import ThemeToggle from '$lib/ThemeToggle.svelte';
+	import CommandPalette from '$lib/components/CommandPalette.svelte';
 
 	let { children } = $props();
 </script>
@@ -25,6 +26,8 @@
 	<header class="fixed top-4 right-4 z-50">
 		<ThemeToggle />
 	</header>
+
+	<CommandPalette />
 
 	<main class="container flex-1 px-4 pt-24">
 		{@render children()}
