@@ -10,7 +10,20 @@ const config = {
 		vitePreprocess(),
 		mdsvex({
 			extensions: ['.md', '.svx', '.mdx']
-		})
+		}),
+		{
+			name: 'mdsvex-deprecation-fix',
+			markup({ content, filename }) {
+				if (
+					filename &&
+					(filename.endsWith('.md') || filename.endsWith('.svx') || filename.endsWith('.mdx'))
+				) {
+					return {
+						code: content.replace('context="module"', 'module')
+					};
+				}
+			}
+		}
 	],
 	kit: {
 		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
