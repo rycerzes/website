@@ -2,141 +2,74 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-	--color-scheme: light dark;
-	--font-family: 'Inconsolata', monospace;
-
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
-	--color-card: var(--card);
-	--color-card-foreground: var(--card-foreground);
-	--color-popover: var(--popover);
-	--color-popover-foreground: var(--popover-foreground);
-	--color-primary: var(--primary);
-	--color-primary-foreground: var(--primary-foreground);
-	--color-secondary: var(--secondary);
-	--color-secondary-foreground: var(--secondary-foreground);
-	--color-muted: var(--muted);
-	--color-muted-foreground: var(--muted-foreground);
-	--color-accent: var(--accent);
-	--color-accent-foreground: var(--accent-foreground);
-	--color-destructive: var(--destructive);
-	--color-destructive-foreground: var(--destructive-foreground);
-	--color-border: var(--border);
-	--color-input: var(--input);
-	--color-ring: var(--ring);
-	--color-chart-1: var(--chart-1);
-	--color-chart-2: var(--chart-2);
-	--color-chart-3: var(--chart-3);
-	--color-chart-4: var(--chart-4);
-	--color-chart-5: var(--chart-5);
-	--color-sidebar: var(--sidebar);
-	--color-sidebar-foreground: var(--sidebar-foreground);
-	--color-sidebar-primary: var(--sidebar-primary);
-	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-	--color-sidebar-accent: var(--sidebar-accent);
-	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-	--color-sidebar-border: var(--sidebar-border);
-	--color-sidebar-ring: var(--sidebar-ring);
+	
+	/* Custom UV Theme Colors mapped to standard shadcn/tailwind names where possible, or kept custom */
+	--color-uv-black: #030205;
+	--color-uv-deep: #0e0a14;
+	--color-uv-mute: #2a2436;
+	--color-uv-text-main: #eaddff;
+	--color-uv-text-dim: #9d94b0;
+	--color-uv-highlight: #8b5cf6;
 
-	--radius-lg: 0;
-	--radius-md: 0;
-	--radius-sm: 0;
+	--font-family-mono: "JetBrains Mono", monospace;
 }
 
-@variant dark (&:where(.dark, .dark *));
-
-/* Theme base styles */
-:root {
-	--radius: 0;
-	--background: oklch(0.99 0.002 280);
-	--foreground: oklch(0.15 0.02 280);
-	--card: oklch(0.98 0.003 280);
-	--card-foreground: oklch(0.15 0.02 280);
-	--popover: oklch(0.98 0.003 280);
-	--popover-foreground: oklch(0.15 0.02 280);
-	--primary: oklch(0.65 0.18 200);
-	--primary-foreground: oklch(0.98 0.01 200);
-	--secondary: oklch(0.85 0.12 330);
-	--secondary-foreground: oklch(0.95 0.02 330);
-	--muted: oklch(0.93 0.01 280);
-	--muted-foreground: oklch(0.45 0.08 280);
-	--accent: oklch(0.88 0.14 270);
-	--accent-foreground: oklch(0.15 0.02 270);
-	--destructive: oklch(0.65 0.18 350);
-	--destructive-foreground: oklch(0.98 0.01 350);
-	--border: oklch(0.88 0.02 280);
-	--input: oklch(0.88 0.02 280);
-	--ring: oklch(0.65 0.18 200);
-	--chart-1: oklch(0.65 0.18 200);
-	--chart-2: oklch(0.65 0.14 330);
-	--chart-3: oklch(0.65 0.16 270);
-	--chart-4: oklch(0.65 0.15 50);
-	--chart-5: oklch(0.65 0.18 350);
-	--sidebar: oklch(0.96 0.005 280);
-	--sidebar-foreground: oklch(0.15 0.02 280);
-	--sidebar-primary: oklch(0.65 0.18 200);
-	--sidebar-primary-foreground: oklch(0.98 0.01 200);
-	--sidebar-accent: oklch(0.92 0.01 280);
-	--sidebar-accent-foreground: oklch(0.15 0.02 280);
-	--sidebar-border: oklch(0.88 0.02 280);
-	--sidebar-ring: oklch(0.65 0.18 200);
+@utility dither-bg {
+	background-color: var(--color-uv-black);
+	background-image: 
+		radial-gradient(at 50% 10%, rgba(20, 10, 30, 0.8) 0px, transparent 60%),
+		radial-gradient(at 90% 40%, rgba(15, 8, 25, 1) 0px, transparent 50%),
+		radial-gradient(at 0% 80%, rgba(15, 8, 25, 1) 0px, transparent 50%);
+	position: fixed;
+	inset: 0;
+	z-index: -20;
 }
 
-.dark {
-	--background: oklch(0 0 0);
-	--foreground: oklch(0.95 0.02 280);
-	--card: oklch(0.12 0.015 280);
-	--card-foreground: oklch(0.95 0.02 280);
-	--popover: oklch(0.12 0.015 280);
-	--popover-foreground: oklch(0.95 0.02 280);
-	--primary: oklch(0.7 0.2 200);
-	--primary-foreground: oklch(0.05 0.02 200);
-	--secondary: oklch(0.6 0.15 330);
-	--secondary-foreground: oklch(0.95 0.02 330);
-	--muted: oklch(0.15 0.02 280);
-	--muted-foreground: oklch(0.65 0.12 280);
-	--accent: oklch(0.6 0.16 270);
-	--accent-foreground: oklch(0.95 0.02 270);
-	--destructive: oklch(0.7 0.2 350);
-	--destructive-foreground: oklch(0.95 0.02 350);
-	--border: oklch(0.2 0.03 280);
-	--input: oklch(0.2 0.03 280);
-	--ring: oklch(0.7 0.2 200);
-	--chart-1: oklch(0.7 0.2 200);
-	--chart-2: oklch(0.6 0.15 330);
-	--chart-3: oklch(0.6 0.16 270);
-	--chart-4: oklch(0.65 0.15 50);
-	--chart-5: oklch(0.7 0.2 350);
-	--sidebar: oklch(0.08 0.01 280);
-	--sidebar-foreground: oklch(0.95 0.02 280);
-	--sidebar-primary: oklch(0.7 0.2 200);
-	--sidebar-primary-foreground: oklch(0.05 0.02 200);
-	--sidebar-accent: oklch(0.12 0.015 280);
-	--sidebar-accent-foreground: oklch(0.95 0.02 280);
-	--sidebar-border: oklch(0.2 0.03 280);
-	--sidebar-ring: oklch(0.7 0.2 200);
+@utility dither-overlay {
+	background-image: radial-gradient(#3a2c4d 0.5px, transparent 0.5px);
+	background-size: 2px 2px;
+	mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+	-webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+	opacity: 0.15;
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: -10;
 }
 
-@utility container {
-	margin-inline: auto;
-	padding-inline: 1rem;
-	@media (width >= 768px) {
-		max-width: 768px;
+@utility border-theme {
+	border-color: var(--color-uv-mute);
+}
+
+@utility purple-glow {
+	transition: text-shadow 0.3s ease;
+	&:hover {
+		text-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
 	}
 }
 
-/* Apply Inconsolata font globally */
-body {
-	font-family: 'Inconsolata', monospace;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
-	font-optical-sizing: auto;
-	font-variation-settings: 'wdth' 100;
+:root {
+	/* Mapping UV colors to generic variables for compatibility */
+	--background: #030205;
+	--foreground: #eaddff;
+	
+	font-feature-settings: "ss01", "ss02", "zero", "tnum";
 }
 
-* {
-	transition:
-		background-color 0.3s ease,
-		color 0.3s ease,
-		border-color 0.3s ease;
+/* Global Selection Style */
+::selection {
+	background: #4c3070;
+	color: #ffffff;
 }
+
+body {
+	font-family: var(--font-family-mono);
+	background-color: var(--background);
+	color: var(--foreground);
+	min-height: 100vh;
+	overflow-x: hidden;
+	-webkit-font-smoothing: antialiased;
+}
+
