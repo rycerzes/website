@@ -28,6 +28,7 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.1.14",
 		"@types/node": "^22",
+		"@types/three": "^0.182.0",
 		"bits-ui": "^2.11.0",
 		"drizzle-kit": "^0.31.5",
 		"drizzle-orm": "^0.44.6",
@@ -49,8 +50,12 @@
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",
+		"@threlte/core": "^8.3.1",
+		"@threlte/extras": "^9.7.1",
 		"clsx": "^2.1.1",
+		"postprocessing": "^6.38.2",
 		"tailwind-merge": "^3.4.0",
-		"tailwind-variants": "^3.1.1"
+		"tailwind-variants": "^3.1.1",
+		"three": "^0.182.0"
 	}
 }
