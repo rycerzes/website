@@ -1,3 +1,6 @@
+// Ported over to svelte from
+// https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDemo.jsx
+
 import { Effect } from 'postprocessing';
 import { Uniform } from 'three';
 
