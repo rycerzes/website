@@ -101,7 +101,8 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	// Render Loop
 	useTask((delta) => {
 		if (!disableAnimation) {
-			uniforms.time.value = clock.getElapsedTime();
+			// Use absolute time so that multiple instances (header + background) are synced
+			uniforms.time.value = (performance.now() / 1000) % 10000;
 		}
 
 		if (enableMouseInteraction) {

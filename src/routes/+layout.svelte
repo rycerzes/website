@@ -59,11 +59,21 @@
 		)}
 	>
 		{#if scrollY > 20}
-			<div class="absolute inset-0 overflow-hidden -z-10 pointer-events-none">
+			<div class="absolute inset-0 overflow-hidden -z-10 pointer-events-none rounded-b-xl">
 				<div
-					class="dither-bg"
-					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0;"
-				></div>
+					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0; background-color: var(--color-uv-black);"
+				>
+					<Dither
+						waveColor={[0.5, 0.2, 0.5]}
+						disableAnimation={false}
+						enableMouseInteraction={false}
+						mouseRadius={0}
+						colorNum={6.2}
+						waveAmplitude={0.07}
+						waveFrequency={10}
+						waveSpeed={0.01}
+					/>
+				</div>
 				<div
 					class="dither-overlay"
 					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0;"
