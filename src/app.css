@@ -30,6 +30,7 @@
 @utility dither-overlay {
 	background-image: radial-gradient(#3a2c4d 0.5px, transparent 0.5px);
 	background-size: 2px 2px;
+	background-position: center top;
 	mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
 	-webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
 	opacity: 0.15;

@@ -32,9 +32,9 @@
 <svelte:window bind:scrollY />
 
 <!-- Global Background Effects -->
-<div class="fixed inset-0 -z-20" style="background-color: var(--color-uv-black);">
+<div class="fixed top-0 left-1/2 -translate-x-1/2 -z-20" style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);">
 	<Dither
-		waveColor={[0.5, 0.2, 0.5]}
+		waveColor={[0.28, 0.2, 0.55]}
 		disableAnimation={false}
 		enableMouseInteraction={false}
 		mouseRadius={0}
@@ -44,7 +44,7 @@
 		waveSpeed={0.01}
 	/>
 </div>
-<div class="dither-overlay"></div>
+<div class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2" style="width: 100vw; height: 100vh;"></div>
 
 <div class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10">
 	<!-- 
@@ -64,7 +64,7 @@
 					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0; background-color: var(--color-uv-black);"
 				>
 					<Dither
-						waveColor={[0.5, 0.2, 0.5]}
+						waveColor={[0.28, 0.2, 0.55]}
 						disableAnimation={false}
 						enableMouseInteraction={false}
 						mouseRadius={0}
