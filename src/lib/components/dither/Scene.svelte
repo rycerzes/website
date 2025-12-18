@@ -18,6 +18,7 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 		disableAnimation?: boolean;
 		enableMouseInteraction?: boolean;
 		mouseRadius?: number;
+		onLoad?: () => void;
 	}
 
 	let {
@@ -29,7 +30,8 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 		pixelSize = 2,
 		disableAnimation = false,
 		enableMouseInteraction = true,
-		mouseRadius = 1
+		mouseRadius = 1,
+		onLoad
 	}: Props = $props();
 
 	const { renderer, scene, camera, size } = useThrelte();
@@ -62,6 +64,8 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 
 		composer = comp;
 		retroEffect = effect;
+
+		onLoad?.();
 
 		return () => {
 			comp.dispose();

@@ -11,7 +11,12 @@
 
 	let { children } = $props();
 
+	let isLoaded = $state(false);
 	let scrollY = $state(0);
+
+	function handleLoad() {
+		isLoaded = true;
+	}
 </script>
 
 <svelte:head>
@@ -45,6 +50,7 @@
 		waveAmplitude={0.07}
 		waveFrequency={10}
 		waveSpeed={0.01}
+		onLoad={handleLoad}
 	/>
 </div>
 <div
@@ -52,7 +58,9 @@
 	style="width: 100vw; height: 100vh;"
 ></div>
 
-<div class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10">
+<div
+	class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10 transition-opacity duration-1000"
+>
 	<!-- 
 		Lorem ipsum dolor sit amet.
 	-->
@@ -60,8 +68,9 @@
 	<!-- Header from design -->
 	<header
 		class={cn(
-			'sticky top-0 z-50 -mx-6 md:-mx-12 px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-end pt-4 pb-2 md:pt-6 mb-4 transition-all duration-300',
-			scrollY > 20 ? 'py-4 md:py-4' : 'bg-transparent'
+			'sticky top-0 z-50 -mx-6 md:-mx-12 px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-end pt-4 pb-2 md:pt-6 mb-4 transition-all duration-300 opacity-0',
+			scrollY > 20 ? 'py-4 md:py-4' : 'bg-transparent',
+			isLoaded && 'animate-enter'
 		)}
 	>
 		{#if scrollY > 20}
@@ -108,12 +117,15 @@
 		</nav>
 	</header>
 
-	<main class="flex-1 flex flex-col gap-16">
+	<main class={cn('flex-1 flex flex-col gap-16 opacity-0', isLoaded && 'animate-enter delay-100')}>
 		{@render children()}
 	</main>
 
 	<footer
-		class="py-10 mt-12 border-t border-theme flex flex-col md:flex-row justify-between items-start md:items-center gap-8"
+		class={cn(
+			'py-10 mt-12 border-t border-theme flex flex-col md:flex-row justify-between items-start md:items-center gap-8 opacity-0',
+			isLoaded && 'animate-enter delay-200'
+		)}
 		id="contact"
 	>
 		<div class="flex flex-col gap-2">
