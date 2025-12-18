@@ -74,3 +74,29 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--color-uv-black);
+	border-left: 1px solid var(--color-uv-deep);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-uv-mute);
+	border: 2px solid var(--color-uv-black); /* Padding effect */
+	border-radius: 2px; /* Slight rounding for retro feel but not too round */
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-uv-highlight);
+	box-shadow: 0 0 10px var(--color-uv-highlight); /* Glow effect */
+}
+
+::-webkit-scrollbar-corner {
+	background: var(--color-uv-black);
+}
