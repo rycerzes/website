@@ -8,10 +8,10 @@
 	/* Custom UV Theme Colors mapped to standard shadcn/tailwind names where possible, or kept custom */
 	--color-uv-black: #030205;
 	--color-uv-deep: #0e0a14;
-	--color-uv-mute: #2a2436;
-	--color-uv-text-main: #eaddff;
-	--color-uv-text-dim: #9d94b0;
-	--color-uv-highlight: #8b5cf6;
+	--color-uv-mute: #3e3450; /* Slightly lighter for better border visibility */
+	--color-uv-text-main: #f5f3ff; /* Brighter, near white */
+	--color-uv-text-dim: #d8b4fe; /* Lighter, more readable violet-grey */
+	--color-uv-highlight: #a78bfa; /* More vibrant/neon purple */
 
 	--font-family-mono: "JetBrains Mono", monospace;
 }
@@ -33,7 +33,7 @@
 	background-position: center top;
 	mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
 	-webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-	opacity: 0.15;
+	opacity: 0.1; /* Reduced from 0.15 for clarity */
 	position: fixed;
 	inset: 0;
 	pointer-events: none;

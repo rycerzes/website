@@ -32,7 +32,10 @@
 <svelte:window bind:scrollY />
 
 <!-- Global Background Effects -->
-<div class="fixed top-0 left-1/2 -translate-x-1/2 -z-20" style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);">
+<div
+	class="fixed top-0 left-1/2 -translate-x-1/2 -z-20"
+	style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
+>
 	<Dither
 		waveColor={[0.28, 0.2, 0.55]}
 		disableAnimation={false}
@@ -44,7 +47,10 @@
 		waveSpeed={0.01}
 	/>
 </div>
-<div class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2" style="width: 100vw; height: 100vh;"></div>
+<div
+	class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2"
+	style="width: 100vw; height: 100vh;"
+></div>
 
 <div class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10">
 	<!-- 
@@ -114,15 +120,15 @@
 			<div class="text-[10px] text-uv-text-dim uppercase tracking-widest">
 				© {new Date().getFullYear()} Lorem
 			</div>
-			<div class="text-[10px] text-violet-800/40 uppercase tracking-widest">Lorem Ipsum</div>
+			<div class="text-[10px] text-violet-500/60 uppercase tracking-widest">Lorem Ipsum</div>
 		</div>
 		<div class="flex items-center gap-8">
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_10px_rgba(139,92,246,0.3)]"
+				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">Twitter</a
 			>
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_10px_rgba(139,92,246,0.3)]"
+				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">GitHub</a
 			>
 		</div>
