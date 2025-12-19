@@ -7,18 +7,16 @@
 	<div class="flex flex-col md:flex-row gap-8 items-start">
 		<div class="relative shrink-0">
 			<!-- Profile Image with CRT scanline effect overlay -->
+			<!-- Profile Image with CRT scanline effect overlay -->
 			<div
-				class="w-32 h-32 md:w-40 md:h-40 rounded-none overflow-hidden border border-theme/50 relative group"
+				class="w-32 h-32 md:w-40 md:h-40 rounded-none overflow-hidden border border-theme/50 relative group crt-effect"
 			>
 				<img
 					src={data.avatarUrl}
 					alt="Profile"
-					class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+					class="w-full h-full object-cover transition-all duration-500"
 				/>
-				<div class="absolute inset-0 bg-violet-900/20 pointer-events-none mix-blend-overlay"></div>
-				<div
-					class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20"
-				></div>
+				<div class="absolute inset-0 bg-violet-900/10 pointer-events-none mix-blend-overlay"></div>
 			</div>
 		</div>
 
