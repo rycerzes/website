@@ -143,7 +143,7 @@
 	</div>
 	<div class="space-y-px bg-theme/30">
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-0 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -159,7 +159,7 @@
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-0 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -175,7 +175,7 @@
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-0 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -200,7 +200,7 @@
 	</div>
 	<div class="space-y-px bg-theme/30">
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-0 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -215,7 +215,7 @@
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-0 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
