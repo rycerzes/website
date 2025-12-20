@@ -3,7 +3,7 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<section id="about" class="max-w-2xl mb-12 fade-in">
+<section id="about" class="max-w-2xl mb-6 fade-in">
 	<div class="flex flex-col md:flex-row gap-8 items-start">
 		<div class="relative shrink-0">
 			<!-- Profile Image with CRT scanline effect overlay -->
@@ -45,103 +45,73 @@
 </section>
 
 <section id="projects">
-	<div class="flex items-end justify-between border-b border-theme pb-4 mb-10">
-		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Lorem Ipsum</h2>
-		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest">[01-03]</span>
+	<div class="flex items-end justify-between border-b border-theme pb-2 mb-6">
+		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Projects</h2>
+		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest"
+			>[01-{String(data.projects?.length || 0).padStart(2, '0')}]</span
+		>
 	</div>
-	<div class="flex flex-col gap-6">
-		<a
-			class="group relative py-6 border border-theme/80 bg-uv-deep/50 hover:bg-uv-mute/40 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6 px-6 md:px-8 rounded-sm overflow-hidden"
-			href="/"
-		>
-			<div
-				class="absolute inset-y-0 left-0 w-1 bg-violet-600 group-hover:bg-violet-400 transition-colors duration-500"
-			></div>
-			<div class="flex flex-col gap-1 md:w-2/5">
-				<span class="text-[10px] text-violet-400 font-bold mb-1">[01]</span>
-				<h3 class="text-xl text-white font-medium group-hover:text-violet-200 transition-colors">
-					Lorem Ipsum Dolor
-				</h3>
-			</div>
-			<div class="md:w-2/5">
-				<p
-					class="text-sm text-uv-text-dim leading-relaxed group-hover:text-uv-text-main transition-colors"
+	<div class="flex flex-col gap-3">
+		{#if data.projects && data.projects.length > 0}
+			{#each data.projects as project, i}
+				<a
+					class="group relative py-4 border border-theme/80 bg-uv-deep/50 hover:bg-uv-mute/40 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 md:px-6 rounded-sm overflow-hidden"
+					href={project.html_url}
+					target="_blank"
+					rel="noopener noreferrer"
 				>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				</p>
-			</div>
-			<div class="md:w-1/5 flex justify-end">
-				<span
-					class="material-symbols-outlined text-uv-text-dim group-hover:text-violet-400 group-hover:translate-x-1 transition-all duration-300"
-					>arrow_right_alt</span
-				>
-			</div>
-		</a>
-		<a
-			class="group relative py-6 border border-theme/80 bg-uv-deep/50 hover:bg-uv-mute/40 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6 px-6 md:px-8 rounded-sm overflow-hidden"
-			href="/"
-		>
-			<div
-				class="absolute inset-y-0 left-0 w-1 bg-violet-600 group-hover:bg-violet-400 transition-colors duration-500"
-			></div>
-			<div class="flex flex-col gap-1 md:w-2/5">
-				<span class="text-[10px] text-violet-400 font-bold mb-1">[02]</span>
-				<h3 class="text-xl text-white font-medium group-hover:text-violet-200 transition-colors">
-					Lorem Ipsum Dolor
-				</h3>
-			</div>
-			<div class="md:w-2/5">
-				<p
-					class="text-sm text-uv-text-dim leading-relaxed group-hover:text-uv-text-main transition-colors"
-				>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				</p>
-			</div>
-			<div class="md:w-1/5 flex justify-end">
-				<span
-					class="material-symbols-outlined text-uv-text-dim group-hover:text-violet-400 group-hover:translate-x-1 transition-all duration-300"
-					>arrow_right_alt</span
-				>
-			</div>
-		</a>
-		<a
-			class="group relative py-6 border border-theme/80 bg-uv-deep/50 hover:bg-uv-mute/40 transition-all duration-500 flex flex-col md:flex-row md:items-center justify-between gap-6 px-6 md:px-8 rounded-sm overflow-hidden"
-			href="/"
-		>
-			<div
-				class="absolute inset-y-0 left-0 w-1 bg-violet-600 group-hover:bg-violet-400 transition-colors duration-500"
-			></div>
-			<div class="flex flex-col gap-1 md:w-2/5">
-				<span class="text-[10px] text-violet-400 font-bold mb-1">[03]</span>
-				<h3 class="text-xl text-white font-medium group-hover:text-violet-200 transition-colors">
-					Lorem Ipsum Dolor
-				</h3>
-			</div>
-			<div class="md:w-2/5">
-				<p
-					class="text-sm text-uv-text-dim leading-relaxed group-hover:text-uv-text-main transition-colors"
-				>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				</p>
-			</div>
-			<div class="md:w-1/5 flex justify-end">
-				<span
-					class="material-symbols-outlined text-uv-text-dim group-hover:text-violet-400 group-hover:translate-x-1 transition-all duration-300"
-					>arrow_right_alt</span
-				>
-			</div>
-		</a>
+					<div
+						class="absolute inset-y-0 left-0 w-1 bg-violet-600 group-hover:bg-violet-400 transition-colors duration-500"
+					></div>
+					<div class="flex flex-col gap-1 md:w-2/5">
+						<span class="text-[9px] text-violet-400 font-bold mb-0.5"
+							>[{String(i + 1).padStart(2, '0')}]</span
+						>
+						<h3
+							class="text-base text-white font-medium group-hover:text-violet-200 transition-colors"
+						>
+							{project.full_name}
+						</h3>
+						<div class="flex flex-wrap gap-1.5 mt-1">
+							{#each project.languages.slice(0, 3) as lang}
+								<span class="text-[9px] px-1.5 py-0.5 bg-violet-900/30 text-violet-300 rounded"
+									>{lang}</span
+								>
+							{/each}
+						</div>
+					</div>
+					<div class="md:w-2/5 flex flex-col gap-1.5">
+						<p
+							class="text-xs text-uv-text-dim leading-relaxed group-hover:text-uv-text-main transition-colors line-clamp-2"
+						>
+							{project.description || 'No description available.'}
+						</p>
+						<p class="text-[9px] text-uv-text-dim font-mono mt-auto">
+							Last update: {new Date(project.pushed_at).toLocaleDateString()}
+						</p>
+					</div>
+					<div class="md:w-1/5 flex justify-end">
+						<span
+							class="material-symbols-outlined text-sm text-uv-text-dim group-hover:text-violet-400 group-hover:translate-x-1 transition-all duration-300"
+							>arrow_right_alt</span
+						>
+					</div>
+				</a>
+			{/each}
+		{:else}
+			<p class="text-xs text-uv-text-dim">No projects found.</p>
+		{/if}
 	</div>
 </section>
 
 <section id="writing">
-	<div class="flex items-end justify-between border-b border-theme pb-4 mb-10">
+	<div class="flex items-end justify-between border-b border-theme pb-2 mb-6">
 		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Lorem Ipsum</h2>
 		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest">LOREM</span>
 	</div>
 	<div class="space-y-px bg-theme/30">
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -152,12 +122,12 @@
 				>
 			</div>
 			<span
-				class="material-symbols-outlined text-sm text-violet-900 group-hover:text-violet-400 transition-all duration-300"
+				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
 				>terminal</span
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -168,12 +138,12 @@
 				>
 			</div>
 			<span
-				class="material-symbols-outlined text-sm text-violet-900 group-hover:text-violet-400 transition-all duration-300"
+				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
 				>terminal</span
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -184,7 +154,7 @@
 				>
 			</div>
 			<span
-				class="material-symbols-outlined text-sm text-violet-900 group-hover:text-violet-400 transition-all duration-300"
+				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
 				>terminal</span
 			>
 		</a>
@@ -192,13 +162,13 @@
 </section>
 
 <section id="resources">
-	<div class="flex items-end justify-between border-b border-theme pb-4 mb-10">
+	<div class="flex items-end justify-between border-b border-theme pb-2 mb-6">
 		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Lorem Ipsum</h2>
 		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest">IPSUM</span>
 	</div>
 	<div class="space-y-px bg-theme/30">
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -213,7 +183,7 @@
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-5 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
