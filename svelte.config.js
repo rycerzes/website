@@ -9,7 +9,7 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.md', '.svx']
+			extensions: ['.md', '.svx', '.mdx']
 		})
 	],
 	kit: {
@@ -18,7 +18,7 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter()
 	},
-	extensions: ['.svelte', '.svx', '.md'],
+	extensions: ['.svelte', '.svx', '.md', '.mdx'],
 	compilerOptions: {
 		runes: true
 	}

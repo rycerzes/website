@@ -113,7 +113,7 @@
 
 body {
 	font-family: var(--font-family-mono);
-	/* background-color: var(--background); */
+	background-color: var(--background);
 	color: var(--foreground);
 	min-height: 100vh;
 	overflow-x: hidden;
