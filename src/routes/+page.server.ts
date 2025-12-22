@@ -1,4 +1,5 @@
 import { GITHUB_TOKEN } from '$env/static/private';
+import { getPosts } from '$lib/posts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -68,13 +69,15 @@ export const load: PageServerLoad = async () => {
 
         return {
             avatarUrl,
-            projects: projectsData.filter((p) => p !== null)
+            projects: projectsData.filter((p) => p !== null),
+            posts: getPosts().slice(0, 3)
         };
     } catch (error) {
         console.error('Error in load function:', error);
         return {
             avatarUrl: 'https://github.com/rycerzes.png',
-            projects: []
+            projects: [],
+            posts: []
         };
     }
 };

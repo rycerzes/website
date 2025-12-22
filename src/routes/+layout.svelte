@@ -2,6 +2,7 @@
 	import './layout.css';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.ico';
+	import { page } from '$app/stores';
 
 	import ThemeToggle from '$lib/ThemeToggle.svelte';
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
@@ -17,6 +18,8 @@
 	function handleLoad() {
 		isLoaded = true;
 	}
+
+	let isBlog = $derived($page.url.pathname.startsWith('/blog/'));
 </script>
 
 <svelte:head>
@@ -38,7 +41,8 @@
 
 <!-- Global Background Effects -->
 <div
-	class="fixed top-0 left-1/2 -translate-x-1/2 -z-20"
+	class="fixed top-0 left-1/2 -translate-x-1/2 -z-20 transition-opacity duration-500"
+	class:opacity-0={isBlog}
 	style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
 >
 	<Dither
@@ -54,7 +58,8 @@
 	/>
 </div>
 <div
-	class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2"
+	class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2 transition-opacity duration-500"
+	class:opacity-0={isBlog}
 	style="width: 100vw; height: 100vh;"
 ></div>
 
@@ -100,19 +105,19 @@
 		>
 			<a
 				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="#about">Lorem</a
+				href="/">Home</a
 			>
 			<a
 				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="#projects">Ipsum</a
+				href="/projects">Projects</a
 			>
 			<a
 				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="#writing">Dolor</a
+				href="/blog">Blog</a
 			>
 			<a
 				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="#resources">Sit</a
+				href="/resources">Resources</a
 			>
 		</nav>
 	</header>

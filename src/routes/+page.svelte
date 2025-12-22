@@ -106,58 +106,36 @@
 
 <section id="writing">
 	<div class="flex items-end justify-between border-b border-theme pb-2 mb-6">
-		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Lorem Ipsum</h2>
-		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest">LOREM</span>
+		<h2 class="text-xs font-bold text-violet-200 uppercase tracking-[0.2em]">Writing</h2>
+		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest"
+			>[01-{String(data.posts?.length || 0).padStart(2, '0')}]</span
+		>
 	</div>
 	<div class="space-y-px bg-theme/30">
-		<a
-			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
-			href="/"
-		>
-			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
-				<span class="text-[10px] text-violet-400 font-mono w-24 tracking-wider">02.24.24</span>
-				<span
-					class="text-sm text-uv-text-dim font-medium uppercase tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
-					>Lorem ipsum dolor sit amet</span
+		{#if data.posts && data.posts.length > 0}
+			{#each data.posts as post}
+				<a
+					class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+					href="/blog/{post.slug}"
 				>
-			</div>
-			<span
-				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
-				>terminal</span
-			>
-		</a>
-		<a
-			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
-			href="/"
-		>
-			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
-				<span class="text-[10px] text-violet-400 font-mono w-24 tracking-wider">01.12.24</span>
-				<span
-					class="text-sm text-uv-text-dim font-medium uppercase tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
-					>Consectetur adipiscing elit</span
-				>
-			</div>
-			<span
-				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
-				>terminal</span
-			>
-		</a>
-		<a
-			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
-			href="/"
-		>
-			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
-				<span class="text-[10px] text-violet-400 font-mono w-24 tracking-wider">12.08.23</span>
-				<span
-					class="text-sm text-uv-text-dim font-medium uppercase tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
-					>Sed do eiusmod tempor</span
-				>
-			</div>
-			<span
-				class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
-				>terminal</span
-			>
-		</a>
+					<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
+						<span class="text-[10px] text-violet-400 font-mono w-24 tracking-wider"
+							>{post.date}</span
+						>
+						<span
+							class="text-sm text-uv-text-dim font-medium uppercase tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
+							>{post.title}</span
+						>
+					</div>
+					<span
+						class="material-symbols-outlined text-xs text-violet-900 group-hover:text-violet-400 transition-all duration-300"
+						>terminal</span
+					>
+				</a>
+			{/each}
+		{:else}
+			<div class="py-3 px-4 text-xs text-uv-text-dim">No posts found.</div>
+		{/if}
 	</div>
 </section>
 
