@@ -19,7 +19,13 @@
 		isLoaded = true;
 	}
 
-	let isBlog = $derived($page.url.pathname.startsWith('/blog/'));
+	let showBackground = $derived($page.url.pathname === '/');
+
+	$effect(() => {
+		if (!showBackground) {
+			isLoaded = true;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -40,28 +46,28 @@
 <svelte:window bind:scrollY />
 
 <!-- Global Background Effects -->
-<div
-	class="fixed top-0 left-1/2 -translate-x-1/2 -z-20 transition-opacity duration-500"
-	class:opacity-0={isBlog}
-	style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
->
-	<Dither
-		waveColor={[0.28, 0.2, 0.55]}
-		disableAnimation={false}
-		enableMouseInteraction={false}
-		mouseRadius={0}
-		colorNum={6.2}
-		waveAmplitude={0.07}
-		waveFrequency={10}
-		waveSpeed={0.01}
-		onLoad={handleLoad}
-	/>
-</div>
-<div
-	class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2 transition-opacity duration-500"
-	class:opacity-0={isBlog}
-	style="width: 100vw; height: 100vh;"
-></div>
+{#if showBackground}
+	<div
+		class="fixed top-0 left-1/2 -translate-x-1/2 -z-20 transition-opacity duration-500"
+		style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
+	>
+		<Dither
+			waveColor={[0.28, 0.2, 0.55]}
+			disableAnimation={false}
+			enableMouseInteraction={false}
+			mouseRadius={0}
+			colorNum={6.2}
+			waveAmplitude={0.07}
+			waveFrequency={10}
+			waveSpeed={0.01}
+			onLoad={handleLoad}
+		/>
+	</div>
+	<div
+		class="dither-overlay fixed top-0 left-1/2 -translate-x-1/2 transition-opacity duration-500"
+		style="width: 100vw; height: 100vh;"
+	></div>
+{/if}
 
 <div
 	class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10 transition-opacity duration-1000"
@@ -122,9 +128,13 @@
 		</nav>
 	</header>
 
-	<main class={cn('flex-1 flex flex-col gap-16 opacity-0', isLoaded && 'animate-enter delay-100')}>
-		{@render children()}
-	</main>
+	{#key $page.url.pathname}
+		<main
+			class={cn('flex-1 flex flex-col gap-16 opacity-0', isLoaded && 'animate-enter delay-100')}
+		>
+			{@render children()}
+		</main>
+	{/key}
 
 	<footer
 		class={cn(
