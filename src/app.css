@@ -118,6 +118,11 @@ body {
 	min-height: 100vh;
 	overflow-x: hidden;
 	-webkit-font-smoothing: antialiased;
+	text-transform: lowercase;
+}
+
+.material-symbols-outlined {
+	text-transform: none;
 }
 
 

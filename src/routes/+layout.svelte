@@ -34,7 +34,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 	<link
-		href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap"
+		href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap"
 		rel="stylesheet"
 	/>
 	<link
@@ -110,19 +110,19 @@
 			class="relative z-10 flex items-center gap-6 md:gap-10 text-sm overflow-x-auto no-scrollbar w-full md:w-auto justify-center md:justify-end"
 		>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
 				href="/">Home</a
 			>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
 				href="/projects">Projects</a
 			>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
 				href="/blog">Blog</a
 			>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors uppercase tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
 				href="/resources">Resources</a
 			>
 		</nav>
@@ -144,18 +144,18 @@
 		id="contact"
 	>
 		<div class="flex flex-col gap-2">
-			<div class="text-[10px] text-uv-text-dim uppercase tracking-widest">
+			<div class="text-[10px] text-uv-text-dim tracking-widest">
 				© {new Date().getFullYear()} Lorem
 			</div>
-			<div class="text-[10px] text-violet-500/60 uppercase tracking-widest">Lorem Ipsum</div>
+			<div class="text-[10px] text-violet-500/60 tracking-widest">Lorem Ipsum</div>
 		</div>
 		<div class="flex items-center gap-8">
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
+				class="text-xs font-medium text-uv-text-dim hover:text-white tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">Twitter</a
 			>
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white uppercase tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
+				class="text-xs font-medium text-uv-text-dim hover:text-white tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">GitHub</a
 			>
 		</div>
