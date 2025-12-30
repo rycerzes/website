@@ -104,9 +104,9 @@
 	</div>
 </section>
 
-<section id="writing">
+<section id="Blog">
 	<div class="flex items-end justify-between border-b border-theme pb-2 mb-6">
-		<h2 class="text-xs font-bold text-violet-200 tracking-[0.2em]">Writing</h2>
+		<h2 class="text-xs font-bold text-violet-200 tracking-[0.2em]">Blog</h2>
 		<span class="text-[10px] text-uv-text-dim font-mono tracking-widest"
 			>[01-{String(data.posts?.length || 0).padStart(2, '0')}]</span
 		>
@@ -115,7 +115,7 @@
 		{#if data.posts && data.posts.length > 0}
 			{#each data.posts as post}
 				<a
-					class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+					class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/20 transition-all duration-300 rounded-sm"
 					href="/blog/{post.slug}"
 				>
 					<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
@@ -123,7 +123,7 @@
 							>{post.date}</span
 						>
 						<span
-							class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
+							class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors duration-300"
 							>{post.title}</span
 						>
 					</div>
@@ -146,12 +146,12 @@
 	</div>
 	<div class="space-y-px bg-theme/30">
 		<a
-			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/20 transition-all duration-300 rounded-sm"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
 				<span
-					class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
+					class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors duration-300"
 					>Lorem Ipsum</span
 				>
 			</div>
@@ -161,12 +161,12 @@
 			>
 		</a>
 		<a
-			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/10 transition-all duration-300"
+			class="group flex items-center justify-between py-3 px-4 md:px-4 hover:bg-uv-mute/20 transition-all duration-300 rounded-sm"
 			href="/"
 		>
 			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 w-full">
 				<span
-					class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors group-hover:pl-2 duration-300"
+					class="text-sm text-uv-text-dim font-medium tracking-wide group-hover:text-violet-100 transition-colors duration-300"
 					>Dolor Sit Amet</span
 				>
 			</div>
