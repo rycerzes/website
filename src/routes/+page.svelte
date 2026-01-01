@@ -102,6 +102,17 @@
 			<p class="text-xs text-uv-text-dim">No projects found.</p>
 		{/if}
 	</div>
+	<div class="mt-4 flex justify-end px-4 md:px-6">
+		<a
+			href="https://github.com/rycerzes"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="group flex items-center gap-2 text-xs font-medium text-uv-text-dim transition-colors hover:text-violet-400"
+		>
+			more projects
+			<span class="transition-transform duration-300 group-hover:translate-x-1">-&gt;</span>
+		</a>
+	</div>
 </section>
 
 <section id="Blog">

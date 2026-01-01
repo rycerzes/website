@@ -48,7 +48,7 @@
 <!-- Global Background Effects -->
 {#if showBackground}
 	<div
-		class="fixed top-0 left-1/2 -translate-x-1/2 -z-20 transition-opacity duration-500"
+		class="fixed top-0 left-1/2 -z-20 -translate-x-1/2 transition-opacity duration-500"
 		style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
 	>
 		<Dither
@@ -70,7 +70,7 @@
 {/if}
 
 <div
-	class="relative flex flex-col w-full max-w-4xl mx-auto min-h-screen px-6 md:px-12 z-10 transition-opacity duration-1000"
+	class="relative z-10 mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 transition-opacity duration-1000 md:px-12"
 >
 	<!-- 
 		Lorem ipsum dolor sit amet.
@@ -79,13 +79,13 @@
 	<!-- Header from design -->
 	<header
 		class={cn(
-			'sticky top-0 z-50 -mx-6 md:-mx-12 px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-end pt-4 pb-2 md:pt-6 mb-4 transition-all duration-300 opacity-0',
+			'sticky top-0 z-50 -mx-6 mb-4 flex flex-col justify-end px-6 pt-4 pb-2 opacity-0 transition-all duration-300 md:-mx-12 md:flex-row md:items-center md:px-12 md:pt-6',
 			scrollY > 20 ? 'py-4 md:py-4' : 'bg-transparent',
 			isLoaded && 'animate-enter'
 		)}
 	>
 		{#if scrollY > 20}
-			<div class="absolute inset-0 overflow-hidden -z-10 pointer-events-none rounded-b-xl">
+			<div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-b-xl">
 				<div
 					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0; background-color: var(--color-uv-black);"
 				>
@@ -107,30 +107,31 @@
 			</div>
 		{/if}
 		<nav
-			class="relative z-10 flex items-center gap-6 md:gap-10 text-sm overflow-x-auto no-scrollbar w-full md:w-auto justify-center md:justify-end"
+			class="no-scrollbar relative z-10 flex w-full items-center justify-center gap-6 overflow-x-auto text-sm md:w-auto md:justify-end md:gap-10"
 		>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
 				href="/">Home</a
 			>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="/projects">Projects</a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				href="/about">About</a
 			>
 			<a
-				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
+				target="_blank">Resume</a
+			>
+			<a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
 				href="/blog">Blog</a
-			>
-			<a
-				class="text-uv-text-dim hover:text-white transition-colors tracking-widest text-xs border-b border-transparent hover:border-violet-500/50 pb-1"
-				href="/resources">Resources</a
 			>
 		</nav>
 	</header>
 
 	{#key $page.url.pathname}
 		<main
-			class={cn('flex-1 flex flex-col gap-16 opacity-0', isLoaded && 'animate-enter delay-100')}
+			class={cn('flex flex-1 flex-col gap-16 opacity-0', isLoaded && 'animate-enter delay-100')}
 		>
 			{@render children()}
 		</main>
@@ -138,24 +139,24 @@
 
 	<footer
 		class={cn(
-			'py-10 mt-12 border-t border-theme flex flex-col md:flex-row justify-between items-start md:items-center gap-8 opacity-0',
+			'mt-12 flex flex-col items-start justify-between gap-8 border-t border-theme py-10 opacity-0 md:flex-row md:items-center',
 			isLoaded && 'animate-enter delay-200'
 		)}
 		id="contact"
 	>
 		<div class="flex flex-col gap-2">
-			<div class="text-[10px] text-uv-text-dim tracking-widest">
+			<div class="text-[10px] tracking-widest text-uv-text-dim">
 				© {new Date().getFullYear()} Lorem
 			</div>
-			<div class="text-[10px] text-violet-500/60 tracking-widest">Lorem Ipsum</div>
+			<div class="text-[10px] tracking-widest text-violet-500/60">Lorem Ipsum</div>
 		</div>
 		<div class="flex items-center gap-8">
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-white hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">Twitter</a
 			>
 			<a
-				class="text-xs font-medium text-uv-text-dim hover:text-white tracking-wider transition-colors hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-white hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
 				href="/">GitHub</a
 			>
 		</div>
