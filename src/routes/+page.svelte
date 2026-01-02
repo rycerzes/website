@@ -150,41 +150,33 @@
 	</div>
 </section>
 
-<section id="resources">
+<section id="activity">
 	<div class="mb-6 flex items-end justify-between border-b border-theme pb-2">
-		<h2 class="text-xs font-bold tracking-[0.2em] text-violet-200">Lorem Ipsum</h2>
-		<span class="font-mono text-[10px] tracking-widest text-uv-text-dim">IPSUM</span>
+		<h2 class="text-xs font-bold tracking-[0.2em] text-violet-200">Recent Activity</h2>
+		<span class="font-mono text-[10px] tracking-widest text-uv-text-dim">SPOTIFY</span>
 	</div>
 	<div class="bg-theme/30 space-y-px">
-		<a
-			class="group flex items-center justify-between rounded-sm px-4 py-3 transition-all duration-300 hover:bg-uv-mute/20 md:px-4"
-			href="/"
-		>
-			<div class="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-8">
-				<span
-					class="text-sm font-medium tracking-wide text-uv-text-dim transition-colors duration-300 group-hover:text-violet-100"
-					>Lorem Ipsum</span
-				>
-			</div>
-			<span
-				class="material-symbols-outlined text-sm text-violet-900 transition-all duration-300 group-hover:text-violet-400"
-				>arrow_outward</span
+		{#if data.recentActivity}
+			<a
+				class="group flex items-center justify-between rounded-sm px-4 py-3 transition-all duration-300 hover:bg-uv-mute/20 md:px-4"
+				href={data.recentActivity.url}
+				target="_blank"
+				rel="noopener noreferrer"
 			>
-		</a>
-		<a
-			class="group flex items-center justify-between rounded-sm px-4 py-3 transition-all duration-300 hover:bg-uv-mute/20 md:px-4"
-			href="/"
-		>
-			<div class="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-8">
+				<div class="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-8">
+					<span class="w-24 font-mono text-[10px] tracking-wider text-green-400">Last Played</span>
+					<span
+						class="text-sm font-medium tracking-wide text-uv-text-dim transition-colors duration-300 group-hover:text-violet-100"
+						>{data.recentActivity.title} - {data.recentActivity.artist}</span
+					>
+				</div>
 				<span
-					class="text-sm font-medium tracking-wide text-uv-text-dim transition-colors duration-300 group-hover:text-violet-100"
-					>Dolor Sit Amet</span
+					class="material-symbols-outlined text-sm text-violet-900 transition-all duration-300 group-hover:text-violet-400"
+					>graphic_eq</span
 				>
-			</div>
-			<span
-				class="material-symbols-outlined text-sm text-violet-900 transition-all duration-300 group-hover:text-violet-400"
-				>arrow_outward</span
-			>
-		</a>
+			</a>
+		{:else}
+			<div class="px-4 py-3 text-xs text-uv-text-dim">No recent activity found.</div>
+		{/if}
 	</div>
 </section>
