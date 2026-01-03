@@ -72,10 +72,6 @@
 <div
 	class="relative z-10 mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 transition-opacity duration-1000 md:px-12"
 >
-	<!-- 
-		Lorem ipsum dolor sit amet.
-	-->
-
 	<!-- Header from design -->
 	<header
 		class={cn(
@@ -146,18 +142,22 @@
 	>
 		<div class="flex flex-col gap-2">
 			<div class="text-[10px] tracking-widest text-uv-text-dim">
-				© {new Date().getFullYear()} Lorem
+				© {new Date().getFullYear()} rycerzes
 			</div>
-			<div class="text-[10px] tracking-widest text-violet-500/60">Lorem Ipsum</div>
+			<div class="text-[10px] tracking-widest text-violet-500/60">swappy</div>
 		</div>
 		<div class="flex items-center gap-8">
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-white hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
-				href="/">Twitter</a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="https://x.com/swaapppyyy">x/twtr</a
 			>
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-white hover:shadow-[0_0_15px_rgba(167,139,250,0.5)]"
-				href="/">GitHub</a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="https://github.com/rycerzes">github</a
+			>
+			<a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="mailto:swapnil@rycerz.es">email</a
 			>
 		</div>
 	</footer>
