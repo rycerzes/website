@@ -85,16 +85,18 @@
 				<div
 					style="position: absolute; width: 100vw; height: 100vh; left: 50%; transform: translateX(-50%); top: 0; background-color: var(--color-uv-black);"
 				>
-					<Dither
-						waveColor={[0.28, 0.2, 0.55]}
-						disableAnimation={false}
-						enableMouseInteraction={false}
-						mouseRadius={0}
-						colorNum={6.2}
-						waveAmplitude={0.07}
-						waveFrequency={10}
-						waveSpeed={0.01}
-					/>
+					{#if showBackground}
+						<Dither
+							waveColor={[0.28, 0.2, 0.55]}
+							disableAnimation={false}
+							enableMouseInteraction={false}
+							mouseRadius={0}
+							colorNum={6.2}
+							waveAmplitude={0.07}
+							waveFrequency={10}
+							waveSpeed={0.01}
+						/>
+					{/if}
 				</div>
 				<div
 					class="dither-overlay"
