@@ -2,23 +2,23 @@
 	let { data } = $props();
 </script>
 
-<div class="container mx-auto px-4 py-8 max-w-4xl">
+<div class="container mx-auto max-w-4xl px-4 py-8">
 	<div class="mb-12">
-		<h1 class="text-4xl font-bold text-violet-400 font-mono mb-2">blog</h1>
-		<p class="text-uv-text-dim text-sm tracking-wide">all opinions are my own</p>
+		<h1 class="mb-2 font-mono text-4xl font-bold text-violet-400">blog</h1>
+		<p class="text-sm tracking-wide text-uv-text-dim">all opinions are my own</p>
 	</div>
 
 	<div class="flex flex-col gap-12">
 		{#each data.posts as post}
 			<a href="/blog/{post.slug}" class="group block">
 				<div class="flex flex-col gap-1">
-					<div class="flex items-baseline justify-between w-full">
+					<div class="flex w-full items-baseline justify-between">
 						<h2
-							class="text-xl font-medium text-uv-text group-hover:text-violet-300 transition-colors font-mono"
+							class="text-uv-text font-mono text-xl font-medium transition-colors group-hover:text-violet-300"
 						>
 							{post.title}
 						</h2>
-						<span class="text-xs text-uv-text-dim/60 font-mono shrink-0 ml-4">{post.date}</span>
+						<span class="ml-4 shrink-0 font-mono text-sm text-uv-text-dim/60">{post.date}</span>
 					</div>
 
 					<!-- 
@@ -33,7 +33,9 @@
 					{/if}
 					-->
 
-					<p class="text-uv-text-dim text-sm mt-1 group-hover:text-uv-text/80 transition-colors">
+					<p
+						class="group-hover:text-uv-text/80 mt-1 text-xs break-words text-uv-text-dim transition-colors"
+					>
 						{post.excerpt}
 					</p>
 				</div>
@@ -42,7 +44,7 @@
 	</div>
 
 	<div class="mt-20">
-		<a href="/" class="text-sm text-uv-text-dim hover:text-violet-300 transition-colors font-mono">
+		<a href="/" class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300">
 			← back to home
 		</a>
 	</div>
