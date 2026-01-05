@@ -26,10 +26,16 @@
 			isLoaded = true;
 		}
 	});
+	let pageTitle = $derived.by(() => {
+		const path = $page.url.pathname;
+		if (path === '/') return 'swappy';
+		const segment = path.split('/').filter(Boolean).pop();
+		return `${segment} | swappy`;
+	});
 </script>
 
 <svelte:head>
-	<title>swappy</title>
+	<title>{pageTitle}</title>
 	<link rel="icon" href={favicon} />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
