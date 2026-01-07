@@ -49,7 +49,11 @@
 						<span class="text-uv-text-dim/30">•</span>
 						<div class="flex gap-2">
 							{#each data.post.tags as tag}
-								<span>#{tag}</span>
+								<span
+									class="cursor-default bg-uv-mute/30 px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-uv-text-dim uppercase transition-colors hover:bg-uv-mute/50"
+								>
+									{tag}
+								</span>
 							{/each}
 						</div>
 					{/if}
@@ -65,7 +69,7 @@
 			class="mdx-content prose prose-sm max-w-none prose-invert
 				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
 				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
-				prose-a:text-violet-400/80 prose-a:no-underline hover:prose-a:text-violet-300 hover:prose-a:underline
+				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 hover:prose-a:text-violet-300 hover:prose-a:decoration-violet-300
 				prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1 prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1
 				prose-code:py-0.5 prose-code:font-mono prose-code:text-[0.8em]

@@ -30,7 +30,8 @@
 		const path = $page.url.pathname;
 		if (path === '/') return 'swappy';
 		const segment = path.split('/').filter(Boolean).pop();
-		return `${segment} | swappy`;
+		const title = segment?.replace(/-/g, ' ');
+		return `${title} | swappy`;
 	});
 </script>
 
