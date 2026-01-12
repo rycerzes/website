@@ -4,9 +4,9 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 <script lang="ts">
 	import { T, useTask, useThrelte } from '@threlte/core';
 	import { Vector2, Color, Uniform, Clock } from 'three';
-	import { EffectComposer, EffectPass, RenderPass } from 'postprocessing';
+	import type { EffectComposer } from 'postprocessing';
 	import { waveVertexShader, waveFragmentShader } from './shaders';
-	import { RetroEffect } from './RetroEffect';
+	import type { RetroEffect } from './RetroEffect';
 
 	interface Props {
 		waveSpeed?: number;
@@ -56,19 +56,28 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	$effect(() => {
 		if (!renderer || !scene || !$camera) return;
 
-		const comp = new EffectComposer(renderer);
-		comp.addPass(new RenderPass(scene, $camera));
+		let cancelled = false;
 
-		const effect = new RetroEffect({ colorNum, pixelSize });
-		comp.addPass(new EffectPass($camera, effect));
+		Promise.all([import('postprocessing'), import('./RetroEffect')]).then(
+			([{ EffectComposer, EffectPass, RenderPass }, { RetroEffect }]) => {
+				if (cancelled) return;
 
-		composer = comp;
-		retroEffect = effect;
+				const comp = new EffectComposer(renderer);
+				comp.addPass(new RenderPass(scene, $camera));
 
-		onLoad?.();
+				const effect = new RetroEffect({ colorNum, pixelSize });
+				comp.addPass(new EffectPass($camera, effect));
+
+				composer = comp;
+				retroEffect = effect;
+
+				onLoad?.();
+			}
+		);
 
 		return () => {
-			comp.dispose();
+			cancelled = true;
+			composer?.dispose();
 		};
 	});
 
