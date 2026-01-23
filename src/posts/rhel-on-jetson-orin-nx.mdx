@@ -1,0 +1,228 @@
+---
+title: 'RHEL on jetson orin nx'
+date: '23-01-2026'
+excerpt: 'finally bringing enterprise linux to my favorite edge compute module'
+tags: ['nvidia', 'red-hat', 'jetson', 'edge-computing', 'linux']
+---
+
+# enterprise linux on edge hardware? actually based.
+
+I wanted to use something other than **Ubuntu 22.04** on a Nvidia Jetson Orin NX 16GB.
+
+Why? Because I do not like Ubuntu at all.
+
+That aside, I was unable to find good docs for flashing the Jetson with something other than the default Ubuntu. I did find random threads on the Nvidia Developer Forums, but other than that, there wasn't much to go on.
+
+Fortunately, I found this guide from Red Hat Developers:
+
+[Red Hat Device Edge on Nvidia Jetson Orin & IGX Orin - JetPack Preparation and Physical Cable Layout](https://developers.redhat.com/learning/learn:rhel:install-red-hat-device-edge-nvidia-jetson-orin-and-igx-orin/resource/resources:jetpack-preparation-and-physical-cable-layout)
+
+This guide/blog follows the same steps.
+
+---
+
+This isn't your typical "install Ubuntu and call it a day" situation. There's actual work involved.
+
+But hey, that's what makes it interesting, right?
+
+## the hardware situation
+
+Here's what you'll need:
+
+| Item            | Why You Need It                 |
+| --------------- | ------------------------------- |
+| USB-C cable     | For recovery mode and flashing  |
+| power supply    | The dev kit needs serious juice |
+| x64 workstation | You'll flash from here          |
+| 16GB+ USB stick | For the RHEL installer          |
+
+The Orin NX doesn't have the same button-based recovery mode as its bigger brother, the AGX Orin. Instead, you need to short the `FC_REC` and `GND` pins.
+
+## step one: get that jetson into recovery mode
+
+Power off your Orin NX completely. Look for the `FC_REC` pin header on your module.
+
+Short `FC_REC` to `GND` with a female-to-female jumper, then connect the USB-C cable from your workstation to the USB-C port on the Orin NX. While still shorting those pins, connect the power supply.
+
+Verify it worked:
+
+```bash
+lsusb | grep NVIDIA
+```
+
+You should see something like `0955:xxxx NVIDIA Corp.` That "xxxx" will differ based on the exact board revision, but the "NVIDIA Corp." and "recovery mode" part is what matters.
+
+## step two: download the goods
+
+NVIDIA's JetPack is the BSP (Board Support Package) that makes everything work. We're going with JetPack 6.1, which includes Jetson Linux r36.3.1.
+
+Download these files from the [NVIDIA developer portal](https://developer.nvidia.com/embedded/jetson-linux-r363):
+
+```
+jetson_linux_r36.3.0_aarch64.tbz2
+```
+
+## step three: extract and prepare
+
+Create a directory for this mess:
+
+```bash
+mkdir -p ~/nvidia-jetson
+tar xf jetson_linux_r36.3.0_aarch64.tbz2 -C ~/nvidia-jetson/
+cd ~/nvidia-jetson/Linux_for_Tegra/
+```
+
+Make sure you have the flashing dependencies installed:
+
+```bash
+# On Fedora or RHEL:
+sudo dnf install dtc binutils usbutils lz4
+```
+
+## step four: flash the qspi firmware
+
+This is where things get real. The QSPI flash holds the bootloader—the stuff that actually makes the Orin boot.
+
+For the Jetson Orin NX (which uses the p3768 board ID):
+
+```bash
+sudo ./flash.sh p3768-0000-p3767-0000-a0-qspi external
+```
+
+Let that do its thing. It might take a few minutes. When it's done, your device will automatically reboot out of recovery mode.
+
+## step five: install rhel on the thing
+
+Now for the fun part—putting actual RHEL on this hardware.
+
+Grab the RHEL 9.4 aarch64 ISO from the Red Hat customer portal. Write it to your USB stick using `dd` or balenaEtcher:
+
+```bash
+sudo dd if=RHEL-9.4-aarch64-dvd.iso of=/dev/sdX bs=4M status=progress
+```
+
+Plug the USB into your Orin NX, power it on, and get ready to hit ESC when the UEFI bootloader starts. You'll see a boot menu—select your USB drive.
+
+Then proceed through the standard RHEL installation. Standard stuff—partitioning, user creation, software selection.
+
+**Warning:** RHEL on Jetson is technically tech preview support. NVIDIA isn't shipping kmods for every kernel update. If you `dnf upgrade` and it pulls in a new kernel, you're gonna have a bad time. Lock your kernel version or be prepared to rebuild modules.
+
+## step six: nvidia repositories and packages
+
+Once you're logged into your fresh RHEL install, add the NVIDIA repos:
+
+```bash
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+curl -s -L https://repo.download.nvidia.com/jetson/rhel-9.4/jp6.1/nvidia-l4t.repo | sudo tee /etc/yum.repos.d/nvidia-l4t.repo
+```
+
+Add yourself to the video group (important for GPU access):
+
+```bash
+sudo usermod -a -G video $USER
+sudo usermod -a -G video gdm
+```
+
+Now install everything:
+
+```bash
+sudo dnf -y install nvidia-jetpack-kmod nvidia-jetpack-all nvidia-container-toolkit
+```
+
+This pulls down the kernel modules, userspace libraries, and container tooling. It's a decent-sized download—another coffee break.
+
+If you installed a GUI, make sure it starts on boot:
+
+```bash
+sudo systemctl set-default graphical.target
+```
+
+Then reboot to load those shiny new kernel modules:
+
+```bash
+sudo systemctl reboot
+```
+
+## step seven: configure container support (optional but recommended)
+
+Red Hat Device Edge is all about running containers at the edge. Let's get that GPU passthrough working with Podman.
+
+Generate the CDI (Container Device Interface) spec:
+
+```bash
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia
+```
+
+Want this to regenerate automatically on boot? Create a systemd service:
+
+```bash
+sudo su -
+cat << EOF > /etc/systemd/system/nvidia-cdi.service
+[Unit]
+Description=Generate the nvidia cdi yaml file
+Requires=multi-user.target
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=nvidia-ctk cdi generate --output=/etc/cdi/nvidia
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable nvidia-cdi
+exit
+```
+
+Now you can run GPU-accelerated containers:
+
+```bash
+# Run a container with full GPU access
+podman run --rm -it --device nvidia.com/gpu=all nvcr.io/nvidia/l4t-pytorch:r36.3.0-pth2.0-py3 /bin/bash
+```
+
+## step eight: performance tuning
+
+The Orin NX has different power modes. By default, it's probably running in some conservative mode to avoid thermal throttling. Let's fix that.
+
+Set maximum performance mode:
+
+```bash
+sudo nvpmodel -m 0
+sudo systemctl reboot
+```
+
+After the reboot, max out those clocks:
+
+```bash
+sudo jetson_clocks
+```
+
+This script pushes CPU and GPU clocks to their maximum. Run it after every reboot for peak performance.
+
+## the verdict
+
+So, is Red Hat Device Edge the silver bullet? Honestly... probably not for everyone.
+
+While getting a clean, enterprise-grade OS on the Jetson feels great, you quickly run into the reality of "tech preview" support. You're constantly one `dnf update` away from a broken kernel module because NVIDIA doesn't ship kmods for every RHEL kernel release. It's a high-maintenance relationship.
+
+In a perfect world, we'd have a lean, minimal BSP that just works. But we don't have that luxury. Despite the frustrations with the SDKManager (and its tendency to hang at 98% in VMs) and the sheer amount of bloat in the default image, **sticking with the NVIDIA L4T Ubuntu defaults is usually the saner path.**
+
+The ecosystem is built around it. If you run into a weird CUDA error, the fix you find on a forum will assume you're on the default stack. My recommendation? Stick to the official JetPack, but spend the time to aggressively debloat it. Strip out the GUI if you don't need it, kill the telemetry, and use Docker for everything to keep your base OS clean. It's better to fight the bloat than to fight the lack of driver support.
+
+(If you're a real glutton for punishment and need a truly custom, minimal industrial-grade OS, check out project [OE4T](https://github.com/OE4T) (OpenEmbedded for Tegra). It exists so that developers can build customized Linux distributions for NVIDIA Jetson platforms using the Yocto Project)
+
+## resources
+
+These resources are of great help as well for running stuff on Jetson:
+
+- [jetson-containers](https://github.com/dusty-nv/jetson-containers) - Seriously, just use this. It's the only way to stay sane with dependencies.
+- [OE4T (OpenEmbedded for Tegra)](https://github.com/OE4T) - For building custom, minimal Linux distributions using Yocto.
+- [RidgeRun NVIDIA](https://www.ridgerun.com/nvidia) - The gold standard for Jetson documentation and pro-grade BSP support.
+
+---
+
+**Now go deploy something at the edge.**
