@@ -2,7 +2,10 @@ import { GITHUB_TOKEN } from '$env/static/private';
 import { getPosts } from '$lib/posts';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ setHeaders }) => {
+    setHeaders({
+        'Cache-Control': 'public, max-age=86400'
+    });
     const projectLinks = [
         'meta-pytorch/openenv',
         '3xcaffeine/mario-openenv',
