@@ -40,17 +40,17 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	const uniforms = {
 		time: new Uniform(0),
 		resolution: new Uniform(new Vector2(0, 0)),
-		waveSpeed: new Uniform(waveSpeed),
-		waveFrequency: new Uniform(waveFrequency),
-		waveAmplitude: new Uniform(waveAmplitude),
-		waveColor: new Uniform(new Color(...(waveColor as [number, number, number]))),
+		waveSpeed: new Uniform(0),
+		waveFrequency: new Uniform(0),
+		waveAmplitude: new Uniform(0),
+		waveColor: new Uniform(new Color(0, 0, 0)),
 		mousePos: new Uniform(new Vector2(0, 0)),
-		enableMouseInteraction: new Uniform(enableMouseInteraction ? 1 : 0),
-		mouseRadius: new Uniform(mouseRadius)
+		enableMouseInteraction: new Uniform(0),
+		mouseRadius: new Uniform(0)
 	};
 
-	let composer: EffectComposer | undefined;
-	let retroEffect: RetroEffect | undefined;
+	let composer = $state<EffectComposer | undefined>();
+	let retroEffect = $state<RetroEffect | undefined>();
 
 	// Initialize Composer
 	$effect(() => {
