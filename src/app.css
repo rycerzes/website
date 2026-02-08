@@ -125,6 +125,11 @@ body {
 	text-transform: none;
 }
 
+/* Preserve capitalization in code */
+code, pre, pre code, pre code * {
+	text-transform: none !important;
+}
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -178,4 +183,47 @@ body {
 
 .delay-300 {
 	animation-delay: 300ms;
+}
+
+/* Shiki Code Block Styles */
+code[data-theme*=' '],
+code[data-theme*=' '] span {
+	color: var(--shiki-light);
+	background-color: var(--shiki-light-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+	code[data-theme*=' '],
+	code[data-theme*=' '] span {
+		color: var(--shiki-dark);
+		background-color: var(--shiki-dark-bg);
+	}
+}
+
+/* Ensure syntax highlighting is preserved */
+pre code {
+	display: block;
+	font-family: var(--font-family-mono);
+	tab-size: 2;
+}
+
+/* Line highlighting for code blocks */
+pre code .line {
+	display: inline-block;
+	min-height: 1rem;
+	width: 100%;
+}
+
+pre code .line.highlighted {
+	background-color: rgba(168, 85, 247, 0.1);
+	border-left: 2px solid rgb(168, 85, 247);
+	padding-left: 0.5rem;
+	margin-left: -0.5rem;
+}
+
+/* Word highlighting in code blocks */
+pre code .word {
+	background-color: rgba(168, 85, 247, 0.2);
+	padding: 0.125rem 0.25rem;
+	border-radius: 0.25rem;
 }

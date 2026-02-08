@@ -1,6 +1,13 @@
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import rehypePrettyCode from 'rehype-pretty-code';
+
+/** @type {import('rehype-pretty-code').Options} */
+const prettyCodeOptions = {
+	theme: 'github-dark-dimmed',
+	keepBackground: false
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -9,7 +16,8 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.md', '.svx', '.mdx']
+			extensions: ['.md', '.svx', '.mdx'],
+			rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
 		}),
 		{
 			name: 'mdsvex-deprecation-fix',

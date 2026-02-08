@@ -1,7 +1,7 @@
 <script lang="ts">
 	let { data } = $props();
-	let Content = $derived(data.post.component);
 	import TableOfContents from '../../../components/TableOfContents.svelte';
+	import MdxContent from '$lib/components/MdxContent.svelte';
 </script>
 
 <div class="relative mx-auto max-w-2xl px-4 py-8">
@@ -74,10 +74,10 @@
 				prose-blockquote:px-4 prose-blockquote:py-1 prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1
 				prose-code:py-0.5 prose-code:font-mono prose-code:text-[0.8em]
 				prose-code:text-violet-300/90
-				prose-code:before:content-none prose-code:after:content-none prose-pre:border prose-pre:border-uv-mute/30 prose-pre:bg-uv-deep/50 prose-li:text-uv-text-dim/80
+				prose-code:before:content-none prose-code:after:content-none prose-li:text-uv-text-dim/80
 			"
 		>
-			<Content />
+			<MdxContent component={data.post.component} />
 		</div>
 	</article>
 </div>

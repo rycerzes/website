@@ -1,5 +1,6 @@
 <script lang="ts">
 	let { data } = $props();
+	import MdxContent from '$lib/components/MdxContent.svelte';
 </script>
 
 <article class="container mx-auto prose max-w-3xl px-4 py-12 prose-invert prose-violet">
@@ -22,8 +23,7 @@
 
 	<div class="mdx-content">
 		{#if data.post.component}
-			{@const Component = data.post.component}
-			<Component />
+			<MdxContent component={data.post.component} />
 		{/if}
 	</div>
 </article>
