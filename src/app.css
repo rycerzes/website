@@ -4,7 +4,7 @@
 @theme {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
-	
+
 	/* Custom UV Theme Colors mapped to standard shadcn/tailwind names where possible, or kept custom */
 	--color-uv-black: #030205;
 	--color-uv-deep: #0e0a14;
@@ -13,12 +13,12 @@
 	--color-uv-text-dim: #d8b4fe; /* Lighter, more readable violet-grey */
 	--color-uv-highlight: #a78bfa; /* More vibrant/neon purple */
 
-	--font-family-mono: "JetBrains Mono", monospace;
+	--font-family-mono: 'JetBrains Mono', monospace;
 }
 
 @utility dither-bg {
 	background-color: var(--color-uv-black);
-	background-image: 
+	background-image:
 		radial-gradient(at 50% 10%, rgba(20, 10, 30, 0.8) 0px, transparent 60%),
 		radial-gradient(at 90% 40%, rgba(15, 8, 25, 1) 0px, transparent 50%),
 		radial-gradient(at 0% 80%, rgba(15, 8, 25, 1) 0px, transparent 50%);
@@ -31,8 +31,8 @@
 	background-image: radial-gradient(#3a2c4d 0.5px, transparent 0.5px);
 	background-size: 2px 2px;
 	background-position: center top;
-	mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-	-webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+	-webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
 	opacity: 0.1; /* Reduced from 0.15 for clarity */
 	position: fixed;
 	inset: 0;
@@ -41,8 +41,12 @@
 }
 
 @keyframes scanline-scroll {
-	0% { background-position: 0 0; }
-	100% { background-position: 0 100%; }
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 0 100%;
+	}
 }
 
 @utility crt-effect {
@@ -50,7 +54,7 @@
 	overflow: hidden;
 
 	&::after {
-		content: "";
+		content: '';
 		position: absolute;
 		inset: 0;
 		background: 
@@ -63,13 +67,10 @@
 				rgba(0, 0, 0, 0.2)
 			),
 			/* RGB Phosphor / Aperture Grille (Vertical RGB stripes) */
-			linear-gradient(
-				90deg,
-				rgba(255, 0, 0, 0.06),
-				rgba(0, 255, 0, 0.02),
-				rgba(0, 0, 255, 0.06)
-			);
-		background-size: 100% 4px, 3px 100%;
+				linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+		background-size:
+			100% 4px,
+			3px 100%;
 		animation: scanline-scroll 10s linear infinite;
 		pointer-events: none;
 		z-index: 20;
@@ -77,10 +78,10 @@
 	}
 
 	&::before {
-		content: "";
+		content: '';
 		position: absolute;
 		inset: 0;
-		background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(0,0,0,0.6) 100%);
+		background: radial-gradient(circle, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
 		pointer-events: none;
 		z-index: 21;
 	}
@@ -101,8 +102,8 @@
 	/* Mapping UV colors to generic variables for compatibility */
 	--background: #030205;
 	--foreground: #eaddff;
-	
-	font-feature-settings: "ss01", "ss02", "zero", "tnum";
+
+	font-feature-settings: 'ss01', 'ss02', 'zero', 'tnum';
 }
 
 /* Global Selection Style */
@@ -126,10 +127,12 @@ body {
 }
 
 /* Preserve capitalization in code */
-code, pre, pre code, pre code * {
+code,
+pre,
+pre code,
+pre code * {
 	text-transform: none !important;
 }
-
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
