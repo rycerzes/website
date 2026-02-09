@@ -41,7 +41,15 @@
 			};
 
 			// Remove prose styles from pre
-			pre.classList.add('overflow-x-auto', 'rounded-lg', 'border', 'border-uv-mute/30', 'bg-uv-deep/50', 'p-4', '!my-0');
+			pre.classList.add(
+				'overflow-x-auto',
+				'rounded-lg',
+				'border',
+				'border-uv-mute/30',
+				'bg-uv-deep/50',
+				'p-4',
+				'!my-0'
+			);
 
 			// Wrap the pre element
 			pre.parentNode?.insertBefore(wrapper, pre);

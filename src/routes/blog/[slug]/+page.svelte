@@ -6,7 +6,7 @@
 
 <div class="relative mx-auto max-w-2xl px-4 py-8">
 	<!-- Left Sidebar with TOC - Hanging to the left -->
-	<aside class="absolute top-0 right-full hidden h-full w-48 pr-12 lg:block">
+	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">
 			<div class="mb-8">
 				<a

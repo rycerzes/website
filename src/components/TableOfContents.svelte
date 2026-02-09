@@ -38,7 +38,20 @@
 
 		elements.forEach((elem) => observer.observe(elem));
 
-		return () => observer.disconnect();
+		const onScroll = () => {
+			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+				if (headings.length > 0) {
+					activeId = headings[headings.length - 1].id;
+				}
+			}
+		};
+
+		window.addEventListener('scroll', onScroll);
+
+		return () => {
+			observer.disconnect();
+			window.removeEventListener('scroll', onScroll);
+		};
 	});
 </script>
 
@@ -48,7 +61,7 @@
 		{#each headings as heading}
 			<a
 				href="#{heading.id}"
-				class="group flex items-start py-1 transition-colors hover:text-violet-300 {activeId ===
+				class="group relative flex h-8 items-center transition-colors hover:text-violet-300 {activeId ===
 				heading.id
 					? 'active'
 					: ''}"
@@ -56,13 +69,13 @@
 			>
 				<!-- The Line -->
 				<div
-					class="mt-2 h-px w-6 shrink-0 bg-uv-text-dim/30 transition-all duration-200 ease-out group-hover:w-2 group-hover:bg-violet-300 group-hover:opacity-100 group-[.active]:w-8 group-[.active]:bg-violet-400 group-[.active]:opacity-80"
+					class="h-px w-6 shrink-0 bg-uv-text-dim/30 transition-all duration-200 ease-out group-hover:w-2 group-hover:bg-violet-300 group-hover:opacity-100 group-[.active]:w-8 group-[.active]:bg-violet-400 group-[.active]:opacity-80"
 					style="background-color: var(--color-uv-text-dim); opacity: 0.3;"
 				></div>
 
 				<!-- The Text -->
 				<span
-					class="ml-3 block -translate-x-2 font-mono text-xs text-uv-text-dim opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100"
+					class="absolute left-12 z-10 w-48 -translate-x-2 text-xs whitespace-normal text-uv-text-dim opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100 group-[.active]:translate-x-0 group-[.active]:opacity-100"
 					style="font-family: var(--font-family-mono); color: var(--color-uv-text-dim);"
 				>
 					{heading.text}
@@ -86,5 +99,17 @@
 		width: 0.5rem !important;
 		background-color: #c4b5fd !important;
 		opacity: 1 !important;
+	}
+
+	/* When the NAV is hovered, hide the ACTIVE item's text, UNLESS it is the one being hovered */
+	:global(.toc-nav:hover) a.active:not(:hover) span {
+		opacity: 0 !important;
+		transform: translateX(-0.5rem);
+	}
+
+	/* Ensure the specific hovered item IS visible (reinforcing the tailwind group-hover) */
+	:global(.toc-nav) a:hover span {
+		opacity: 1 !important;
+		transform: translateX(0) !important;
 	}
 </style>
