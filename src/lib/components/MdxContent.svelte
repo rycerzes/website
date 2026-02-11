@@ -2,15 +2,12 @@
 	import { Check, Copy } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 
-	let { component } = $props<{ component: any }>();
+	let { Component } = $props<{ Component: any }>();
 	let contentElement: HTMLDivElement;
 	let copiedStates = $state<Map<number, boolean>>(new Map());
 
 	$effect(() => {
-		// Run this effect whenever `component` changes (or on mount)
-		// We reference `component` here to track it, though we don't use it directly in the logic below
-		// beyond knowing content changed.
-		void component;
+		void Component;
 
 		// Add copy buttons to all pre elements
 		const preElements = contentElement.querySelectorAll('pre');
@@ -79,5 +76,5 @@
 </script>
 
 <div bind:this={contentElement}>
-	<svelte:component this={component} />
+	<Component />
 </div>

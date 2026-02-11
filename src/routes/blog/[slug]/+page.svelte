@@ -77,7 +77,7 @@
 				prose-code:before:content-none prose-code:after:content-none prose-li:text-uv-text-dim/80
 			"
 		>
-			<MdxContent component={data.post.component} />
+			<MdxContent Component={data.post.component} />
 		</div>
 	</article>
 </div>
