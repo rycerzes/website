@@ -4,7 +4,7 @@
 	import MdxContent from '$lib/components/MdxContent.svelte';
 </script>
 
-<div class="relative mx-auto max-w-2xl px-4 py-8">
+<div class="relative mx-auto w-full max-w-2xl px-4 py-8">
 	<!-- Left Sidebar with TOC - Hanging to the left -->
 	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">
@@ -66,7 +66,7 @@
 		</header>
 
 		<div
-			class="mdx-content prose prose-sm max-w-none prose-invert
+			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
 				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
 				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
 				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 hover:prose-a:text-violet-300 hover:prose-a:decoration-violet-300

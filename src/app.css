@@ -188,7 +188,36 @@ pre code * {
 	animation-delay: 300ms;
 }
 
-/* Shiki Code Block Styles */
+/* Table responsiveness */
+.table-wrapper {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.prose table {
+	width: 100%;
+	table-layout: auto;
+	border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+	padding: 0.5rem 0.75rem;
+	overflow-wrap: break-word;
+	word-break: normal;
+}
+
+@media (max-width: 640px) {
+	.prose table {
+		font-size: 0.8rem;
+	}
+
+	.prose th,
+	.prose td {
+		padding: 0.4rem 0.5rem;
+	}
+}
+
 code[data-theme*=' '],
 code[data-theme*=' '] span {
 	color: var(--shiki-light);
@@ -203,6 +232,25 @@ code[data-theme*=' '] span {
 	}
 }
 
+/* Constrain code blocks and content to container width */
+.mdx-content {
+	overflow: hidden;
+}
+
+.mdx-content pre,
+.mdx-content figure,
+.code-block-wrapper {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+/* Break long words/URLs in prose to prevent overflow */
+.mdx-content a,
+.mdx-content p {
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
 /* Ensure syntax highlighting is preserved */
 pre code {
 	display: block;
@@ -214,7 +262,7 @@ pre code {
 pre code .line {
 	display: inline-block;
 	min-height: 1rem;
-	width: 100%;
+	min-width: 100%;
 }
 
 pre code .line.highlighted {

@@ -6,7 +6,12 @@
 	let contentElement: HTMLDivElement;
 	let copiedStates = $state<Map<number, boolean>>(new Map());
 
-	onMount(() => {
+	$effect(() => {
+		// Run this effect whenever `component` changes (or on mount)
+		// We reference `component` here to track it, though we don't use it directly in the logic below
+		// beyond knowing content changed.
+		void component;
+
 		// Add copy buttons to all pre elements
 		const preElements = contentElement.querySelectorAll('pre');
 		preElements.forEach((pre, index) => {
@@ -33,7 +38,7 @@
 					button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span>`;
 
 					setTimeout(() => {
-						button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2 2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Copy</span>`;
+						button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Copy</span>`;
 					}, 2000);
 				} catch (err) {
 					console.error('Failed to copy:', err);
@@ -55,6 +60,20 @@
 			pre.parentNode?.insertBefore(wrapper, pre);
 			wrapper.appendChild(button);
 			wrapper.appendChild(pre);
+		});
+
+		// Add wrapper to all table elements for responsiveness
+		const tables = contentElement.querySelectorAll('table');
+		tables.forEach((table) => {
+			// Skip if already wrapped
+			if (table.parentElement?.classList.contains('table-wrapper')) return;
+
+			const wrapper = document.createElement('div');
+			wrapper.className =
+				'table-wrapper overflow-x-auto my-8 rounded-lg border border-uv-mute/30 bg-uv-deep/30';
+
+			table.parentNode?.insertBefore(wrapper, table);
+			wrapper.appendChild(table);
 		});
 	});
 </script>
