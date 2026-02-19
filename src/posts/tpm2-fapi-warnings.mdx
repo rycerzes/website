@@ -1,0 +1,139 @@
+---
+title: 'fixing tpm2 fapi warnings on linux'
+date: '19-02-2026'
+excerpt: 'getting rid of those annoying FAPI warnings when using wget, curl, or GnuTLS'
+tags: ['linux', 'tpm2', 'security', 'troubleshooting']
+---
+
+# those annoying tpm2 fapi warnings
+
+If you've ever run `wget` or `curl` on a Linux system and been greeted by a wall of warnings like:
+
+```
+WARNING:fapi:...Profile of path not provisioned: /HS/SRK
+ERROR:fapi:...ErrorCode (0x00060034) Entities_List
+WARNING: Listing FAPI token objects failed
+```
+
+The error code `0x00060034` translates to `TSS2_FAPI_RC_NOT_PROVISIONED`-which is exactly what it sounds like. The FAPI layer hasn't been initialized, so it can't list or manage any objects.
+
+Congrats-you've met TPM2 FAPI. The Feature API. And it's yelling at you because your system's TPM isn't provisioned the way certain tools expect.
+
+Let me walk you through fixing it.
+
+---
+
+## what's even happening here
+
+TPM2 (Trusted Platform Module) is a hardware security chip found on most modern motherboards. FAPI is the userspace library that exposes TPM functionality to applications.
+
+The problem? Most systems don't actually have FAPI provisioned. The TPM hardware is there, sitting idle, but nobody told the OS "hey, set up the FAPI keystore." So when tools like GnuTLS, libp11, or anything using PKCS#11 try to talk to the TPM, they get loud about it.
+
+These aren't critical errors-they're just noisy warnings. But if you're scripting or running automated tasks, they pollute your logs like nobody's business.
+
+---
+
+## step one: diagnose first
+
+Before we start mucking around with system directories, let's see what we're actually dealing with.
+
+Check for persistent TPM handles:
+
+```bash
+sudo tpm2_getcap handles-persistent
+```
+
+If you see any handles listed, you might have old cruft taking up space in TPM NV memory.
+
+Check if disk encryption uses TPM (unlikely but worth checking):
+
+```bash
+sudo cryptsetup luksDump /dev/<partition> | grep tpm2
+```
+
+Verify your keystore permissions:
+
+```bash
+ls -la /var/lib/tpm2-tss/system/keystore/
+```
+
+---
+
+## the quick fix (suppress the noise)
+
+If you just want the warnings to go away and don't care about actually using TPM-backed keys:
+
+```bash
+export TSS2_LOG=fapi+NONE
+```
+
+You can add this to your shell profile or systemd service if it's a specific app causing headaches. This tells the TSS2 library to log FAPI events but discard them. Easy.
+
+But wait-you're here to actually fix it, right?
+
+---
+
+## the proper fix (provision TPM FAPI)
+
+This is the "actually solving the problem" path. We're going to provision the TPM FAPI properly.
+
+### step 1: clean up old persistent handles
+
+If `tpm2_getcap handles-persistent` showed anything, you might want to evict it first. TPM NV space is limited:
+
+```bash
+sudo tpm2_evictcontrol -c <handle>
+```
+
+Replace `<handle>` with the actual handle value (like `0x81000001`).
+
+### step 2: nuke the old keystore
+
+If there's existing broken state, remove it and recreate with proper ownership:
+
+```bash
+sudo rm -rf /var/lib/tpm2-tss/system/keystore
+sudo mkdir -p /var/lib/tpm2-tss/system/keystore
+sudo chown -R tss:tss /var/lib/tpm2-tss
+sudo chmod -R 775 /var/lib/tpm2-tss
+```
+
+### step 3: provision FAPI
+
+Now the fun part. Run the provisioning tool:
+
+```bash
+sudo tss2_provision
+```
+
+This sets up the hierarchy, creates the storage root key (SRK), and initializes the keystore. Depending on your system, this might take a few seconds.
+
+### step 4: fix permissions
+
+Because we're doing stuff as root, the permissions might get messed up:
+
+```bash
+sudo chmod -R 755 /var/lib/tpm2-tss/system/keystore
+sudo chmod 755 /var/lib/tpm2-tss/system
+sudo chmod 755 /var/lib/tpm2-tss
+```
+
+If you're running services that need access (like `tpm2-pkcs11`), make sure they're in the appropriate groups. You'll also want to add yourself to the `tss` group:
+
+```bash
+sudo usermod -aG tss $USER
+```
+
+Then log out and back in for the changes to take effect.
+
+---
+
+## test it out
+
+Run your command again:
+
+```bash
+wget https://example.com
+```
+
+Those warnings should be gone. If not, you might need to reboot-the TPM subsystem can be finicky about recognizing new keystore state.
