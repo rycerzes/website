@@ -4,6 +4,17 @@ import type { Post } from './types';
 // so we get the module immediately.
 const glob_import = import.meta.glob('/src/posts/*.mdx', { eager: true });
 
+function parsePostDate(date: string): number {
+    const ddMmYyyyMatch = /^(\d{2})-(\d{2})-(\d{4})$/.exec(date);
+    if (ddMmYyyyMatch) {
+        const [, day, month, year] = ddMmYyyyMatch;
+        return Date.UTC(Number(year), Number(month) - 1, Number(day));
+    }
+
+    const timestamp = Date.parse(date);
+    return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
 export function getPosts(): Post[] {
     const posts: Post[] = [];
 
@@ -32,7 +43,7 @@ export function getPosts(): Post[] {
 
     // Sort by date descending (newest first)
     return posts.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+        return parsePostDate(b.date) - parsePostDate(a.date);
     });
 }
 
