@@ -10,20 +10,20 @@
 				<span>{data.post.date}</span>
 				<span>•</span>
 				<div class="flex gap-2">
-					{#each data.post.tags as tag}
+					{#each data.post.tags as tag (tag)}
 						<span class="tracking-wide uppercase">#{tag}</span>
 					{/each}
 				</div>
 			</div>
 
-			<h1 class="!mb-0 text-4xl font-bold tracking-tight text-violet-100">{data.post.title}</h1>
-			<p class="!mt-2 text-xl text-uv-text-dim">{data.post.excerpt}</p>
+			<h1 class="mb-0! text-4xl font-bold tracking-tight text-violet-100">{data.post.title}</h1>
+			<p class="mt-2! text-xl text-uv-text-dim">{data.post.excerpt}</p>
 		</div>
 	</header>
 
 	<div class="mdx-content">
 		{#if data.post.component}
-			<MdxContent component={data.post.component} />
+			<MdxContent Component={data.post.component} />
 		{/if}
 	</div>
 </article>
