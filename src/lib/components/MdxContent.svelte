@@ -1,17 +1,92 @@
 <script lang="ts">
-	import { Check, Copy } from '@lucide/svelte';
-	import { onMount } from 'svelte';
+	import mermaid from 'mermaid';
+
+	const mermaidThemeVariables = {
+		darkMode: true,
+		background: 'transparent',
+		fontFamily: 'JetBrains Mono, monospace',
+		fontSize: '14px',
+		primaryColor: '#0e0a14',
+		primaryTextColor: '#f5f3ff',
+		primaryBorderColor: '#3e3450',
+		secondaryColor: '#161022',
+		secondaryTextColor: '#f5f3ff',
+		secondaryBorderColor: '#4c3f63',
+		tertiaryColor: '#211a31',
+		tertiaryTextColor: '#f5f3ff',
+		tertiaryBorderColor: '#5f4e7d',
+		lineColor: '#a78bfa',
+		textColor: '#eaddff',
+		mainBkg: '#0e0a14',
+		nodeBorder: '#5f4e7d',
+		nodeTextColor: '#f5f3ff',
+		clusterBkg: '#161022',
+		clusterBorder: '#4c3f63',
+		edgeLabelBackground: '#161022',
+		titleColor: '#f5f3ff',
+		actorBkg: '#0e0a14',
+		actorBorder: '#5f4e7d',
+		actorTextColor: '#f5f3ff',
+		actorLineColor: '#a78bfa',
+		signalColor: '#d8b4fe',
+		signalTextColor: '#f5f3ff',
+		labelBoxBkgColor: '#161022',
+		labelBoxBorderColor: '#5f4e7d',
+		labelTextColor: '#f5f3ff',
+		activationBkgColor: '#211a31',
+		activationBorderColor: '#5f4e7d',
+		noteBkgColor: '#211a31',
+		noteTextColor: '#f5f3ff',
+		noteBorderColor: '#5f4e7d',
+		errorBkgColor: '#2a1f34',
+		errorTextColor: '#f5f3ff'
+	} as const;
 
 	let { Component } = $props<{ Component: any }>();
 	let contentElement: HTMLDivElement;
-	let copiedStates = $state<Map<number, boolean>>(new Map());
+	let mermaidReady = false;
+
+	function ensureMermaidInitialized() {
+		if (mermaidReady) return;
+
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: 'base',
+			themeVariables: {
+				...mermaidThemeVariables,
+				background: 'transparent'
+			},
+			securityLevel: 'loose'
+		});
+
+		mermaidReady = true;
+	}
 
 	$effect(() => {
 		void Component;
 
+		if (!contentElement) return;
+
+		ensureMermaidInitialized();
+
+		const mermaidBlocks = Array.from(
+			contentElement.querySelectorAll<HTMLPreElement>('pre.mermaid')
+		);
+		if (mermaidBlocks.length > 0) {
+			void mermaid.run({ nodes: mermaidBlocks }).catch((error) => {
+				console.error('Failed to render Mermaid diagram(s):', error);
+			});
+
+			// Mermaid injects inline SVG styles; force transparent canvas for all diagrams.
+			const mermaidSvgs = contentElement.querySelectorAll<SVGElement>('pre.mermaid svg');
+			mermaidSvgs.forEach((svg) => {
+				svg.style.backgroundColor = 'transparent';
+			});
+		}
+
 		// Add copy buttons to all pre elements
-		const preElements = contentElement.querySelectorAll('pre');
-		preElements.forEach((pre, index) => {
+		const preElements = contentElement.querySelectorAll('pre:not(.mermaid)');
+		preElements.forEach((pre) => {
 			// Skip if already has a copy button
 			if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
 

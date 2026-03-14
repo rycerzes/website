@@ -1,6 +1,7 @@
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import rehypeMermaid from 'rehype-mermaid';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -17,7 +18,11 @@ const config = {
 		vitePreprocess(),
 		mdsvex({
 			extensions: ['.md', '.svx', '.mdx'],
-			rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+			highlight: false,
+			rehypePlugins: [
+				[rehypeMermaid, { strategy: 'pre-mermaid' }],
+				[rehypePrettyCode, prettyCodeOptions]
+			]
 		}),
 		{
 			name: 'mdsvex-deprecation-fix',

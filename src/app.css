@@ -244,6 +244,16 @@ code[data-theme*=' '] span {
 	overflow-x: auto;
 }
 
+/* Keep Mermaid diagrams visually centered in prose content. */
+.mdx-content pre.mermaid {
+	display: flex;
+	justify-content: center;
+}
+
+.mdx-content pre.mermaid svg {
+	margin-inline: auto;
+}
+
 /* Break long words/URLs in prose to prevent overflow */
 .mdx-content a,
 .mdx-content p {
