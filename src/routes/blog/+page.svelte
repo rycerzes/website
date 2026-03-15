@@ -34,7 +34,7 @@
 					-->
 
 					<p
-						class="group-hover:text-uv-text/80 mt-1 text-xs break-words text-uv-text-dim transition-colors"
+						class="group-hover:text-uv-text/80 mt-1 text-xs wrap-break-word text-uv-text-dim transition-colors"
 					>
 						{post.excerpt}
 					</p>
