@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { Check, Copy } from '@lucide/svelte';
 
-	let { children, ...props }: { children?: any; [key: string]: any } = $props();
+	let {
+		children,
+		tabIndex: _tabIndex,
+		tabindex: _tabindex,
+		...props
+	}: { children?: any; [key: string]: any } = $props();
 
 	let copied = $state(false);
 	let preElement: HTMLPreElement | null = $state(null);
