@@ -5,6 +5,8 @@ excerpt: 'analyzing mllm for zero-shot object detection with visual prompting an
 tags: ['mllm', 'rex-omni', 'qwen', 'object-detection', 'computer-vision']
 ---
 
+> **TL;DR**: Rex-Omni extends Qwen2.5-VL-3B with coordinate tokenization — repurposing the last 1000 tokens as coordinate bins (0-999) to output structured [x0, y0, x1, y1] bboxes without adding parameters. Enables zero-shot detection, visual prompting, pointing, and OCR with a unified output format. Trained via SFT + GRPO with geometry-aware rewards that eliminate duplicate and large-box predictions.
+
 ## The Problem: Electrical Single-Line Diagrams
 
 At work, I was tasked with coming up with a pipeline which would automatically detect components in electrical single-line diagrams (SLDs). These are the schematics you see in industrial control panels — like JIC or NFPA standard schemas.
