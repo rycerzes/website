@@ -134,6 +134,20 @@ pre code * {
 	text-transform: none !important;
 }
 
+/* Render model/control tokens literally in code blocks (no glyph ligatures). */
+code,
+pre,
+pre code,
+pre code * {
+	font-variant-ligatures: none;
+	font-feature-settings:
+		'liga' 0,
+		'calt' 0,
+		'dlig' 0,
+		'ss01' 0,
+		'ss02' 0;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
 	width: 10px;
