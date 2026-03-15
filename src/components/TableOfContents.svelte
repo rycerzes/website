@@ -3,6 +3,16 @@
 
 	let headings: { id: string; text: string; level: number }[] = $state([]);
 	let activeId = $state('');
+	let tocNav: HTMLElement | null = $state(null);
+
+	$effect(() => {
+		if (!tocNav || !activeId) {
+			return;
+		}
+
+		const activeLink = tocNav.querySelector(`a[href="#${activeId}"]`) as HTMLElement | null;
+		activeLink?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+	});
 
 	onMount(() => {
 		// Find all headings in the article content
@@ -24,39 +34,43 @@
 			};
 		});
 
-		// Scroll spy
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						activeId = entry.target.id;
-					}
-				});
-			},
-			{ rootMargin: '0px 0px -80% 0px' }
-		);
-
-		elements.forEach((elem) => observer.observe(elem));
-
 		const onScroll = () => {
-			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-				if (headings.length > 0) {
-					activeId = headings[headings.length - 1].id;
+			if (headings.length === 0) {
+				return;
+			}
+
+			const markerLine = window.innerHeight * 0.22;
+			let currentId = headings[0].id;
+
+			for (const elem of elements) {
+				if (elem.getBoundingClientRect().top <= markerLine) {
+					currentId = elem.id;
+				} else {
+					break;
 				}
+			}
+
+			activeId = currentId;
+
+			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+				activeId = headings[headings.length - 1].id;
 			}
 		};
 
-		window.addEventListener('scroll', onScroll);
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
 
 		return () => {
-			observer.disconnect();
 			window.removeEventListener('scroll', onScroll);
 		};
 	});
 </script>
 
 {#if headings.length > 0}
-	<nav class="toc-nav relative flex flex-col gap-1">
+	<nav
+		bind:this={tocNav}
+		class="toc-nav relative flex max-h-[calc(100vh-11rem)] flex-col gap-1 overflow-y-auto pr-2 pb-2"
+	>
 		<!-- Header removed for minimal Chiri style -->
 		{#each headings as heading}
 			<a
@@ -75,7 +89,7 @@
 
 				<!-- The Text -->
 				<span
-					class="absolute left-12 z-10 w-48 -translate-x-2 text-xs whitespace-normal text-uv-text-dim opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100 group-[.active]:translate-x-0 group-[.active]:opacity-100"
+					class="absolute left-11 z-10 w-40 -translate-x-2 text-xs whitespace-normal text-uv-text-dim opacity-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:opacity-100 group-[.active]:translate-x-0 group-[.active]:opacity-100"
 					style="font-family: var(--font-family-mono); color: var(--color-uv-text-dim);"
 				>
 					{heading.text}
