@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "*.css": "tailwindcss"
+        "*.css": "tailwindcss",
+        "**/+page.mdx": "svelte",
+        "**/+layout.mdx": "svelte",
+        "**/+error.mdx": "svelte"
     },
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
