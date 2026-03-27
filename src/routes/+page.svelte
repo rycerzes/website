@@ -28,7 +28,7 @@
 			</div>
 
 			<p class="mt-1 max-w-lg text-sm leading-relaxed text-uv-text-dim">
-				currently interning at siemens, working on vlms/llms, robotics and autonomous systems.
+				currently interning at siemens, working on vlms/llms, agentic systems, and openenv.
 			</p>
 
 			<p class="mt-2 text-sm text-uv-text-dim">
