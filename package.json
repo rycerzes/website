@@ -53,6 +53,7 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
+		"@chenglou/pretext": "^0.0.5",
 		"@neondatabase/serverless": "^1.0.2",
 		"@threlte/core": "^8.3.1",
 		"@threlte/extras": "^9.7.1",
