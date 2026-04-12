@@ -1,0 +1,146 @@
+---
+title: 'pretext and the end of dom text measurement?'
+date: '12-04-2026'
+excerpt: "why cheng lou's pretext might be one of the biggest frontend infrastructure drops in years"
+tags: ['pretext', 'typescript', 'frontend', 'performance', 'ui-infra']
+---
+
+# a few weeks earlier, cheng lou dropped something interesting for frontend
+
+"text measurement" sounds boring but this new lib by cheng lou was making a lot of buzz on twt/x and hackernews.
+
+so i finally gave in to the hype and decided to spend my weekend on this `yay!`
+
+This thing is _very_ impressive.
+
+if you've ever built a heavily composited ui and fought layout thrash, this is one of those releases that could age like React Motion did: niche on day one, everywhere two years later.
+
+---
+
+## live demo: editorial flow with pokemon sprites
+
+This is a demo heavily inspired by [editorial engine demo from pretext website](https://chenglou.me/pretext/editorial-engine/). it's embedded directly in this post. Move your cursor and gengar chases it, while Pretext continuously reroutes lines around the moving obstacle.
+
+<div class="not-prose my-8 overflow-hidden border border-uv-mute/40 bg-[#0c0a10]">
+	<div
+		class="border-b border-uv-mute/30 bg-[#120f1a] px-4 py-2 font-mono text-[11px] tracking-wide text-uv-text-dim/80 uppercase"
+	>
+		demo
+	</div>
+
+    <div
+    	id="pretext-gengar-demo-stage"
+    	role="img"
+    	aria-label="Pretext line routing demo with a cursor-following gengar sprite"
+    	class="relative h-[520px] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_30%,#181326_0%,#0d0a14_55%,#07060b_100%)]"
+    >
+    	<div id="pretext-gengar-demo-lines" class="absolute inset-0 z-10 pointer-events-none"></div>
+
+    	<div
+    		id="pretext-gengar-demo-sprite"
+    		class="absolute z-20"
+    	>
+    		<div
+    			id="pretext-gengar-demo-sprite-inner"
+    			class="h-full w-full bg-no-repeat image-render-pixel"
+    			style=""
+    		></div>
+    	</div>
+    </div>
+
+</div>
+
+---
+
+## the old pain: dom measurement is expensive
+
+If your UI depends on unknown text size at runtime, you usually end up poking the DOM for answers.
+
+That works, until scale shows up.
+
+Think chat timelines, activity feeds, knowledge bases, and comment systems. The moment you need reliable line wrapping and height for thousands of text blocks, `getBoundingClientRect` starts showing up in all the wrong places.
+
+And once layout reflow enters the chat, performance drops fast.
+
+For years the trade-off looked like this:
+
+- measure everything and pay the cost
+- estimate heights and accept visual drift
+
+Neither option feels good when you're trying to build smooth, text-heavy product surfaces.
+
+---
+
+## what pretext does differently
+
+Pretext sidesteps the bottleneck by moving the expensive part out of DOM layout.
+
+The model is straightforward:
+
+- Use **Canvas text metrics** for horizontal measurement.
+- Build a **custom line-breaking + layout algorithm** for wrapping behavior.
+- Return line count and height without touching the DOM layout pipeline.
+
+So instead of repeatedly asking the browser "how tall is this paragraph?", you compute it in userland with a deterministic path.
+
+The API split is what makes it practical:
+
+```ts
+import { prepare, layout } from '@chenglou/pretext';
+
+const prepared = prepare(text, '16px Inter');
+const { height, lineCount } = layout(prepared, width, 24);
+```
+
+- `prepare(...)` does the heavier one-time work.
+- `layout(...)` is the cheap hot path you can rerun on resize.
+
+That separation matters a lot in real apps. You can precompute once, then re-layout at different widths without repeatedly triggering expensive browser layout passes.
+
+---
+
+## where this actually helps in production
+
+Once text layout becomes cheap and predictable, a lot of annoying frontend problems get less annoying:
+
+- Accurate virtualization without DOM probes
+- Stable scroll anchoring when content streams in
+- Better precomputation for chat, docs, feeds, and comments
+- Programmatic text layouts that used to be impractical
+
+This is the bigger shift: browser rendering is still the source of visual truth, but your app logic no longer has to rely on browser reflow as the measurement API.
+
+That means fewer hacks, fewer guess tables, and less layout jitter hiding behind "good enough" heuristics.
+
+---
+
+## hype or real infra win?
+
+No, this doesn't replace the browser text engine.
+
+But it does remove one painful class of costs that we usually accept as unavoidable.
+
+If your product has a lot of dynamic text and you care about smooth rendering at scale, Pretext is worth testing.
+
+---
+
+## why this is harder than it looks
+
+The problem it solves is efficiently calculating the height of some wrapped text on a web page, without actually rendering that text to the page first which is very expensive.
+
+It does that by pre-calculating the width/height of individual segments like words/characters and caching those. Then it implements the full algorithm for how browsers construct text strings by line-wrapping those segments using custom code.
+
+This is diabolically hard because of the many different types of wrapping and characters (hyphenation, emoji, Chinese, etc) that need to be taken into account - plus the fact that different browsers have slight differences in their rendering algorithms.
+
+It tests the resulting library against real browsers using a wide variety of long text documents, see https://github.com/chenglou/pretext/tree/main/corpora and https://github.com/chenglou/pretext/tree/main/accuracy
+
+---
+
+## links & references
+
+- Pretext: https://github.com/chenglou/pretext
+
+Demo code adapted from
+
+- gengar Sprite: https://sprites.pmdcollab.org/#/0172
+- Pokeneko: https://jamesschoch.github.io/Pokeneko/
