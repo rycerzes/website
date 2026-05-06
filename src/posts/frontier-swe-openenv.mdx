@@ -1,0 +1,295 @@
+---
+title: 'working with openenv for rl on long horizon swe tasks'
+date: '06-05-2026'
+excerpt: 'how my team and i created a long-horizon swe environment with frontier-swe + openenv + pi harness'
+tags: ['openenv', 'rl', 'swe', 'hackathon', 'pi', 'frontierswe']
+---
+
+my friends sourasish and shopno and i were participating in openenv hackathon and we had cleared round one with our environment [qed-math-openenv](https://github.com/3xcaffeine/qed-math-openenv/), which was inspired and based on [QED-Nano](https://github.com/CMU-AIRe/QED-Nano)
+
+Round 1 (`qed-math-openenv`) was our play safe phase xD
+
+That environment focused on theorem-style math tasks where the agent had to:
+
+- generate intermediate reasoning artifacts,
+- apply transformations in constrained action spaces,
+- and maximize reward from both intermediate correctness + final solution checks.
+- the rewards were based on rubrics and given out by a judge llm
+
+The biggest round-1 lesson: **reward design dominates everything**. If your reward function is even slightly misaligned, the agent finds cursed shortcuts instantly and tries every reward hack under the sun.
+
+So for round 2, we wanted a domain where shortcutting is harder and competence has to be operationally real.
+
+That naturally pushed us toward long-horizon software engineering, which also aligned with my curiousity for the same
+
+---
+
+## why frontier-swe?
+
+I came across **FrontierSWE** from Proximal Labs:
+
+- https://frontierswe.com
+- https://www.proximal.ai/blog/frontierswe
+
+The benchmark is compelling for one core reason: these tasks are hard enough that even frontier models underperform. That was exactly the pressure test we wanted.
+
+We weren't interested in toy "edit one line and pass one unit test" setups.
+We wanted tasks where agents must:
+
+1. read unfamiliar repos,
+2. discover latent constraints,
+3. modify multiple files,
+4. run and interpret tooling feedback,
+5. recover from bad plans over long trajectories.
+
+So we adapted that direction into an OpenEnv environment:
+
+- https://github.com/3xCaffeine/frontier-swe-openenv
+
+---
+
+## architecture: how we mapped frontier-swe style tasks into openenv
+
+At a high level, each episode is a deterministic sandbox with:
+
+- a pinned repo snapshot (commit hash / archive hash),
+- a task prompt (issue-style or behavior-style objective),
+- an allowed tool surface,
+- and an evaluator that computes terminal + shaping signals.
+
+### episode lifecycle
+
+```text
+reset()
+  -> provision workspace (repo + deps + cache)
+  -> inject task spec + constraints
+  -> expose tool API
+
+step(action)
+  -> validate tool call / patch
+  -> execute in sandbox
+  -> return observation (stdout/stderr/diff/files)
+  -> return reward components + done flag
+
+done()
+  -> run evaluator suite (tests, static checks, patch heuristics)
+  -> compute final score
+  -> emit trajectory artifacts
+```
+
+### action space we found practical
+
+We intentionally used actions that mirror actual coding workflows instead of synthetic "magic" actions:
+
+- `read(path, offset, limit)`
+- `bash(command)`
+- `edit(path, oldText, newText)`
+- `write(path, content)`
+- optional `submit()` / `done()`
+
+This keeps policies tool-grounded and makes trajectories auditable.
+
+---
+
+## pi harness integration
+
+One big unlock was wiring the environment to run cleanly with the **pi coding harness** loop.
+
+Why this mattered technically:
+
+- We could enforce **structured tool calls** rather than raw freeform shell spam.
+- We got deterministic logs for each step: command input, output, edit diff, error status.
+- We could replay trajectories and debug failure modes at the step level.
+
+In practice, this let us analyze policies beyond final pass/fail:
+
+- Did the agent localize the bug quickly?
+- Did it over-edit unrelated files?
+- Did it recover after first failed test run?
+- Did it terminate early with a broken patch?
+
+That debugging visibility is the difference between "benchmark score moved" and "we understand why it moved."
+
+---
+
+## evaluation and reward shaping (the part that bites)
+
+Long-horizon SWE tasks can't rely on a single binary score. We used layered scoring with hard gates.
+
+### terminal checks
+
+- task-specific test subset pass rate,
+- repo-wide regression guardrail (avoid unrelated breakage),
+- lint/type/static checks when relevant,
+- patch validity (applies cleanly, no malformed edits).
+
+### shaping signals (carefully weighted)
+
+- progress reward for reducing failing tests,
+- mild penalty for excessive no-op or redundant tool calls,
+- penalty for broad destructive edits,
+- small bonus for concise successful trajectories.
+
+### simplified scoring sketch
+
+```text
+final_score =
+  0.55 * task_test_pass
++ 0.20 * regression_safety
++ 0.15 * static_quality
++ 0.10 * patch_hygiene
+- action_cost_penalty
+```
+
+The exact numbers are less important than the principle: reward should track true SWE progress, not superficial activity.
+
+---
+
+## reproducibility vs realism: what we did to keep runs stable
+
+This was heavily informed by the HF writeup for the same:
+
+- https://huggingface.co/blog/rycerzes/building-long-horizon-swe-environments-on-openenv
+
+The core pain in SWE envs is nondeterminism. We mitigated it with:
+
+- pinned dependency versions / lockfiles,
+- bounded command timeouts,
+- controlled network assumptions,
+- sandbox reset per episode,
+- cached setup layers to keep rollout cost manageable.
+
+Without this, training/eval noise becomes so high that policy changes are impossible to interpret.
+
+---
+
+## what transferred from qed-math-openenv (and what didn't)
+
+### transferred well
+
+- strict environment contracts,
+- explicit reward decomposition,
+- trajectory-level diagnostics.
+
+### did not transfer cleanly
+
+- math tasks had cleaner success manifolds; SWE tasks are messy and multi-path,
+- action branching factor exploded (tooling + repo topology),
+- sparse reward stretches were much longer.
+
+This forced us to invest more in:
+
+- intermediate progress metrics,
+- robust failure typing,
+- and better stop conditions.
+
+---
+
+## concrete failure modes we repeatedly saw
+
+Some patterns appeared across many rollouts:
+
+1. **local optimum patching**: agent fixes one failing test by hardcoding behavior, then breaks hidden invariants.
+2. **grep-and-pray edits**: broad pattern replacement causes collateral damage.
+3. **tool thrashing**: too many shell commands without committing to a hypothesis.
+4. **premature submit**: agent stops after partial green signals.
+
+Designing evaluator hooks to detect these was essential.
+
+---
+
+## training: why we went offline rl (and what we actually ran)
+
+A single Frontier SWE episode can take roughly **45 to 90 minutes** depending on task/verifier/tooling behavior. That makes dense online RL loops painfully expensive and noisy. So we followed an **offline RL pipeline**:
+
+1. collect trajectories,
+2. backfill/clean rewards,
+3. compute hindsight step scores,
+4. build a static HCAPO-style dataset,
+5. fine-tune,
+6. track with Trackio.
+
+This is also documented in the project README + training docs:
+
+- https://github.com/3xCaffeine/frontier-swe-openenv
+- (see [training/README.md](https://github.com/3xcaffeine/frontier-swe-openenv/blob/main/training/README.md) for a more detailed writeup)
+
+### concrete run setup from the repo docs
+
+For the postgres-sqlite-wire-adapter task, we collected:
+
+- **20 episodes**,
+- on a **2x NVIDIA A100** host,
+- using **sglang** serving,
+- with **Qwen/Qwen3.6-27B** as the model,
+- run label: **`pg-01`**.
+
+Then we ran post-processing scripts from the repo:
+
+- `scripts/backfill_rewards.py` (fix missing persisted `episode_reward` from a server-side bug)
+- `scripts/compute_hindsight_scores.py` (attach per-step hindsight quantities)
+- `scripts/build_hcapo_dataset.py` (emit training JSONL)
+
+The README references these published artifacts too:
+
+- trajectory dataset: `rycerzes/fswe-pg-01-traj-q36-27b`
+- HCAPO dataset: `rycerzes/fswe-hcapo-pg-01-trajectories`
+- Trackio dashboard: `rycerzes/trackio` (run `fswe-hcapo-pg-01-qwen36-27b`)
+
+### dataset build + fine-tune path
+
+The documented dataset build flow is basically:
+
+```bash
+uv run python scripts/build_hcapo_dataset.py \
+  --input-dir trajectories \
+  --output-dir datasets \
+  --min-reward 0.05 \
+  --omega 1.0
+```
+
+And training launch:
+
+```bash
+./scripts/launch_hf_space.sh --with-dataset-upload
+```
+
+with a short sanity schedule (README example):
+
+- **3 epochs**
+- **18 optimizer steps**
+
+The Trackio curves in README indicate the expected small-run behavior (loss trending down, warmup/decay LR shape, bounded gradient norm), which is exactly what we wanted for a first reproducible fine-tune.
+
+### why this mattered for the environment design itself
+
+Once training is offline-first, environment engineering priorities shift:
+
+- trajectory logging quality matters as much as raw reward,
+- hindsight compatibility matters (step-level metadata must be reconstructable),
+- and deterministic replay/debugging matters more than peak throughput.
+
+That fed directly back into our pi harness + structured tooling decisions.
+
+## why this benchmark direction is worth it
+
+FrontierSWE's signal is useful precisely because it is uncomfortable: strong models still fail often. That means there’s headroom, and that improvements are likely to reflect real gains in long-horizon agent behavior.
+
+For us, round 2 was less about chasing a leaderboard and more about building a credible RL environment where:
+
+- the agent must reason over time,
+- tools are first-class,
+- and success requires real engineering work.
+
+And yes, building this with sourasish and Shopno has been chaotic and extremely fun.
+
+---
+
+## references
+
+- FrontierSWE site: https://frontierswe.com
+- Proximal Labs FrontierSWE post: https://www.proximal.ai/blog/frontierswe
+- FrontierSWE OpenEnv adaptation repo: https://github.com/3xCaffeine/frontier-swe-openenv
+- Our round-1 env (QED math): https://github.com/3xcaffeine/qed-math-openenv/
+- QED Nano: https://github.com/CMU-AIRe/QED-Nano
+- HF post: building long-horizon SWE environments on OpenEnv: https://huggingface.co/blog/rycerzes/building-long-horizon-swe-environments-on-openenv
