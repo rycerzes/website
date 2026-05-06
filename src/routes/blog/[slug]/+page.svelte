@@ -84,7 +84,7 @@
 			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
 				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
 				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
-				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 hover:prose-a:text-violet-300 hover:prose-a:decoration-violet-300
+				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 [&_a:hover]:text-violet-300 [&_a:hover]:decoration-violet-300
 				prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1 prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1
 				prose-code:py-0.5 prose-code:font-mono prose-code:text-[0.8em]
