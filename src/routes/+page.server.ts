@@ -1,10 +1,11 @@
 import { GITHUB_TOKEN } from '$env/static/private';
+import { env } from '$env/dynamic/public';
 import { getPosts } from '$lib/posts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ setHeaders }) => {
     setHeaders({
-        'Cache-Control': 'public, max-age=86400'
+        'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
     });
     const projectLinks = [
         'meta-pytorch/openenv',
@@ -51,40 +52,29 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
         }
     };
 
-    const fetchSpotifyMeta = async (url: string) => {
+    const fetchLanyardPresence = async (userId: string) => {
+        if (!userId) return null;
+
         try {
-            const res = await fetch(url);
-            if (!res.ok) return null;
-            const html = await res.text();
-            // Match: <title>Song - song and lyrics by Artist | Spotify</title>
-            const match = html.match(/<title>(.*?) - song and lyrics by (.*?) \| Spotify<\/title>/);
-            if (match) {
-                return {
-                    title: match[1],
-                    artist: match[2],
-                    url
-                };
+            const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
+
+            if (!response.ok) {
+                console.error('Failed to fetch Lanyard presence:', await response.text());
+                return null;
             }
-            // Fallback if title format is different (e.g. just Title | Spotify)
-            const simpleMatch = html.match(/<title>(.*?) \| Spotify<\/title>/);
-            if (simpleMatch) {
-                return {
-                    title: simpleMatch[1],
-                    artist: 'Spotify',
-                    url
-                }
-            }
-            return null;
-        } catch (e) {
-            console.error('Error fetching Spotify meta:', e);
+
+            const payload = await response.json();
+            return payload?.data ?? null;
+        } catch (error) {
+            console.error('Error fetching Lanyard presence:', error);
             return null;
         }
     };
 
     try {
-        const spotifyUrl = 'https://open.spotify.com/track/13mhxEx7vmeGk6e2Zk5gTQ';
+        const lanyardUserId = env.PUBLIC_LANYARD_USER_ID?.trim() ?? '';
 
-        const [userRes, projectsData, recentActivity] = await Promise.all([
+        const [userRes, projectsData, lanyardPresence] = await Promise.all([
             fetch('https://api.github.com/user', {
                 headers: {
                     Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -92,7 +82,7 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
                 }
             }),
             Promise.all(projectLinks.map(fetchRepoData)),
-            fetchSpotifyMeta(spotifyUrl)
+            fetchLanyardPresence(lanyardUserId)
         ]);
 
         let avatarUrl = 'https://github.com/rycerzes.png';
@@ -107,14 +97,15 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
             avatarUrl,
             projects: projectsData.filter((p) => p !== null),
             posts: getPosts().slice(0, 3),
-            recentActivity
+            lanyard: lanyardPresence
         };
     } catch (error) {
         console.error('Error in load function:', error);
         return {
             avatarUrl: 'https://github.com/rycerzes.png',
             projects: [],
-            posts: []
+            posts: [],
+            lanyard: null
         };
     }
 };
