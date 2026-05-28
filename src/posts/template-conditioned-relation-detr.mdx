@@ -1,0 +1,270 @@
+---
+title: 'Template-Conditioned Relation-DETR'
+date: '27-05-2026'
+excerpt: 'turning a closed-set DETR detector into an exemplar-conditioned detector by replacing class logits with learned cosine matching'
+tags: ['detr', 'relation-detr', 'object-detection', 'few-shot', 'computer-vision']
+---
+
+> **TL;DR**: A closed-set DETR-style detector predicts one of `C` fixed classes for every object query. A template-conditioned detector instead asks whether each decoded query matches a supplied exemplar image. The geometry stays DETR-like: Hungarian matching, box regression, transformer decoding, and Relation-DETR's spatial reasoning remain intact. The semantic head changes from `(B, N, C)` class logits to `(B, N, 1)` query-template match logits.
+
+## The shift
+
+Standard DETR-style detectors answer a fixed-vocabulary question:
+
+- "Which predefined class does this object query represent?"
+
+Template-conditioned detection asks a retrieval-style question:
+
+- "How similar is this object query to the exemplar I provided?"
+
+That sounds like a small change, but it moves the class decision boundary out of the final classifier weights and into the input. Instead of learning a static matrix of class weights, the model receives a visual template at inference time and scores every decoded object query against that template.
+
+For a Relation-DETR-like detector, this is appealing because the detector already has a strong geometric engine. The decoder learns object queries, the matcher enforces one-to-one assignments, and the box heads learn localization. We do not need to discard that machinery. We only need to replace closed-set classification with conditional matching.
+
+## Architecture change
+
+The original detector and the template-conditioned variant share the same image path. The change is isolated to the semantic branch after the decoder: the closed-set classifier is replaced by a query-template similarity head.
+
+```typst-diagram
+draw.set-style(stroke: rgb("#94a3b8"), mark: (fill: rgb("#94a3b8"), scale: .75))
+
+draw.content((0, 7), text(weight: "bold", size: 11pt)[Original Relation-DETR], anchor: "west")
+
+draw.content((1.5, 5.5), text(size: 8pt)[target image], name: "a1", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((5.5, 5.5), text(size: 8pt)[backbone + neck], name: "a2", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((10, 5.5), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "a3", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((14.5, 5.5), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "a4", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((19, 6.3), text(size: 8pt, align(center)[linear class\ head]), name: "a5", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
+draw.content((19, 4.7), text(size: 8pt)[box head], name: "a6", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
+draw.content((23.2, 6.3), text(size: 8pt, align(center)[class logits\ $(B, N, C)$]), name: "a7", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+draw.content((23.2, 4.7), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "a8", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+
+draw.line("a1.east", "a2.west", mark: (end: ">"))
+draw.line("a2.east", "a3.west", mark: (end: ">"))
+draw.line("a3.east", "a4.west", mark: (end: ">"))
+draw.line("a4.east", "a5.west", mark: (end: ">"))
+draw.line("a4.east", "a6.west", mark: (end: ">"))
+draw.line("a5.east", "a7.west", mark: (end: ">"))
+draw.line("a6.east", "a8.west", mark: (end: ">"))
+
+draw.content((0, 2.5), text(weight: "bold", size: 11pt)[Template-conditioned variant], anchor: "west")
+
+draw.content((1.5, 0.7), text(size: 8pt)[target image], name: "b1", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((5.5, 0.7), text(size: 8pt)[backbone + neck], name: "b2", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((10, 0.7), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "b3", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((14.5, 0.7), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "b4", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
+draw.content((19, 1.5), text(size: 8pt, align(center)[template similarity\ head]), name: "b5", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
+draw.content((19, -0.1), text(size: 8pt)[box head], name: "b6", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
+draw.content((23.2, 1.5), text(size: 8pt, align(center)[match logits\ $(B, N, 1)$]), name: "b7", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+draw.content((23.2, -0.1), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "b8", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+
+draw.content((5.5, -1.8), text(size: 8pt)[template crop], name: "c1", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
+draw.content((10, -1.8), text(size: 8pt, align(center)[visual prompt\ encoder]), name: "c2", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
+draw.content((14.5, -1.8), text(size: 8pt, align(center)[template embedding\ $(B, 1, D)$]), name: "c3", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
+
+draw.line("b1.east", "b2.west", mark: (end: ">"))
+draw.line("b2.east", "b3.west", mark: (end: ">"))
+draw.line("b3.east", "b4.west", mark: (end: ">"))
+draw.line("b4.east", "b5.west", mark: (end: ">"))
+draw.line("b4.east", "b6.west", mark: (end: ">"))
+draw.line("b5.east", "b7.west", mark: (end: ">"))
+draw.line("b6.east", "b8.west", mark: (end: ">"))
+draw.line("c1.east", "c2.west", mark: (end: ">"))
+draw.line("c2.east", "c3.west", mark: (end: ">"))
+draw.line("c3.east", "b5.south", mark: (end: ">"), stroke: rgb("#fb923c"))
+
+draw.line("a5.south", "b5.north", stroke: (paint: rgb("#fb923c"), dash: "dashed"), mark: (end: ">", fill: rgb("#fb923c")))
+draw.content((20, 3.9), text(size: 7pt, fill: rgb("#fb923c"))[replace classifier], anchor: "west")
+```
+
+The conceptual diff is: keep the backbone, decoder, query set, and box head fixed; remove the `Linear(D, C)` classifier; add a template encoder and replace the classifier with normalized query-template matching.
+
+## Mathematical formulation
+
+Let the detector decoder produce `N` query embeddings:
+
+```math
+Q = { q_i }_(i=1)^N, quad q_i in RR^D
+```
+
+Let a template encoder produce one visual prototype from the exemplar crop:
+
+```math
+v = E(t), quad v in RR^D
+```
+
+For each query, project the query embedding and compute a normalized similarity score against the template:
+
+```math
+ell_i = tau dot angle.l frac(W q_i, norm(W q_i)_2), frac(v, norm(v)_2) angle.r
+```
+
+where:
+
+- `W in R^(D x D)` is a learned projection
+- `tau = exp(s)` is a learned temperature
+- `ell_i` is the conditional match logit for query `i`
+
+Then:
+
+```math
+p_i = sigma(ell_i)
+```
+
+The output shape becomes:
+
+```text
+closed-set classification:       (B, N, C)
+template-conditioned matching:   (B, N, 1)
+```
+
+The model no longer predicts a class id directly. It predicts whether each query matches the exemplar.
+
+## Matching and loss
+
+The localization losses can stay almost unchanged. Hungarian assignment still matches predicted boxes to ground-truth boxes. The classification term becomes binary: positive if the ground-truth object belongs to the template's category, negative otherwise.
+
+For a matched pair `(i, j)`:
+
+```math
+cal(L)_(i j) = lambda_"cls" cal(L)_"focal"(p_i, y_j) + lambda_"L1" norm(b_i - b_j^*)_1 + lambda_"giou" (1 - "GIoU"(b_i, b_j^*))
+```
+
+This keeps the detector DETR-like in geometry and metric-learning-like in recognition. The decoder still has to produce good boxes; the head only changes how semantic evidence is computed.
+
+## Design pressure
+
+Closed-set detectors work well when the vocabulary is known ahead of deployment. They become brittle when the target category is rare, private, changing, or easier to show than to name.
+
+Template conditioning is useful when:
+
+- a user can provide a crop but not a stable class label
+- the category is absent from the training taxonomy
+- product, logo, symbol, or defect appearances change faster than retraining cycles
+- the same image needs to be searched repeatedly for different exemplars
+
+In that last case, the system can cache the target image features once, then run multiple template embeddings against the same decoded representation.
+
+## Core implementation
+
+The class head is the surgical part. A conventional DETR classifier maps every query to `C` logits. The template-conditioned head maps every query to one match logit.
+
+```python
+class TemplateClassHead(nn.Module):
+    def __init__(self, embed_dim: int = 256):
+        super().__init__()
+        self.query_proj = nn.Linear(embed_dim, embed_dim)
+        self.logit_scale = nn.Parameter(torch.tensor(math.log(10.0)))
+        self._template: torch.Tensor | None = None
+
+    def set_template(self, template: torch.Tensor) -> None:
+        self._template = template  # (B, 1, D)
+
+    def forward(self, query: torch.Tensor) -> torch.Tensor:
+        if self._template is None:
+            raise RuntimeError('TemplateClassHead requires a template before scoring queries.')
+
+        q = F.normalize(self.query_proj(query), dim=-1)      # (B, N, D)
+        v = F.normalize(self._template, dim=-1)              # (B, 1, D)
+        score = torch.bmm(q, v.transpose(1, 2))              # (B, N, 1)
+        return score * self.logit_scale.exp()
+```
+
+A minimal visual prompt encoder can be built from pooled backbone features:
+
+```python
+class VisualPromptEncoder(nn.Module):
+    def __init__(self, embed_dim: int = 256, in_ch: int = 2048):
+        super().__init__()
+        self.proj = nn.Sequential(
+            nn.Conv2d(in_ch, embed_dim, kernel_size=1),
+            nn.GroupNorm(32, embed_dim),
+        )
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.mlp = nn.Sequential(
+            nn.Linear(embed_dim, embed_dim),
+            nn.ReLU(inplace=True),
+            nn.Linear(embed_dim, embed_dim),
+            nn.LayerNorm(embed_dim),
+        )
+
+    def forward(self, feat: torch.Tensor) -> torch.Tensor:
+        x = self.proj(feat)
+        x = self.pool(x).flatten(1)
+        x = self.mlp(x)
+        return x.unsqueeze(1)  # (B, 1, D)
+```
+
+The inference path can reuse image features across templates:
+
+```python
+cached = model.extract_features(image)
+
+for template in templates:
+    template_embedding = model.encode_template(template)
+    detections = model.detect_with_cached_features(cached, template_embedding)
+```
+
+That matters in workflows where the same large image is queried with many exemplars: schematic symbols, retail products, industrial defects, logo search, or repeated visual inspection.
+
+## Training signal
+
+Each training sample can be formed as:
+
+- one target image
+- one template crop sampled from an object category in that image
+- all boxes of that category as positives
+- other decoded queries as negatives through the binary classification loss
+
+This gives a dense "find all objects like this" signal. The target image teaches localization, while the template controls which subset of objects should be scored as matches.
+
+A useful extension is to sample hard negatives deliberately: visually similar classes, nearby parts, same-category variants, or confusing background structures. Without that pressure, cosine heads can overfire on lookalikes.
+
+## What this borrows
+
+This design is a recombination of existing ideas rather than a new detection paradigm.
+
+From DETR, it keeps:
+
+- set prediction
+- learned object queries
+- bipartite matching
+- L1 and GIoU box losses
+- the decoder-to-box-head interface
+
+From Relation-DETR, it keeps the belief that the geometric decoder should remain strong and mostly untouched. The point is not to rebuild detection; the point is to change the semantic scoring layer while preserving the spatial reasoning stack.
+
+From FS-DETR and one-shot detection work, it borrows the idea that a visual example can define the target category at inference time.
+
+From OV-DETR, it borrows the conditional binary matching framing: the detector should predict whether a region matches a supplied query, rather than always predicting over a fixed class vocabulary.
+
+From CLIP-style retrieval heads, it borrows normalized embeddings and a learned temperature for cosine-style scoring.
+
+The difference is the scope of the modification. Instead of injecting templates deeply into the transformer decoder or building a full open-vocabulary text-and-image query system, this variant replaces the class head with a template-conditioned similarity head. It is intentionally narrow.
+
+## Failure modes
+
+The obvious failure mode is template quality. If the crop contains background clutter, partial objects, scale artifacts, or ambiguous context, the prototype becomes noisy.
+
+Near-lookalike categories are another problem. If two objects share local texture or shape, a single global template vector may not separate them reliably. This is where hard negative mining, multi-template prototypes, and contrastive auxiliary losses become useful.
+
+Thresholding is also brittle. A fixed score cutoff may work on one dataset and fail on another because the learned temperature, template quality, and visual domain all affect score calibration.
+
+Promising next steps:
+
+- use multiple templates per target and aggregate a prototype set
+- add hard negative mining with confusing lookalikes
+- train a calibration head for more stable thresholds
+- add contrastive supervision between query and template embeddings
+- preserve spatial template structure instead of collapsing the exemplar into one vector
+
+## Related work and implementations
+
+- [DETR: End-to-End Object Detection with Transformers](https://arxiv.org/abs/2005.12872) introduced the set-prediction formulation, Hungarian matching, and object-query decoder. Code: [facebookresearch/detr](https://github.com/facebookresearch/detr).
+- [Relation DETR: Exploring Explicit Position Relation Prior for Object Detection](https://arxiv.org/abs/2407.11699) adds explicit position-relation priors to strengthen DETR-style decoding. Code: [xiuqhou/Relation-DETR](https://github.com/xiuqhou/Relation-DETR).
+- [FS-DETR: Few-Shot Detection Transformer with Prompting and without Re-training](https://arxiv.org/abs/2210.04845) feeds visual templates as prompts so novel categories can be detected without test-time fine-tuning.
+- [OV-DETR: Open-Vocabulary DETR with Conditional Matching](https://arxiv.org/abs/2203.11876) formulates detection as conditional binary matching against text or exemplar-image queries.
+- [OS2D: One-Stage One-Shot Object Detection by Matching Anchor Features](https://arxiv.org/abs/2003.06800) performs one-shot detection through learned feature matching and geometric alignment. Code: [aosokin/os2d](https://github.com/aosokin/os2d).
+- [One-Shot Object Detection with Co-Attention and Co-Excitation](https://arxiv.org/abs/1911.12529) uses support-query interaction for one-shot detection. Code: [timy90022/one-shot-object-detection](https://github.com/timy90022/one-shot-object-detection).
+- [CORA: Adapting CLIP for Open-Vocabulary Detection with Region Prompting and Anchor Pre-Matching](https://openaccess.thecvf.com/content/CVPR2023/html/Wu_CORA_Adapting_CLIP_for_Open-Vocabulary_Detection_With_Region_Prompting_and_CVPR_2023_paper.html) adapts CLIP region features inside a DETR-style open-vocabulary detector.
+- [Few-Shot Pattern Detection via Template Matching and Regression](https://chipmunk-g4.github.io/TMR/) revisits template matching with modern frozen backbones and regression heads. Code: [Chipmunk-g4/Template-Matching-and-Regression](https://github.com/Chipmunk-g4/Template-Matching-and-Regression).
