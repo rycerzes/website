@@ -7,7 +7,7 @@ import { visit } from 'unist-util-visit';
  * @property {string} type
  * @property {string=} tagName
  * @property {string=} value
- * @property {{ className?: unknown }=} properties
+ * @property {{ className?: unknown, href?: unknown, xlinkHref?: unknown }=} properties
  * @property {HastNode[]=} children
  */
 
@@ -33,6 +33,27 @@ function diagnosticMessage(error) {
 		return JSON.stringify(error.shortDiagnostics);
 	}
 	return error instanceof Error ? error.message : String(error);
+}
+
+/**
+ * Typst SVGs can include self-referential fragment links that SvelteKit treats as page anchors
+ * during prerendering. Drop them because diagrams are static in post content.
+ *
+ * @param {HastNode} node
+ */
+function removeInternalSvgLinks(node) {
+	if (node.type === 'element' && node.properties) {
+		if (typeof node.properties.href === 'string' && node.properties.href.startsWith('#')) {
+			delete node.properties.href;
+		}
+		if (typeof node.properties.xlinkHref === 'string' && node.properties.xlinkHref.startsWith('#')) {
+			delete node.properties.xlinkHref;
+		}
+	}
+
+	for (const child of node.children ?? []) {
+		removeInternalSvgLinks(child);
+	}
 }
 
 /**
@@ -97,6 +118,7 @@ export default function rehypeTypstDiagram() {
 				const svg = renderTypstToSvg(source);
 				const root = fromHtmlIsomorphic(svg, { fragment: true });
 				const svgNode = root.children?.[0];
+				if (svgNode) removeInternalSvgLinks(svgNode);
 
 				if (!parentNode?.children) return;
 				parentNode.children[index] = {
