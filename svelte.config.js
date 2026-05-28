@@ -3,6 +3,9 @@ import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import rehypeMermaid from 'rehype-mermaid';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeTypst from '@myriaddreamin/rehype-typst';
+import remarkMath from 'remark-math';
+import rehypeTypstDiagram from './src/lib/mdx/rehype-typst-diagram.js';
 
 /**
  * Svelte warns when noninteractive elements (like <pre>) have tabindex >= 0.
@@ -48,7 +51,10 @@ const config = {
 		mdsvex({
 			extensions: ['.md', '.svx', '.mdx'],
 			highlight: false,
+			remarkPlugins: [remarkMath],
 			rehypePlugins: [
+				rehypeTypst,
+				rehypeTypstDiagram,
 				[rehypeMermaid, { strategy: 'pre-mermaid' }],
 				[rehypePrettyCode, prettyCodeOptions],
 				rehypeStripPreTabindex
