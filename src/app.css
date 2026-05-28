@@ -268,6 +268,37 @@ code[data-theme*=' '] span {
 	margin-inline: auto;
 }
 
+.mdx-content img[src*='/assets/blog/template-conditioned-relation-detr/'] {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 1.5rem auto;
+	border-radius: 0.75rem;
+}
+
+.mdx-content .typst-diagram svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 1.5rem auto;
+	border-radius: 0.75rem;
+}
+
+.mdx-content svg.typst-doc {
+	color: var(--foreground);
+	--glyph_fill: var(--foreground);
+	--glyph_stroke: var(--foreground);
+}
+
+.mdx-content .typst-diagram-error {
+	margin: 1.5rem 0;
+	overflow-x: auto;
+	border-radius: 0.75rem;
+	border: 1px solid rgba(248, 113, 113, 0.45);
+	background: rgba(127, 29, 29, 0.2);
+	padding: 1rem;
+}
+
 /* Break long words/URLs in prose to prevent overflow */
 .mdx-content a,
 .mdx-content p {
