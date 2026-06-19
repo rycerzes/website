@@ -1,0 +1,210 @@
+---
+title: 'atlan ai builder intern interview experience'
+date: '28-06-2026'
+excerpt: 'resume shortlist, ai-adjacent deep dives, agent memory demos, and why atlan felt different'
+tags: ['atlan', 'internship', 'ai', 'interview', 'agents']
+---
+
+# interviewing at atlan for the ai builder intern role
+
+I recently interviewed at **[Atlan](https://atlan.com/)** for the **AI Builder Intern** role, got through the loop, and I am currently interning there now 🎉
+
+I wanted to write about it, Not because it was some glamorous "how I cracked Xyz" arc but because the interviews were very clearly about whether I actually build AI systems or just talk about building AI systems.
+
+There is a big difference.
+
+Also, before anything else, massive thanks to [Sourasish Basu](https://github.com/SourasishBasu) for referring me. This entire pipeline started because he put in a word, so yes, certified friend behavior.
+
+---
+
+## the shortlist
+
+The first cut happened on the basis of my resume.
+
+I think the thing that helped was that my resume had actual build artifacts instead of just a pile of AI buzzwords. There was my work at [**Siemens**](https://www.siemens.com/global/en.html), but more importantly for this role, there were personal projects that made it very easy to ask follow-up questions.
+
+The two projects that ended up mattering the most later were:
+
+- [vision-autoresearch](https://github.com/rycerzes/vision-autoresearch)
+- [agent-memory](https://github.com/rycerzes/agent-memory)
+
+In hindsight, this was the correct shape of proof for an AI builder role. A notebook is fine. A demo video is fine. But a repo that can be opened, questioned, run locally, broken, fixed, and extended live is a very different kind of signal.
+
+The resume got me through the door, but the repos did most of the talking after that.
+
+---
+
+## round one: 15 minutes with anshul
+
+The first conversation was a short 15 minute call with [Anshul Mehta](https://www.linkedin.com/in/anshul-mehta/).
+
+This was not a stress round. No leetcode jumpscare. No "design Twitter in 12 minutes" nonsense.
+
+It was mostly a fast scan of:
+
+- what I had been doing at Siemens,
+- what parts of AI/ML I had been spending time on,
+- what my personal projects were actually trying to do,
+- and why **vision-autoresearch** existed in the first place.
+
+I liked that the conversation started from "what have you been building?" rather than "recite the definition of X". It is a small difference, but it changes the whole energy of the interview.
+
+For vision-autoresearch, I explained the rough idea: autonomous research workflows around vision tasks, where the system does not just answer once, but tries to decompose, gather context, reason over intermediate outputs, and keep moving toward something useful.
+
+That was enough for the next round.
+
+---
+
+## round two: the technical deep dive
+
+The second round was a one hour technical deep dive with [Mustafa Hasan Khan](https://www.linkedin.com/in/mustafahasankhan) and [Rishav Katoch](https://www.linkedin.com/in/rishhavv), both Senior Software Engineers at Atlan.
+
+This was where the process stopped being warm-up and became very real.
+
+The questions moved across a lot of AI-adjacent territory:
+
+- autonomous agents,
+- knowledge layers,
+- memory systems,
+- reinforcement learning,
+- [huggingface/openenv](https://github.com/huggingface/openenv),
+- [huggingface/trl](https://github.com/huggingface/trl),
+- [3xcaffeine/mcp-server](https://github.com/3xcaffeine/mcp-server),
+- [rycerzes/vision-autoresearch](https://github.com/rycerzes/vision-autoresearch),
+- [rycerzes/agent-memory](https://github.com/rycerzes/agent-memory).
+
+But the good part was that it did not feel like a checklist. It felt like they were trying to find out whether my mental model had any depth.
+
+There is a very particular kind of interview question that sounds simple but is actually a trapdoor:
+
+> okay, but how does your system know what to remember?
+
+Or:
+
+> what happens when the agent retrieves something stale?
+
+Or:
+
+> how would you evaluate this if the output is not a single deterministic answer?
+
+These are not "name the algorithm" questions. These are "have you suffered through this implementation class before?" questions.
+
+---
+
+## when the terminal enters the interview
+
+The deepest parts of the technical round were around [vision-autoresearch](https://github.com/rycerzes/vision-autoresearch) and [agent-memory](https://github.com/rycerzes/agent-memory).
+
+I had to run them locally, walk through the architecture, explain the design decisions, and add features while discussing the system.
+
+This is where interviews become very honest.
+
+The terminal does not care that your README sounded confident. If the environment is broken, everyone gets to watch it break. If your abstraction is fake, it collapses in public. If the project only worked once at 3:17 AM after five uncommitted `.env` changes, congratulations, your laptop is now the interviewer.
+
+Thankfully, the projects held up enough for the discussion to become fun instead of fatal.
+
+For **agent-memory**, the architecture was roughly:
+
+- vector storage for semantic retrieval,
+- graph storage for entity and relationship memory,
+- PostgreSQL for history and operation metadata,
+- and an LLM layer that decides whether new information should add, update, or delete existing memories.
+
+The obvious pitch is "memory for agents". The non-obvious problem is that memory is extremely easy to make useless.
+
+Store too much and retrieval becomes noise.
+
+Store too little and the agent has goldfish energy.
+
+Update too aggressively and you lose history.
+
+Never update and your system becomes a haunted museum of stale facts.
+
+That led to a much more interesting discussion around semantic memory, episodic memory, procedural memory, contradiction handling, and why "just throw it into a vector DB" is usually the beginning of the problem, not the end.
+
+For **vision-autoresearch**, the discussion was more about autonomous loops:
+
+- how the task is broken down,
+- what the system does between model calls,
+- where retrieval enters the loop,
+- how intermediate state is inspected,
+- and how you debug the system when the model takes a scenic route through nonsense.
+
+This was probably my favorite part of the interview. It felt less like defending a school project and more like opening up a messy workshop and saying, "yeah, here is the thing, here is where it works, here is where it is cursed, and here is what I would change next."
+
+---
+
+## the atlan connection clicked mid-conversation
+
+The more we spoke about agents, the more Atlan's positioning started making sense to me.
+
+Atlan describes itself as the **context layer for enterprise AI**. That sounds like marketing until you actually think about what an enterprise agent needs before it can answer a real data question.
+
+It needs to know:
+
+- what the metric means,
+- where the data came from,
+- who owns it,
+- whether it is trusted,
+- whether the user can access it,
+- what depends on it,
+- whether the definition changed,
+- and which tribal-knowledge spreadsheet is secretly load-bearing.
+
+This is where all the "boring" metadata machinery suddenly becomes very not boring.
+
+If agents are going to operate inside companies, they cannot live on prompt vibes. They need lineage, governance, definitions, access control, quality signals, ownership, and change history. Otherwise you are just giving a stochastic parrot admin access and hoping the vibes are ISO compliant.
+
+So the technical round ended up being a weirdly good match for the company. My projects were about memory, tools, and autonomous loops. Atlan's product world is about making enterprise context queryable, governed, and useful for humans and agents.
+
+That overlap was the interesting bit.
+
+---
+
+## round three: culture with vijay
+
+After the technical round, I had a culture interview with [Vijay](https://www.linkedin.com/in/vijayaragavanv), Director of Technology.
+
+This round had almost no code, which was a nice psychological reset after terminal-driven combat.
+
+We spoke about why I took up computer science, what I had learned through the journey, and how I moved through different corners of tech before landing properly in AI/ML.
+
+My answer was not very elegant because my path was not very elegant.
+
+It started, very predictably, with **Iron Man** and JARVIS. I watched those movies and decided that computers talking back and controlling things was obviously the coolest thing humanity had produced.
+
+Then came Arduino, ESP32s, Raspberry Pis, sensors, breadboards, wires everywhere, and the classic "why is this not blinking" phase.
+
+After that I drifted through cybersecurity, web development, bots, automation, and eventually AI/ML. In hindsight, the common thread was not "I always wanted to train models". The common thread was that I liked systems that reacted, adapted, automated something, or exposed some hidden layer of how things worked.
+
+JARVIS was the cinematic version. Agents are the current terminal-pilled version.
+
+We also discussed Atlan's values and how the company thinks about customers, shipping, ownership, and AI-native development. The part I liked was that the values conversation did not stay in the motivational-poster zone. It got into tradeoffs: what should a company optimize for, what does customer value actually mean, and how do you keep shipping fast without building toy AI features that look good in a launch video and then fall apart in a real enterprise.
+
+---
+
+## what i would do if i were preparing again
+
+If I had to prepare again, I would not spend most of my time memorizing generic AI interview answers.
+
+I would do this instead:
+
+1. Make sure my main projects run locally without ritual sacrifice.
+2. Re-read my own code and identify the parts I would redesign.
+3. Be ready to explain failure modes, not just architecture diagrams.
+4. Understand memory, retrieval, tool use, evals, and agent observability at the systems level.
+5. Read Atlan's AI/context layer positioning properly and connect it to real agent problems.
+
+The biggest lesson: for roles like this, "I built X" is only the opening line. The actual interview starts when they ask why X was built that way, what breaks first, and what you would change if the project had to serve real users.
+
+---
+
+## final thoughts
+
+The process was intense, but it was intense in the way I prefer: grounded in real work.
+
+I got to talk about agents, memory, RL environments, MCP, local demos, enterprise context, and why AI-native products need more than a chatbot-shaped surface area. That is very much my preferred genre of brainrot.
+
+Huge thanks again to Sourasish for the referral, and to Anshul, Mustafa, Rishav, and Vijay for the conversations.
+
+The best part was that the interview loop made the role legible. By the time I joined as an intern, I had a much clearer sense of what an "AI Builder" at Atlan is expected to care about: not just prompting models, but building the context, tools, loops, and engineering discipline around them 🥳
