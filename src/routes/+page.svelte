@@ -24,12 +24,12 @@
 			<h1 class="text-3xl font-bold tracking-tight text-white md:text-4xl">swappy</h1>
 
 			<div class="text-sm font-medium tracking-wide text-uv-text-dim">
-				<p>eng intern @ siemens</p>
+				<p>eng intern @ atlan</p>
 				<p>programmer. tinkerer. nerd.</p>
 			</div>
 
 			<p class="mt-1 max-w-lg text-sm leading-relaxed text-uv-text-dim">
-				currently interning at siemens, working on vlms/llms, agentic systems, and openenv.
+				currently interning at atlan, working on agentic systems
 			</p>
 
 			<p class="mt-2 text-sm text-uv-text-dim">
