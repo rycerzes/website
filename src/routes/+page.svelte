@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	import LanyardPresence from '$lib/components/LanyardPresence.svelte';
 	let { data }: { data: PageData } = $props();
@@ -34,7 +35,7 @@
 
 			<p class="mt-2 text-sm text-uv-text-dim">
 				I've written a longer introduction <a
-					href="/about"
+					href={resolve('/about')}
 					class="underline transition-colors hover:text-violet-400">here</a
 				> if you're interested :)
 			</p>
@@ -58,10 +59,10 @@
 	</div>
 	<div class="flex flex-col gap-3">
 		{#if data.projects && data.projects.length > 0}
-			{#each data.projects as project, i}
+			{#each data.projects as project, i (project.html_url)}
 				<a
 					class="group border-theme/80 relative flex flex-col justify-between gap-4 overflow-hidden rounded-none border bg-uv-deep/50 px-4 py-4 transition-all duration-500 hover:bg-uv-mute/40 md:flex-row md:items-center md:px-6"
-					href={project.html_url}
+					href={resolve(project.html_url)}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -78,7 +79,7 @@
 							{project.full_name}
 						</h3>
 						<div class="mt-1 flex flex-wrap gap-1.5">
-							{#each project.languages.slice(0, 3) as lang}
+							{#each project.languages.slice(0, 3) as lang (lang)}
 								<span class="rounded bg-violet-900/30 px-1.5 py-0.5 text-[9px] text-violet-300"
 									>{lang}</span
 								>
@@ -129,10 +130,10 @@
 	</div>
 	<div class="bg-theme/30 space-y-px">
 		{#if data.posts && data.posts.length > 0}
-			{#each data.posts as post}
+			{#each data.posts as post (post.slug)}
 				<a
 					class="group flex items-center justify-between rounded-sm px-4 py-3 transition-all duration-300 hover:bg-uv-mute/20 md:px-4"
-					href="/blog/{post.slug}"
+					href={resolve('/blog/[slug]', { slug: post.slug })}
 				>
 					<div class="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-8">
 						<span class="w-24 font-mono text-[10px] tracking-wider text-violet-400"

@@ -1,9 +1,11 @@
 <script lang="ts">
-	let { data } = $props();
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import TableOfContents from '../../../components/TableOfContents.svelte';
 	import MdxContent from '$lib/components/MdxContent.svelte';
 	import { mountPretextgengarDemo } from '$lib/components/pretextDemo.js';
+
+	let { data } = $props();
 
 	onMount(() => {
 		if (!document.getElementById('pretext-gengar-demo-stage')) {
@@ -25,7 +27,7 @@
 		<div class="sticky top-32">
 			<div class="mb-8">
 				<a
-					href="/blog"
+					href={resolve('/blog')}
 					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-violet-300"
 				>
 					<svg
@@ -60,10 +62,12 @@
 					class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-widest text-uv-text-dim/60 uppercase"
 				>
 					<span>{data.post.date}</span>
+					<span class="text-uv-text-dim/30">•</span>
+					<span>{data.post.readingTime}</span>
 					{#if data.post.tags.length > 0}
 						<span class="text-uv-text-dim/30">•</span>
 						<div class="flex gap-2">
-							{#each data.post.tags as tag}
+							{#each data.post.tags as tag (tag)}
 								<span
 									class="cursor-default bg-uv-mute/30 px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-uv-text-dim uppercase transition-colors hover:bg-uv-mute/50"
 								>

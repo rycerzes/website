@@ -340,7 +340,7 @@
 				{/if}
 
 				{#if visibleActivities(presence).length}
-					{#each visibleActivities(presence) as activity}
+					{#each visibleActivities(presence) as activity (activity.id ?? `${activity.type}-${activity.name}`)}
 						<article class="border-theme/60 border bg-uv-mute/20 p-3">
 							<div class="flex flex-wrap items-start justify-between gap-3">
 								<div class="min-w-0 flex-1">
@@ -427,7 +427,7 @@
 					<p class="text-[11px] text-uv-text-dim">Lanyard key/value data attached to the profile</p>
 				</div>
 				<div class="grid gap-2 md:grid-cols-2">
-					{#each Object.entries(presence.kv) as [key, value]}
+					{#each Object.entries(presence.kv) as [key, value] (key)}
 						<div class="border-theme/60 border bg-uv-mute/20 p-3">
 							<p class="text-[10px] tracking-[0.2em] text-violet-200 uppercase">{key}</p>
 							<p class="mt-1 text-sm text-uv-text-dim">{value}</p>

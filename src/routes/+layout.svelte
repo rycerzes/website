@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import '../app.css';
+	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.ico';
 	import { page } from '$app/stores';
 
@@ -116,11 +117,11 @@
 		>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href="/">Home</a
+				href={resolve('/')}>Home</a
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href="/about">About</a
+				href={resolve('/about')}>About</a
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
@@ -129,7 +130,7 @@
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href="/blog">Blog</a
+				href={resolve('/blog')}>Blog</a
 			>
 		</nav>
 	</header>
