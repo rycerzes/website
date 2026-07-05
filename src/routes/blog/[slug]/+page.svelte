@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import TableOfContents from '../../../components/TableOfContents.svelte';
+	import GiscusComments from '$lib/components/GiscusComments.svelte';
 	import MdxContent from '$lib/components/MdxContent.svelte';
 	import { mountPretextgengarDemo } from '$lib/components/pretextDemo.js';
 
@@ -98,5 +99,7 @@
 		>
 			<MdxContent Component={data.post.component} />
 		</div>
+
+		<GiscusComments />
 	</article>
 </div>
