@@ -13,7 +13,17 @@
 <section class="mt-16 border-t border-dashed border-theme/20 pt-10">
 	<div class="mb-6">
 		<h2 class="font-mono text-sm tracking-widest text-violet-200/90 uppercase">comments</h2>
-		<p class="mt-2 text-sm text-uv-text-dim/70">Reactions and discussion are powered by GitHub.</p>
+		<p class="mt-2 text-sm text-uv-text-dim/70">
+			Reactions and discussion are powered by
+			<a
+				href="https://giscus.app"
+				target="_blank"
+				rel="noreferrer"
+				class="text-violet-300/90 underline decoration-violet-500/30 underline-offset-2 transition-colors hover:text-violet-200 hover:decoration-violet-300"
+			>
+				giscus</a
+			>
+		</p>
 	</div>
 
 	<div class="giscus min-h-32">
