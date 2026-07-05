@@ -62,7 +62,7 @@
 			{#each data.projects as project, i (project.html_url)}
 				<a
 					class="group border-theme/80 relative flex flex-col justify-between gap-4 overflow-hidden rounded-none border bg-uv-deep/50 px-4 py-4 transition-all duration-500 hover:bg-uv-mute/40 md:flex-row md:items-center md:px-6"
-					href={resolve(project.html_url)}
+					href={project.html_url}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
