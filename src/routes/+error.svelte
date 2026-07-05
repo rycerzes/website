@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		if ($page.status === 404) {
-			goto('/404', { replaceState: true });
+			goto(resolve('/404'), { replaceState: true });
 		}
 	});
 </script>

@@ -64,7 +64,7 @@
 					class="group border-theme/80 relative flex flex-col justify-between gap-4 overflow-hidden rounded-none border bg-uv-deep/50 px-4 py-4 transition-all duration-500 hover:bg-uv-mute/40 md:flex-row md:items-center md:px-6"
 					href={project.html_url}
 					target="_blank"
-					rel="noopener noreferrer"
+					rel="external noopener noreferrer"
 				>
 					<div
 						class="absolute inset-y-0 left-0 w-1 bg-violet-600 transition-colors duration-500 group-hover:bg-violet-400"

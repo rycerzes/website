@@ -305,7 +305,7 @@
 							? `https://open.spotify.com/track/${presence.spotify.track_id}`
 							: 'https://open.spotify.com'}
 						target="_blank"
-						rel="noopener noreferrer"
+						rel="external noopener noreferrer"
 						class="group border-theme/60 flex items-center justify-between gap-4 border bg-uv-mute/20 p-3 transition-colors hover:bg-uv-mute/30"
 					>
 						<div class="flex min-w-0 flex-1 items-center gap-4">
@@ -405,7 +405,7 @@
 									<a
 										href={activityUrl(activity) ?? '#'}
 										target="_blank"
-										rel="noopener noreferrer"
+										rel="external noopener noreferrer"
 										class="text-xs text-violet-300 underline decoration-dotted underline-offset-4 transition-colors hover:text-violet-200"
 									>
 										Open linked activity
