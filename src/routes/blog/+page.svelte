@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	let { data } = $props();
 </script>
 
@@ -9,8 +11,8 @@
 	</div>
 
 	<div class="flex flex-col gap-12">
-		{#each data.posts as post}
-			<a href="/blog/{post.slug}" class="group block">
+		{#each data.posts as post (post.slug)}
+			<a href={resolve('/blog/[slug]', { slug: post.slug })} class="group block">
 				<div class="flex flex-col gap-1">
 					<div class="flex w-full items-baseline justify-between">
 						<h2
@@ -18,7 +20,9 @@
 						>
 							{post.title}
 						</h2>
-						<span class="ml-4 shrink-0 font-mono text-sm text-uv-text-dim/60">{post.date}</span>
+						<span class="ml-4 shrink-0 font-mono text-sm text-uv-text-dim/60">
+							{post.date} · {post.readingTime}
+						</span>
 					</div>
 
 					<!-- 
@@ -44,7 +48,7 @@
 	</div>
 
 	<div class="mt-20">
-		<a href="/" class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300">
+		<a href={resolve('/')} class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300">
 			← back to home
 		</a>
 	</div>

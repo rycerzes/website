@@ -9,6 +9,8 @@
 			<div class="flex items-center gap-4 font-mono text-xs text-violet-400">
 				<span>{data.post.date}</span>
 				<span>•</span>
+				<span>{data.post.readingTime}</span>
+				<span>•</span>
 				<div class="flex gap-2">
 					{#each data.post.tags as tag (tag)}
 						<span class="tracking-wide uppercase">#{tag}</span>

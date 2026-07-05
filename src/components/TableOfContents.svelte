@@ -72,7 +72,7 @@
 		class="toc-nav relative flex max-h-[calc(100vh-11rem)] flex-col gap-1 overflow-y-auto pr-2 pb-2"
 	>
 		<!-- Header removed for minimal Chiri style -->
-		{#each headings as heading}
+		{#each headings as heading (heading.id)}
 			<a
 				href="#{heading.id}"
 				class="group relative flex h-8 items-center transition-colors hover:text-violet-300 {activeId ===

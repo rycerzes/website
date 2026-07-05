@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
@@ -18,7 +19,7 @@
 <div class="flex min-h-[70vh] flex-col items-center justify-center gap-8" in:fade>
 	<!-- Image Container with CRT Effect -->
 	<div
-		class="bg-uv-surface border-theme/50 crt-effect relative flex aspect-[4/3] w-full max-w-lg items-center justify-center overflow-hidden rounded-none border"
+		class="bg-uv-surface border-theme/50 crt-effect relative flex aspect-4/3 w-full max-w-lg items-center justify-center overflow-hidden rounded-none border"
 	>
 		{#if imageUrl}
 			<img
@@ -49,7 +50,7 @@
 		</p>
 
 		<a
-			href="/"
+			href={resolve('/')}
 			class="text-uv-text mt-6 border border-violet-500/30 px-8 py-3 text-xs tracking-widest uppercase transition-all hover:border-violet-500 hover:bg-uv-mute/40 hover:text-white"
 		>
 			Return Home

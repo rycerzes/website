@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -15,7 +16,7 @@
 		<h1 class="text-4xl font-light text-white">Error {$page.status}</h1>
 		<p class="text-uv-text-dim">{$page.error?.message}</p>
 		<a
-			href="/"
+			href={resolve('/')}
 			class="mt-4 px-6 py-2 border border-violet-500/30 hover:border-violet-500 text-sm tracking-widest text-uv-text hover:text-white transition-all rounded-full uppercase"
 		>
 			Return Home
