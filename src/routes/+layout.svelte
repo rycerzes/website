@@ -125,6 +125,10 @@
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				href={resolve('/ai')}>AI</a
+			>
+			<a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
 				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
 				target="_blank">Resume</a
 			>
