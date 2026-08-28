@@ -1,3 +1,5 @@
+import type { Component } from 'svelte';
+
 export type Post = {
 	title: string;
 	slug: string;
@@ -6,5 +8,5 @@ export type Post = {
 	tags: string[];
 	cover: string;
 	readingTime: string;
-	component?: any; // The actual Svelte component
+	component?: Component; // The actual Svelte component
 };

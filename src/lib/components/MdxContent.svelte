@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component as SvelteComponent } from 'svelte';
 	import mermaid from 'mermaid';
 	import { surface, border, text, accent } from '$lib/palette';
 
@@ -43,7 +44,7 @@
 		errorTextColor: text.primary
 	} as const;
 
-	let { Component } = $props<{ Component: any }>();
+	let { Component } = $props<{ Component?: SvelteComponent }>();
 	let contentElement: HTMLDivElement;
 	let mermaidReady = false;
 
@@ -152,5 +153,7 @@
 </script>
 
 <div bind:this={contentElement}>
-	<Component />
+	{#if Component}
+		<Component />
+	{/if}
 </div>

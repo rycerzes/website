@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { Check, Copy } from '@lucide/svelte';
 
 	let {
@@ -6,7 +7,7 @@
 		tabIndex: _tabIndex,
 		tabindex: _tabindex,
 		...props
-	}: { children?: any; [key: string]: any } = $props();
+	}: { children?: Snippet; [key: string]: unknown } = $props();
 
 	let copied = $state(false);
 	let preElement: HTMLPreElement | null = $state(null);

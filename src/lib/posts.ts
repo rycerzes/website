@@ -1,4 +1,15 @@
+import type { Component } from 'svelte';
 import type { Post } from './types';
+
+type PostMetadata = {
+	title?: string;
+	date?: string;
+	excerpt?: string;
+	tags?: string[];
+	cover?: string;
+};
+
+type PostModule = { default: Component; metadata?: PostMetadata };
 
 const WORDS_PER_MINUTE = 200;
 
@@ -54,7 +65,7 @@ export function getPosts(): Post[] {
 
 		if (!filename) continue;
 
-		const metadata = (resolver as any).metadata;
+		const metadata = (resolver as PostModule).metadata;
 
 		// Skip if essential metadata is missing, or provide defaults
 		if (!metadata) continue;
@@ -81,8 +92,8 @@ export function getPost(slug: string): Post | undefined {
 	for (const [path, resolver] of Object.entries(glob_import)) {
 		const filename = path.split('/').pop()?.split('.').shift();
 		if (filename === slug) {
-			const metadata = (resolver as any).metadata;
-			const component = (resolver as any).default;
+			const metadata = (resolver as PostModule).metadata ?? {};
+			const component = (resolver as PostModule).default;
 			return {
 				slug: filename,
 				title: metadata.title || 'Untitled',

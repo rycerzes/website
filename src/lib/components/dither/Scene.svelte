@@ -3,7 +3,7 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 
 <script lang="ts">
 	import { T, useTask, useThrelte } from '@threlte/core';
-	import { Vector2, Color, Uniform, Clock } from 'three';
+	import { Vector2, Color, Uniform } from 'three';
 	import type { EffectComposer } from 'postprocessing';
 	import { waveVertexShader, waveFragmentShader } from './shaders';
 	import type { RetroEffect } from './RetroEffect';
@@ -109,10 +109,9 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	});
 
 	let mouse = new Vector2(0, 0);
-	const clock = new Clock();
 
 	// Render Loop
-	useTask((delta) => {
+	useTask(() => {
 		if (!disableAnimation) {
 			// Use absolute time so that multiple instances (header + background) are synced
 			uniforms.time.value = (performance.now() / 1000) % 10000;
@@ -142,7 +141,7 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	visible={false}
 	position={[0, 0, 0.01]}
 	scale={[$size.width, $size.height, 1]}
-	onpointermove={(e: any) => {
+	onpointermove={(e: { uv?: Vector2 }) => {
 		if (!enableMouseInteraction || !e.uv) return;
 		const dpr = renderer.getPixelRatio();
 		const x = e.uv.x * $size.width * dpr;
