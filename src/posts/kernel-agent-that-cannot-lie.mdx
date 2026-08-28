@@ -182,25 +182,6 @@ Two cost models were wrong in the same family. `gather` charged every row read, 
 
 ---
 
-## two claims withdrawn
-
-Both in public, rather than quietly edited.
-
-**I reported that bubblewrap cannot reach a GPU**, and published it in an upstream issue and PR before retesting. It can — at full speed, in an unprivileged user namespace:
-
-|                           |                         |
-| ------------------------- | ----------------------- |
-| CUDA kernel, host         | 920.7 GB/s              |
-| CUDA kernel, inside bwrap | **920.1 GB/s**          |
-| `/proc/self/ns/user`      | differs from the host's |
-| `/proc/self/uid_map`      | `1000 1000 1`           |
-
-Every configuration in my original table varied only how `/dev` was handled and **none mounted `/sys`**. Four failures agreeing tell you nothing when they share a cause you never varied — and a table that _looks_ like a controlled sweep is more persuasive than a single failure, which is what made it convincing instead of suspicious.
-
-**I wrote that `cross_entropy` without the row-max subtraction overflows**, added an adversary for it, and the harness admitted that adversary — correctly. Logits span ±80, the largest row sum of exponentials is 4.3e35, fp32 holds 3.4e38. Nothing overflows. The real failure is the reduction's _scope_, and the adversary that deserved is one shifting each tile by its own maximum: no NaN, right sign, plausible magnitude, wrong by 227×.
-
----
-
 ## what it still does not claim
 
 - **Hopper compute ceilings are absent on purpose.** The published figures do not divide into a per-SM-per-clock constant I can defend, so the gate returns `UNVERIFIABLE_COMPUTE` rather than guessing.
