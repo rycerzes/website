@@ -129,27 +129,41 @@ release-age rule.
   distinction noted in `AGENTS.md`.
 - Hover-only affordances need a keyboard/focus equivalent. Tooltips triggered by hover
   must also appear on focus.
-- Give the figure container `role="img"` with a descriptive `aria-label` summarising what
-  it shows, so the whole thing degrades to a sentence for screen readers.
+- Put `role="img"` and a descriptive `aria-label` on the **non-interactive visual** — the
+  `<svg>` or `<canvas>` — and never on a container that also holds controls. `role="img"`
+  makes a subtree opaque to assistive tech, so wrapping the controls in it would hide
+  them. Let the label track current state, so it stays true as the reader interacts.
+- The `<figcaption>` supplied by `Figure` carries the prose description. It sits outside
+  the lazy boundary, so it is present even when the figure itself has not mounted.
 - Interaction is progressive: the figure must render something meaningful before any
-  input, because it is server-rendered (see §12).
+  input (see §12).
 
 ## 11. Prose integration
 
 Posts render inside a long `prose-*` chain in `src/routes/blog/[slug]/+page.svelte`.
 Figures must escape it:
 
-- Wrap the figure root in `not-prose` (`MdxContent.svelte` does the same for code blocks).
-- Provide a caption below the figure, not above, in `text.dim` at 11–12px.
-- Import in the post's module script and render it inline:
+Use `Figure` (`src/lib/components/figures/Figure.svelte`) rather than hand-rolling this.
+It supplies the `not-prose` escape, the chrome, the reserved height, the lazy boundary,
+and the `<figcaption>`. A figure component itself renders **only its content** — no outer
+border, no heading bar, no caption of its own.
 
 ```svelte
 <script lang="ts">
-	import RopeRotation from '$lib/components/figures/RopeRotation.svelte';
+	import Figure from '$lib/components/figures/Figure.svelte';
 </script>
 
-<RopeRotation />
+<Figure
+	height={320}
+	caption="What the reader is looking at, and what to notice."
+	load={() => import('$lib/components/figures/CoordinateBins.svelte')}
+/>
 ```
+
+`load` dynamically imports the figure so it splits out of the initial bundle; pass the
+component as children instead when it is small enough not to warrant a chunk. `height` is
+the resting height in px and must match the figure, since it is what prevents layout
+shift. `lazy` defaults to true — turn it off only for a figure visible without scrolling.
 
 ## 12. Prerendering and cost
 
@@ -158,11 +172,12 @@ hydrated, so:
 
 - Guard browser-only work with `onMount` or `browser` from `$app/environment`. Never
   touch `window`/`document` at module scope.
-- Reserve the figure's height in the prerendered markup so hydration causes no layout
-  shift.
-- Below-the-fold figures lazy-load: `IntersectionObserver` plus a dynamic `import()`,
-  behind a placeholder of the correct height. Posts here run long — a post with eight
-  eagerly-hydrating figures is a payload problem.
+- `Figure` reserves the height and owns the `IntersectionObserver` + dynamic `import()`,
+  so an individual figure never implements either. Posts here run long — a post with
+  eight eagerly-hydrating figures is a payload problem.
+- A lazy figure is absent from the prerendered HTML by design; only its chrome and
+  caption are static. That is the trade for not shipping every figure up front, and it
+  is why the caption must actually describe the figure rather than just label it.
 
 ## 13. Data
 
