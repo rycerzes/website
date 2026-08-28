@@ -1,6 +1,7 @@
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic';
 import { visit } from 'unist-util-visit';
+import { fileURLToPath } from 'node:url';
 
 /**
  * @typedef {object} HastNode
@@ -11,7 +12,18 @@ import { visit } from 'unist-util-visit';
  * @property {HastNode[]=} children
  */
 
-const compiler = NodeCompiler.create({ workspace: process.cwd() });
+/**
+ * Libertinus Sans is vendored beside this file so diagram rendering is reproducible.
+ * Without an explicit font path Typst silently falls back to whatever the build host
+ * provides, which differs between a local checkout and the Cloudflare build container.
+ * Resolved from import.meta.url rather than cwd so it survives a different working dir.
+ */
+const fontDir = fileURLToPath(new URL('./fonts', import.meta.url));
+
+const compiler = NodeCompiler.create({
+	workspace: process.cwd(),
+	fontArgs: [{ fontPaths: [fontDir] }]
+});
 const cache = new Map();
 
 /** @type {Record<string, string>} */
@@ -45,7 +57,7 @@ function renderTypstToSvg(source) {
 
 	const template = `#import "@preview/cetz:0.4.2": canvas, draw
 #set page(width: auto, height: auto, margin: 0pt, fill: rgb("#030205"))
-#set text(fill: rgb("#f5f3ff"), font: "Linux Biolinum")
+#set text(fill: rgb("#f5f3ff"), font: "Libertinus Sans")
 
 #canvas({
   ${source}
