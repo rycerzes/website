@@ -12,6 +12,12 @@
 	--color-uv-black: #030205;
 	--color-uv-deep: #0e0a14;
 	--color-uv-mute: #3e3450; /* Slightly lighter for better border visibility */
+	/* Surface + border ramps; mirrored in src/lib/palette.ts for JS consumers. */
+	--color-uv-raised: #161022;
+	--color-uv-overlay: #211a31;
+	--color-uv-error: #2a1f34;
+	--color-uv-border: #4c3f63;
+	--color-uv-border-strong: #5f4e7d;
 	--color-uv-text-main: #f5f3ff; /* Brighter, near white */
 	--color-uv-text-dim: #d8b4fe; /* Lighter, more readable violet-grey */
 	--color-uv-highlight: #a78bfa; /* More vibrant/neon purple */
