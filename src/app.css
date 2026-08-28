@@ -22,6 +22,20 @@
 	--color-uv-text-dim: #d8b4fe; /* Lighter, more readable violet-grey */
 	--color-uv-highlight: #a78bfa; /* More vibrant/neon purple */
 
+	/* Validated categorical + status hues for figures; mirrored in src/lib/palette.ts.
+	   Checked against surface #0e0a14 with the six-check palette validator. */
+	--color-fig-blue: #3987e5;
+	--color-fig-orange: #d95926;
+	--color-fig-aqua: #199e70;
+	--color-fig-yellow: #c98500;
+	--color-fig-magenta: #d55181;
+	--color-fig-green: #008300;
+	--color-fig-violet: #9085e9;
+	--color-fig-red: #e66767;
+	--color-fig-pass: #0ca30c;
+	--color-fig-warn: #fab219;
+	--color-fig-fail: #d03b3b;
+
 	--font-family-mono: 'JetBrains Mono', monospace;
 }
 
@@ -132,6 +146,13 @@ body {
 }
 
 .material-symbols-outlined {
+	text-transform: none;
+}
+
+/* Preserve capitalization in figure labels — units like TFLOP/s carry case. Scoped to
+   figures so mermaid diagrams keep the site's lowercase styling. */
+.figure-literal svg text,
+.figure-literal .unit {
 	text-transform: none;
 }
 
