@@ -7,7 +7,7 @@ import { visit } from 'unist-util-visit';
  * @property {string} type
  * @property {string=} tagName
  * @property {string=} value
- * @property {{ className?: unknown }=} properties
+ * @property {Record<string, unknown>=} properties
  * @property {HastNode[]=} children
  */
 
@@ -74,6 +74,47 @@ function renderTypstToSvg(source) {
 	return svg;
 }
 
+/**
+ * typst.ts's `svg()` export can emit `<use href="#gXXXX">` glyph references whose
+ * `<defs>` entry it never wrote. This reproduces on a fresh compiler, for a single
+ * document, across every font we tried, so it is an upstream defect rather than
+ * anything to do with compiler reuse or font fallback.
+ *
+ * An unresolvable `<use>` renders nothing, so dropping it is visually a no-op. What
+ * it buys is markup without dangling fragment references — which SvelteKit's
+ * prerenderer correctly rejects, and which otherwise makes the build pass or fail
+ * depending on whether the glyph hash happens to contain a base64 `+` or `/`.
+ *
+ * @param {HastNode} svgNode
+ * @returns {number} count of references dropped
+ */
+function dropDanglingGlyphRefs(svgNode) {
+	/** @type {Set<string>} */
+	const defined = new Set();
+	visit(/** @type {import('unist').Node} */ (svgNode), 'element', (node) => {
+		const id = /** @type {HastNode} */ (node).properties?.id;
+		if (typeof id === 'string') defined.add(id);
+	});
+
+	let dropped = 0;
+	visit(/** @type {import('unist').Node} */ (svgNode), 'element', (node, index, parent) => {
+		const element = /** @type {HastNode} */ (node);
+		const parentNode = /** @type {HastNode | undefined} */ (parent);
+		if (element.tagName !== 'use' || !parentNode?.children || typeof index !== 'number') return;
+
+		const href = element.properties?.href ?? element.properties?.xlinkHref;
+		if (typeof href !== 'string' || !href.startsWith('#')) return;
+		if (defined.has(href.slice(1))) return;
+
+		parentNode.children.splice(index, 1);
+		dropped += 1;
+		// re-visit this index; it now holds the following sibling
+		return index;
+	});
+
+	return dropped;
+}
+
 export default function rehypeTypstDiagram() {
 	/**
 	 * @param {HastNode} tree
@@ -97,6 +138,15 @@ export default function rehypeTypstDiagram() {
 				const svg = renderTypstToSvg(source);
 				const root = fromHtmlIsomorphic(svg, { fragment: true });
 				const svgNode = root.children?.[0];
+
+				if (svgNode) {
+					const dropped = dropDanglingGlyphRefs(/** @type {HastNode} */ (svgNode));
+					if (dropped > 0) {
+						console.warn(
+							`typst-diagram: dropped ${dropped} glyph reference(s) with no matching definition`
+						);
+					}
+				}
 
 				if (!parentNode?.children) return;
 				parentNode.children[index] = {
