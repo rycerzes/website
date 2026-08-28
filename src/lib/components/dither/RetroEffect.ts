@@ -41,24 +41,24 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 `;
 
 export class RetroEffect extends Effect {
-    constructor({ colorNum = 4.0, pixelSize = 2.0 } = {}) {
-        const uniforms = new Map<string, Uniform>([
-            ['colorNum', new Uniform(colorNum)],
-            ['pixelSize', new Uniform(pixelSize)]
-        ]);
-        super('RetroEffect', ditherFragmentShader, { uniforms });
-    }
+	constructor({ colorNum = 4.0, pixelSize = 2.0 } = {}) {
+		const uniforms = new Map<string, Uniform>([
+			['colorNum', new Uniform(colorNum)],
+			['pixelSize', new Uniform(pixelSize)]
+		]);
+		super('RetroEffect', ditherFragmentShader, { uniforms });
+	}
 
-    set colorNum(value: number) {
-        this.uniforms.get('colorNum')!.value = value;
-    }
-    get colorNum(): number {
-        return this.uniforms.get('colorNum')!.value;
-    }
-    set pixelSize(value: number) {
-        this.uniforms.get('pixelSize')!.value = value;
-    }
-    get pixelSize(): number {
-        return this.uniforms.get('pixelSize')!.value;
-    }
+	set colorNum(value: number) {
+		this.uniforms.get('colorNum')!.value = value;
+	}
+	get colorNum(): number {
+		return this.uniforms.get('colorNum')!.value;
+	}
+	set pixelSize(value: number) {
+		this.uniforms.get('pixelSize')!.value = value;
+	}
+	get pixelSize(): number {
+		return this.uniforms.get('pixelSize')!.value;
+	}
 }

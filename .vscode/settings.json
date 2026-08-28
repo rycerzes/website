@@ -1,14 +1,14 @@
 {
-    "files.associations": {
-        "*.css": "tailwindcss",
-        "**/+page.mdx": "svelte",
-        "**/+layout.mdx": "svelte",
-        "**/+error.mdx": "svelte"
-    },
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "[svelte]": {
-        "editor.defaultFormatter": "svelte.svelte-vscode"
-    },
-    "svelte.enable-ts-plugin": true
+	"files.associations": {
+		"*.css": "tailwindcss",
+		"**/+page.mdx": "svelte",
+		"**/+layout.mdx": "svelte",
+		"**/+error.mdx": "svelte"
+	},
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"svelte.enable-ts-plugin": true
 }

@@ -5,7 +5,11 @@ const WORDS_PER_MINUTE = 200;
 // eager: true forces the import to happen at build time/startup,
 // so we get the module immediately.
 const glob_import = import.meta.glob('/src/posts/*.mdx', { eager: true });
-const rawPostImport = import.meta.glob('/src/posts/*.mdx', { eager: true, query: '?raw', import: 'default' });
+const rawPostImport = import.meta.glob('/src/posts/*.mdx', {
+	eager: true,
+	query: '?raw',
+	import: 'default'
+});
 
 function parsePostDate(date: string): number {
 	const ddMmYyyyMatch = /^(\d{2})-(\d{2})-(\d{4})$/.exec(date);

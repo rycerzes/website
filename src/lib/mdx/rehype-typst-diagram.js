@@ -137,7 +137,9 @@ export default function rehypeTypstDiagram() {
 			const parentNode = /** @type {HastNode | undefined} */ (parent);
 			if (!parentNode || typeof index !== 'number' || element.tagName !== 'pre') return;
 
-			const code = element.children?.find((child) => child.type === 'element' && child.tagName === 'code');
+			const code = element.children?.find(
+				(child) => child.type === 'element' && child.tagName === 'code'
+			);
 			const className = code?.properties?.className;
 			if (!Array.isArray(className) || !className.includes('language-typst-diagram')) return;
 			if (!code) return;

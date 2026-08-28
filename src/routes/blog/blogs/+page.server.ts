@@ -1,7 +1,7 @@
 import { getPosts } from '$lib/posts';
 
 export function load() {
-    return {
-        posts: getPosts()
-    };
+	return {
+		posts: getPosts()
+	};
 }

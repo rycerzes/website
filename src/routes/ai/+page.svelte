@@ -58,45 +58,47 @@
 			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
 				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
 				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
-				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 [&_a:hover]:text-violet-300 [&_a:hover]:decoration-violet-300
-				prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
-				prose-blockquote:px-4 prose-blockquote:py-1 prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1
-				prose-code:py-0.5 prose-code:font-mono prose-code:text-[0.8em]
-				prose-code:text-violet-300/90
-				prose-code:before:content-none prose-code:after:content-none prose-li:text-uv-text-dim/80
+				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
+				prose-blockquote:px-4 prose-blockquote:py-1
+				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
+				prose-code:text-[0.8em] prose-code:text-violet-300/90 prose-code:before:content-none
+				prose-code:after:content-none
+				prose-li:text-uv-text-dim/80 [&_a:hover]:text-violet-300 [&_a:hover]:decoration-violet-300
 			"
 		>
 			<p>
-				Everything published here begins with me. The ideas, arguments, and first draft come from my own
-				experience and the work I have done, including the occasional rough edge that proves a person was
-				here.
+				Everything published here begins with me. The ideas, arguments, and first draft come from my
+				own experience and the work I have done, including the occasional rough edge that proves a
+				person was here.
 			</p>
 
 			<p>
-				Writing is how I work through an idea until I understand it. An LLM can produce competent prose,
-				but it cannot contribute my point of view or replace that process of thinking. If a post here
-				sounds worth reading, I want that to be because it says something I genuinely mean, not because a
-				model made it sound polished.
+				Writing is how I work through an idea until I understand it. An LLM can produce competent
+				prose, but it cannot contribute my point of view or replace that process of thinking. If a
+				post here sounds worth reading, I want that to be because it says something I genuinely
+				mean, not because a model made it sound polished.
 			</p>
 
 			<p>
-				I do not treat AI as forbidden. Once I have a draft, I sometimes use it as a light copy-editing
-				tool: to spot an awkward sentence, test whether a point is clear, or find a better word. The
-				result should still feel like that greninja I raised myself: shaped through the actual grind, quirks
-				and all, rather than traded in fully levelled.
+				I do not treat AI as forbidden. Once I have a draft, I sometimes use it as a light
+				copy-editing tool: to spot an awkward sentence, test whether a point is clear, or find a
+				better word. The result should still feel like that greninja I raised myself: shaped through
+				the actual grind, quirks and all, rather than traded in fully levelled.
 			</p>
 
 			<h2 id="what-i-use-ai-for">What I Use AI For</h2>
 			<ul>
 				<li>Checking grammar, spelling, and phrasing</li>
 				<li>
-					Suggesting alternative wording. As a non-native English speaker, I value the extra vocabulary
-					without letting it flatten my voice
+					Suggesting alternative wording. As a non-native English speaker, I value the extra
+					vocabulary without letting it flatten my voice
 				</li>
-				<li>Sanity-checking whether an article's argument follows clearly from one point to the next</li>
 				<li>
-					Brainstorming titles, teasers, tags, and small improvements to the site, which I rework to fit
-					my own voice
+					Sanity-checking whether an article's argument follows clearly from one point to the next
+				</li>
+				<li>
+					Brainstorming titles, teasers, tags, and small improvements to the site, which I rework to
+					fit my own voice
 				</li>
 			</ul>
 
@@ -109,10 +111,12 @@
 			<h2 id="references">References</h2>
 			<p>These AI disclosures helped shape how I think about this policy:</p>
 			<ul>
-				<li><a href="https://www.morling.dev/ai/">Gunnar Morling - How I Use (and Don't Use) AI</a></li>
+				<li>
+					<a href="https://www.morling.dev/ai/">Gunnar Morling - How I Use (and Don't Use) AI</a>
+				</li>
 				<li><a href="https://vickiboykis.com/ai/">Vicki Boykis - AI</a></li>
 				<li><a href="https://junaid.foo/ai/">Junaid Rahim - AI Disclosure</a></li>
-   						</ul>
+			</ul>
 		</div>
 	</article>
 </div>

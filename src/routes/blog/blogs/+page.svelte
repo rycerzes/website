@@ -5,29 +5,29 @@
 </script>
 
 <div class="container mx-auto px-4 py-8">
-	<h1 class="text-3xl font-bold mb-8 text-violet-200 uppercase tracking-widest">All Blogs</h1>
+	<h1 class="mb-8 text-3xl font-bold tracking-widest text-violet-200 uppercase">All Blogs</h1>
 
 	<div class="grid gap-6">
 		{#each data.posts as post (post.slug)}
 			<a
 				href={resolve('/blog/blogs/[slug]', { slug: post.slug })}
-				class="group block p-6 border border-theme/30 hover:bg-uv-mute/10 hover:border-violet-400 transition-all duration-300 rounded-sm"
+				class="group border-theme/30 block rounded-sm border p-6 transition-all duration-300 hover:border-violet-400 hover:bg-uv-mute/10"
 			>
 				<div class="flex flex-col gap-2">
 					<div class="flex items-center justify-between">
 						<h2
-							class="text-xl font-bold text-uv-text group-hover:text-violet-200 transition-colors"
+							class="text-uv-text text-xl font-bold transition-colors group-hover:text-violet-200"
 						>
 							{post.title}
 						</h2>
-						<span class="text-xs text-violet-400 font-mono">{post.date} · {post.readingTime}</span>
+						<span class="font-mono text-xs text-violet-400">{post.date} · {post.readingTime}</span>
 					</div>
-					<p class="text-uv-text-dim text-sm">{post.excerpt}</p>
+					<p class="text-sm text-uv-text-dim">{post.excerpt}</p>
 					{#if post.tags.length > 0}
-						<div class="flex gap-2 mt-2">
+						<div class="mt-2 flex gap-2">
 							{#each post.tags as tag (tag)}
 								<span
-									class="text-[10px] uppercase tracking-wide text-violet-900 bg-violet-400/10 px-2 py-1 rounded-full"
+									class="rounded-full bg-violet-400/10 px-2 py-1 text-[10px] tracking-wide text-violet-900 uppercase"
 								>
 									{tag}
 								</span>
