@@ -1,25 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { onMount } from 'svelte';
 	import TableOfContents from '../../../components/TableOfContents.svelte';
 	import GiscusComments from '$lib/components/GiscusComments.svelte';
 	import MdxContent from '$lib/components/MdxContent.svelte';
-	import { mountPretextgengarDemo } from '$lib/components/pretextDemo.js';
 
 	let { data } = $props();
-
-	onMount(() => {
-		if (!document.getElementById('pretext-gengar-demo-stage')) {
-			return;
-		}
-
-		return mountPretextgengarDemo(
-			'pretext-gengar-demo-stage',
-			'pretext-gengar-demo-lines',
-			'pretext-gengar-demo-sprite',
-			'pretext-gengar-demo-sprite-inner'
-		);
-	});
 </script>
 
 <div class="relative mx-auto w-full max-w-2xl px-4 py-8">

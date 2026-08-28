@@ -489,19 +489,11 @@ function tick(state: DemoState, now: number): void {
 }
 
 export function mountPretextgengarDemo(
-    stageId: string,
-    linesId: string,
-    spriteId: string,
-    spriteInnerId: string
+    stageEl: HTMLDivElement,
+    linesEl: HTMLDivElement,
+    spriteEl: HTMLDivElement,
+    spriteInnerEl: HTMLDivElement
 ): () => void {
-    const stageEl = document.getElementById(stageId) as HTMLDivElement | null;
-    const linesEl = document.getElementById(linesId) as HTMLDivElement | null;
-    const spriteEl = document.getElementById(spriteId) as HTMLDivElement | null;
-    const spriteInnerEl = document.getElementById(spriteInnerId) as HTMLDivElement | null;
-
-    if (!stageEl || !linesEl || !spriteEl || !spriteInnerEl) {
-        return () => { };
-    }
 
     const setPointerTarget = (clientX: number, clientY: number): void => {
         const rect = stageEl.getBoundingClientRect();
