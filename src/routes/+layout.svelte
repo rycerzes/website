@@ -5,7 +5,6 @@
 	import favicon from '$lib/assets/favicon.ico';
 	import { page } from '$app/stores';
 
-	import ThemeToggle from '$lib/ThemeToggle.svelte';
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
 	import { cn } from '$lib/utils';
 

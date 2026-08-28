@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* Site is dark-only: the .dark class on <html> is permanent, so dark: variants always apply. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
@@ -234,16 +237,8 @@ pre code * {
 
 code[data-theme*=' '],
 code[data-theme*=' '] span {
-	color: var(--shiki-light);
-	background-color: var(--shiki-light-bg);
-}
-
-@media (prefers-color-scheme: dark) {
-	code[data-theme*=' '],
-	code[data-theme*=' '] span {
-		color: var(--shiki-dark);
-		background-color: var(--shiki-dark-bg);
-	}
+	color: var(--shiki-dark);
+	background-color: var(--shiki-dark-bg);
 }
 
 /* Constrain code blocks and content to container width */
