@@ -48,7 +48,10 @@
 	</div>
 
 	<div class="mt-20">
-		<a href={resolve('/')} class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300">
+		<a
+			href={resolve('/')}
+			class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300"
+		>
 			← back to home
 		</a>
 	</div>

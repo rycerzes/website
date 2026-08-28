@@ -1,17 +1,29 @@
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler';
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic';
 import { visit } from 'unist-util-visit';
+import { fileURLToPath } from 'node:url';
 
 /**
  * @typedef {object} HastNode
  * @property {string} type
  * @property {string=} tagName
  * @property {string=} value
- * @property {{ className?: unknown }=} properties
+ * @property {Record<string, unknown>=} properties
  * @property {HastNode[]=} children
  */
 
-const compiler = NodeCompiler.create({ workspace: process.cwd() });
+/**
+ * Libertinus Sans is vendored beside this file so diagram rendering is reproducible.
+ * Without an explicit font path Typst silently falls back to whatever the build host
+ * provides, which differs between a local checkout and the Cloudflare build container.
+ * Resolved from import.meta.url rather than cwd so it survives a different working dir.
+ */
+const fontDir = fileURLToPath(new URL('./fonts', import.meta.url));
+
+const compiler = NodeCompiler.create({
+	workspace: process.cwd(),
+	fontArgs: [{ fontPaths: [fontDir] }]
+});
 const cache = new Map();
 
 /** @type {Record<string, string>} */
@@ -45,7 +57,7 @@ function renderTypstToSvg(source) {
 
 	const template = `#import "@preview/cetz:0.4.2": canvas, draw
 #set page(width: auto, height: auto, margin: 0pt, fill: rgb("#030205"))
-#set text(fill: rgb("#f5f3ff"), font: "Linux Biolinum")
+#set text(fill: rgb("#f5f3ff"), font: "Libertinus Sans")
 
 #canvas({
   ${source}
@@ -74,6 +86,47 @@ function renderTypstToSvg(source) {
 	return svg;
 }
 
+/**
+ * typst.ts's `svg()` export can emit `<use href="#gXXXX">` glyph references whose
+ * `<defs>` entry it never wrote. This reproduces on a fresh compiler, for a single
+ * document, across every font we tried, so it is an upstream defect rather than
+ * anything to do with compiler reuse or font fallback.
+ *
+ * An unresolvable `<use>` renders nothing, so dropping it is visually a no-op. What
+ * it buys is markup without dangling fragment references — which SvelteKit's
+ * prerenderer correctly rejects, and which otherwise makes the build pass or fail
+ * depending on whether the glyph hash happens to contain a base64 `+` or `/`.
+ *
+ * @param {HastNode} svgNode
+ * @returns {number} count of references dropped
+ */
+function dropDanglingGlyphRefs(svgNode) {
+	/** @type {Set<string>} */
+	const defined = new Set();
+	visit(/** @type {import('unist').Node} */ (svgNode), 'element', (node) => {
+		const id = /** @type {HastNode} */ (node).properties?.id;
+		if (typeof id === 'string') defined.add(id);
+	});
+
+	let dropped = 0;
+	visit(/** @type {import('unist').Node} */ (svgNode), 'element', (node, index, parent) => {
+		const element = /** @type {HastNode} */ (node);
+		const parentNode = /** @type {HastNode | undefined} */ (parent);
+		if (element.tagName !== 'use' || !parentNode?.children || typeof index !== 'number') return;
+
+		const href = element.properties?.href ?? element.properties?.xlinkHref;
+		if (typeof href !== 'string' || !href.startsWith('#')) return;
+		if (defined.has(href.slice(1))) return;
+
+		parentNode.children.splice(index, 1);
+		dropped += 1;
+		// re-visit this index; it now holds the following sibling
+		return index;
+	});
+
+	return dropped;
+}
+
 export default function rehypeTypstDiagram() {
 	/**
 	 * @param {HastNode} tree
@@ -84,7 +137,9 @@ export default function rehypeTypstDiagram() {
 			const parentNode = /** @type {HastNode | undefined} */ (parent);
 			if (!parentNode || typeof index !== 'number' || element.tagName !== 'pre') return;
 
-			const code = element.children?.find((child) => child.type === 'element' && child.tagName === 'code');
+			const code = element.children?.find(
+				(child) => child.type === 'element' && child.tagName === 'code'
+			);
 			const className = code?.properties?.className;
 			if (!Array.isArray(className) || !className.includes('language-typst-diagram')) return;
 			if (!code) return;
@@ -97,6 +152,15 @@ export default function rehypeTypstDiagram() {
 				const svg = renderTypstToSvg(source);
 				const root = fromHtmlIsomorphic(svg, { fragment: true });
 				const svgNode = root.children?.[0];
+
+				if (svgNode) {
+					const dropped = dropDanglingGlyphRefs(/** @type {HastNode} */ (svgNode));
+					if (dropped > 0) {
+						console.warn(
+							`typst-diagram: dropped ${dropped} glyph reference(s) with no matching definition`
+						);
+					}
+				}
 
 				if (!parentNode?.children) return;
 				parentNode.children[index] = {

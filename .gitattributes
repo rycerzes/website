@@ -1,0 +1,20 @@
+# Normalize every text file to LF, in the repository and in the working tree.
+# The repo previously had a mix of LF and CRLF, which made `bun run format`
+# rewrite whole files and produced diffs that hid the real change.
+* text=auto eol=lf
+
+# Binary assets — never end-of-line convert or diff these.
+*.otf   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.pdf   binary
+
+# Lockfiles are generated; keep them out of diffs and merge noise.
+bun.lock linguist-generated=true

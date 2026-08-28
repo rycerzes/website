@@ -85,8 +85,9 @@
 	}
 
 	$effect(() => {
-		text;
-		maxLines;
+		// read both so the effect re-runs when either changes
+		void text;
+		void maxLines;
 		void recomputeExcerpt();
 	});
 
