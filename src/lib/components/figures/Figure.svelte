@@ -47,7 +47,7 @@
 	});
 </script>
 
-<figure bind:this={container} class="not-prose my-8">
+<figure bind:this={container} class="figure-literal not-prose my-8">
 	<div class="overflow-hidden border border-uv-mute/40 bg-uv-deep" style="min-height: {height}px">
 		{#if visible}
 			{#if load}

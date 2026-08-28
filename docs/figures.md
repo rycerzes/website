@@ -61,9 +61,30 @@ tooltips and popovers on `surface.overlay`. If you find yourself wanting a shade
 two ramp steps, add a token to both `app.css` and `palette.ts` — do not inline it. Inlined
 one-off hexes are exactly the drift this palette exists to prevent.
 
-Categorical series: derive from `accent` by varying lightness/opacity along a single hue
-rather than introducing new hues. If a figure genuinely needs more than four
-distinguishable series, it probably needs to be two figures.
+Categorical series take `categorical` from `$lib/palette` — a fixed, validated hue order.
+Assign slots in sequence and never cycle. Do **not** derive series colours from `accent`:
+the UV violet sits outside the OKLCH lightness band a categorical palette needs, and a
+single-hue set cannot separate more than two series under colour-vision deficiency.
+
+The palette is not eyeballed. It is checked with a six-check validator — lightness band
+0.48–0.67 for dark, chroma floor 0.10, CVD separation under protanopia/deuteranopia, a
+normal-vision floor, and ≥3:1 contrast against `surface.deep`. Re-run it before changing
+any slot. An earlier hand-picked set failed the band on all six hues and put green and
+rose 7.5 apart under deuteranopia, which would have made a pass/fail encoding unreadable.
+
+Scatter-like figures (roofline, bubble, small multiples) need _every_ pair to separate,
+not just neighbours, and only the first `ALL_PAIRS_SAFE_SERIES` (3) slots clear that.
+More than three series there means faceting, not more hues.
+
+`semantic` carries reserved state colours (pass/warn/fail). Never reuse them as "series
+4", and never let one carry meaning alone — always pair with a label.
+
+Text stays in the `text` tokens, never a series colour. A coloured mark beside a label
+carries identity; the label itself does not.
+
+Figure SVG labels and anything marked `.unit` are exempt from the site's global
+`text-transform: lowercase`, because units carry case — `TFLOP/s` is not `tflop/s`. The
+exemption is scoped to `.figure-literal`, so mermaid diagrams keep the site styling.
 
 ## 5. Typography
 
