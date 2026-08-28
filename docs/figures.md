@@ -12,7 +12,7 @@ A **figure** is any visual that is not prose, a code block, a table, or a mermai
 charts, diagrams, interactive explainers, animated demos, 3D scenes.
 
 Mermaid covers flow/sequence/state diagrams and is already wired up — use a ```mermaid
-fence for those, not a figure. Reach for a figure when the reader needs to *manipulate*
+fence for those, not a figure. Reach for a figure when the reader needs to _manipulate_
 something, or when the thing genuinely moves.
 
 ## 2. Location and naming
@@ -46,12 +46,12 @@ The site is **dark-only**. There is exactly one palette. Never hardcode a color.
 
 Ramps, in order:
 
-| role | tokens |
-|---|---|
-| surface | `surface.page` → `surface.deep` → `surface.raised` → `surface.overlay` |
-| border | `border.subtle` → `border.default` → `border.strong` |
-| text | `text.primary` (headings/labels) · `text.body` · `text.dim` (axes, secondary) |
-| accent | `accent` — lines, marks, interactive affordances |
+| role    | tokens                                                                        |
+| ------- | ----------------------------------------------------------------------------- |
+| surface | `surface.page` → `surface.deep` → `surface.raised` → `surface.overlay`        |
+| border  | `border.subtle` → `border.default` → `border.strong`                          |
+| text    | `text.primary` (headings/labels) · `text.body` · `text.dim` (axes, secondary) |
+| accent  | `accent` — lines, marks, interactive affordances                              |
 
 `surface.error` is warm-shifted and sits **off** the ramp. It is semantic, not an
 elevation step; use it only for error states.
@@ -99,11 +99,11 @@ the retro-but-not-round radius used elsewhere in `app.css`.
 
 Pick per figure; don't standardize on one.
 
-| technique | use when |
-|---|---|
-| SVG + Svelte reactivity | default — diagrams, charts, explainers, up to ~1000 marks |
-| Canvas 2D | dense scatter, particles, anything past ~1000 marks |
-| Threlte / three.js | genuinely 3D (already a dependency — see `components/dither/`) |
+| technique               | use when                                                       |
+| ----------------------- | -------------------------------------------------------------- |
+| SVG + Svelte reactivity | default — diagrams, charts, explainers, up to ~1000 marks      |
+| Canvas 2D               | dense scatter, particles, anything past ~1000 marks            |
+| Threlte / three.js      | genuinely 3D (already a dependency — see `components/dither/`) |
 
 D3 is **math only**. Import submodules (`d3-scale`, `d3-shape`, `d3-array`, `d3-force`)
 for scales, layouts, and path generators. Never the `d3` monolith, never from a CDN, and
