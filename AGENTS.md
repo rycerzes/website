@@ -17,7 +17,8 @@
 - **Styling**: Tailwind CSS v4. Use `clsx` and `tailwind-merge`.
 - **Formatting**: Prettier defaults with `useTabs: true`, `singleQuote: true`, `printWidth: 100`, `trailingComma: "none"`.
 - **Database**: Drizzle ORM. Schema in `src/lib/server/db/schema.ts`.
-- **Components**: PascalCase (e.g., `ThemeToggle.svelte`).
+- **Components**: PascalCase (e.g., `CommandPalette.svelte`).
+- **Figures**: interactive/animated post figures live in `src/lib/components/figures/` and follow `docs/figures.md`. Read that before adding one.
 - **Imports**: Use named imports. Prefer `$lib` alias for internal imports.
 
 ## Rules
@@ -31,3 +32,4 @@
   - **Arbitrary values**: Use `()` instead of `[]` for vars (e.g., `bg-(--color)`).
 - **Error Handling**: Use try/catch blocks for async operations, especially DB calls.
 - **Env**: Use `$env/dynamic/private` for sensitive server-side env vars.
+- **Theme**: The site is dark-only. `<html>` always carries `class="dark"`. Never hardcode colors — use `--color-uv-*` in CSS, `$lib/palette` in JS.
