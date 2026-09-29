@@ -7,9 +7,11 @@ tags: ['gsoc', 'fossology', 'licensing', 'ml', 'evals']
 
 <script lang="ts">import Figure from '$lib/components/figures/Figure.svelte';</script>
 
-_GSoC 2026 with [FOSSology](https://github.com/fossology), mentored by Shaheem Azmal M MD, Kaushlendra Pratap and Ayush Bhardwaj._
+_This year I had the amazing opportunity to work with folks from [FOSSology](https://github.com/fossology) for GSOC 2026, mentored by [Shaheem Azmal](https://www.linkedin.com/in/shaheemazmalmmd/), [Kaushlendra Pratap](https://www.linkedin.com/in/kaushl2208/) and [Ayush Bhardwaj](https://www.linkedin.com/in/hastagab/)_
 
-I rebuilt license identification across two FOSSology tools. The engine that shipped reads no license text with any model. It is a **deterministic lexical cascade with a small gradient-boosted ranker** over match evidence. It is level with ScanCode on the corpora I can measure, and it runs at **20.7 ms per file on CPU**.
+[Problem Statement](https://github.com/fossology/fossology/issues/3632) - was to rebuild license identification across FOSSology ecosystem. 
+The engine that shipped reads no license text with any model. It is a **deterministic lexical cascade with a small gradient-boosted ranker** over match evidence. It is level with ScanCode on the corpora I can measure, and it runs at **20.7 ms per file on CPU**. 
+_~~gpus~~ cpus go brrr!_
 
 DEP-5 precision went from **0.652 to 0.885** over the rebuild. The learned ranker accounts for about the last **0.04** of that. Most of the rest came from finding defects.
 
@@ -66,8 +68,8 @@ The model is [`rycerzes/nirjas-gate`](https://huggingface.co/rycerzes/nirjas-gat
 
 The existing Atarashi test split had two problems:
 
-- **Circular:** 90.8% of its test fragments were verbatim substrings of their own license reference, so recall@k measured copy-detection.
-- **Leaky:** 9.4% of test rows were already in train.
+- **<u>Circular</u>:** 90.8% of its test fragments were verbatim substrings of their own license reference, so recall@k measured copy-detection.
+- **<u>Leaky</u>:** 9.4% of test rows were already in train.
 
 On real files from the-stack-smol, labelled by ScanCode, every method collapsed:
 
@@ -294,9 +296,12 @@ The concrete next experiment:
 
 ## shipped
 
-- **Atarashi**, as three stacked PRs that merge bottom-up. [#130](https://github.com/fossology/atarashi/pull/130) is the deterministic cascade and index, with no model binary, so the first reviewer sees a working engine. [#131](https://github.com/fossology/atarashi/pull/131) adds the learned ranker. [#132](https://github.com/fossology/atarashi/pull/132) adds compound expressions and the constant sweeps. 131 tests.
+- **Atarashi**, as three stacked PRs that merge bottom-up. 
+	- [#130](https://github.com/fossology/atarashi/pull/130) is the deterministic cascade and index, with no model binary, so the first reviewer sees a working engine. 
+	- [#131](https://github.com/fossology/atarashi/pull/131) adds the learned ranker. 
+	- [#132](https://github.com/fossology/atarashi/pull/132) adds compound expressions and the constant sweeps. 131 tests.
 - **Nirjas** [#76](https://github.com/fossology/Nirjas/pull/76) and [#77](https://github.com/fossology/Nirjas/pull/77) are merged. [#82](https://github.com/fossology/Nirjas/pull/82) and [#78](https://github.com/fossology/Nirjas/pull/78) (the gate) are open.
 - **Datasets:** [`rycerzes/atarashi-dep5`](https://huggingface.co/datasets/rycerzes/atarashi-dep5) and [`rycerzes/nirjas-dataset`](https://huggingface.co/datasets/rycerzes/nirjas-dataset). The evaluation suite lives in [Minerva-Dataset-Generation#6](https://github.com/fossology/Minerva-Dataset-Generation/pull/6).
 - **Reports and weekly notes:** [fossology/gsoc · enhancing-atarashi](https://github.com/fossology/gsoc/tree/main/docs/2026/enhancing-atarashi).
 
-If I did it again, I would build the benchmark before the model, give it a negative arm on day one, and keep the list of rejected ideas as carefully as the code. That record turned out to be worth more.
+If I did it again, I would build the benchmark before the model, give it a negative arm, and keep the list of rejected ideas as carefully as the code. That record turned out to be worth more.
