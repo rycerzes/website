@@ -3,7 +3,7 @@
 	import MdxContent from '$lib/components/MdxContent.svelte';
 </script>
 
-<article class="container mx-auto prose max-w-3xl px-4 py-12 prose-invert prose-violet">
+<article class="prose w-full max-w-none py-12 prose-invert prose-violet">
 	<header class="border-theme/30 mb-8 border-b pb-8">
 		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-4 font-mono text-xs text-violet-400">

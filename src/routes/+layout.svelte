@@ -120,11 +120,7 @@
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/about')}>About</a
-			>
-			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/ai')}>AI</a
+				href={resolve('/blog')}>Blog</a
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
@@ -133,7 +129,11 @@
 			>
 			<a
 				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/blog')}>Blog</a
+				href={resolve('/about')}>About</a
+			>
+			<a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				href={resolve('/ai')}>AI</a
 			>
 		</nav>
 	</header>

@@ -7,7 +7,7 @@
 	let { data } = $props();
 </script>
 
-<div class="relative mx-auto w-full max-w-2xl px-4 py-8">
+<div class="relative w-full py-8">
 	<!-- Left Sidebar with TOC - Hanging to the left -->
 	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">

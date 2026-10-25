@@ -37,7 +37,10 @@
 					>
 					:)
 				</p>
-				<p class="mt-12">
+				<p class="mt-12 text-sm leading-relaxed text-uv-text-dim">
+					this website is for a collection of incomplete notes, thoughts and tools
+				</p>
+				<p class="mt-6">
 					<span
 						class="cursor-pointer text-sm font-medium text-violet-400 italic transition-colors hover:text-violet-300"
 						>for those who come after</span

@@ -7,7 +7,7 @@
 	<title>How I Use (and Don't Use) AI | swappy</title>
 </svelte:head>
 
-<div class="relative mx-auto w-full max-w-2xl px-4 py-8">
+<div class="relative w-full py-8">
 	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">
 			<div class="mb-8">

@@ -147,7 +147,7 @@
 </script>
 
 {#if spotify}
-	<section id="listening" class="fade-in w-full">
+	<section id="listening" class="fade-in mt-12 w-full">
 		<h2 class="mb-4 text-xs font-bold tracking-[0.2em] text-violet-200">listening to</h2>
 
 		<a

@@ -4,7 +4,7 @@
 	let { data } = $props();
 </script>
 
-<div class="container mx-auto max-w-4xl px-4 py-8">
+<div class="w-full py-8">
 	<div class="mb-12">
 		<h1 class="mb-2 font-mono text-4xl font-bold text-violet-400">blog</h1>
 		<p class="text-sm tracking-wide text-uv-text-dim">all opinions are my own</p>
