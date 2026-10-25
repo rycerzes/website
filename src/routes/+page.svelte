@@ -11,30 +11,38 @@
 			<div class="flex flex-col gap-3">
 				<h1 class="text-3xl font-bold tracking-tight text-white md:text-4xl">swappy</h1>
 
-				<div class="text-sm font-medium tracking-wide text-uv-text-dim">
-					<p>engineering @ atlan</p>
-				</div>
+				<p class="text-sm font-medium tracking-wide text-uv-text-dim">
+					engineering @ <a
+						href="https://atlan.com"
+						target="_blank"
+						rel="external noopener noreferrer"
+						class="underline decoration-violet-400/70 underline-offset-4 transition-colors hover:text-violet-300"
+						>atlan</a
+					>
+				</p>
 
-				<p class="mt-1 max-w-lg text-sm leading-relaxed text-uv-text-dim">
+				<p class="text-sm leading-relaxed text-uv-text-dim">
 					currently working on agentic systems, evals, durable workflows and tooling
 				</p>
-				
-				<p class="mt-1 max-w-lg text-sm leading-relaxed text-uv-text-dim">
+
+				<p class="text-sm leading-relaxed text-uv-text-dim">
 					also interested in post training models, rl envs, inference, kernels and all things related
 				</p>
 
-				<p class="mt-2 text-sm text-uv-text-dim">
+				<p class="text-sm leading-relaxed text-uv-text-dim">
 					I've written a longer introduction <a
 						href={resolve('/about')}
-						class="underline transition-colors hover:text-violet-400">here</a
-					> :)
+						class="font-medium text-white underline decoration-violet-300 underline-offset-4 transition-colors hover:text-violet-200"
+						>here</a
+					>
+					:)
 				</p>
-				<div class="mt-2 text-sm">
+				<p class="mt-12">
 					<span
-						class="cursor-pointer font-medium text-violet-400 italic transition-colors hover:text-violet-300"
+						class="cursor-pointer text-sm font-medium text-violet-400 italic transition-colors hover:text-violet-300"
 						>for those who come after</span
 					>
-				</div>
+				</p>
 			</div>
 		</section>
 
