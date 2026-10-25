@@ -155,41 +155,37 @@
 
 	<footer
 		class={cn(
-			'mt-12 flex flex-col items-start justify-between gap-8 border-t border-theme py-10 opacity-0 md:flex-row md:items-center',
+			'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-8 gap-y-3 border-t border-theme py-10 opacity-0',
 			isLoaded && 'animate-enter delay-200'
 		)}
 		id="contact"
 	>
-		<div class="flex flex-col gap-2">
-			<div class="text-[10px] tracking-widest text-uv-text-dim">
-				© {new Date().getFullYear()} rycerzes
-			</div>
-			<div class="text-[10px] tracking-widest text-violet-500/60">swappy</div>
+		<div class="text-xs font-medium tracking-wider text-uv-text-dim">
+			© {new Date().getFullYear()} rycerzes
 		</div>
-		<div class="flex flex-col items-end gap-3">
-			<div class="flex items-center gap-8">
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-					href="https://x.com/swaapppyyy">x/twtr</a
-				>
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-					href="https://github.com/rycerzes">github</a
-				>
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-					href="mailto:swapnil@rycerz.es">email</a
-				>
-			</div>
-			{#if commitLabel}
-				<a
-					class="font-mono text-[10px] tracking-widest text-uv-text-dim transition-colors hover:text-violet-400"
-					href={commitHref}
-					target="_blank"
-					rel="external noopener noreferrer">{commitLabel}</a
-				>
-			{/if}
+		<div class="flex items-center justify-end gap-8">
+			<a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="https://x.com/swaapppyyy">x/twtr</a
+			>
+			<a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="https://github.com/rycerzes">github</a
+			>
+			<a
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href="mailto:swapnil@rycerz.es">email</a
+			>
 		</div>
+		<div class="text-xs font-medium tracking-wider text-uv-text-dim">swappy</div>
+		{#if commitLabel}
+			<a
+				class="justify-self-end text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				href={commitHref}
+				target="_blank"
+				rel="external noopener noreferrer">{commitLabel}</a
+			>
+		{/if}
 	</footer>
 
 	<CommandPalette />
