@@ -26,6 +26,13 @@
 			isLoaded = true;
 		}
 	});
+	const commitSha = __APP_COMMIT_SHA__;
+	const commitBranch = __APP_COMMIT_BRANCH__;
+	const commitLabel = commitSha ? `${commitBranch}@${commitSha.slice(0, 7)}` : '';
+	const commitHref = commitSha
+		? `https://github.com/rycerzes/website/commit/${commitSha}`
+		: '';
+
 	let pageTitle = $derived.by(() => {
 		const path = $page.url.pathname;
 		if (path === '/') return 'swappy';
@@ -159,19 +166,29 @@
 			</div>
 			<div class="text-[10px] tracking-widest text-violet-500/60">swappy</div>
 		</div>
-		<div class="flex items-center gap-8">
-			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-				href="https://x.com/swaapppyyy">x/twtr</a
-			>
-			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-				href="https://github.com/rycerzes">github</a
-			>
-			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
-				href="mailto:swapnil@rycerz.es">email</a
-			>
+		<div class="flex flex-col items-end gap-3">
+			<div class="flex items-center gap-8">
+				<a
+					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+					href="https://x.com/swaapppyyy">x/twtr</a
+				>
+				<a
+					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+					href="https://github.com/rycerzes">github</a
+				>
+				<a
+					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+					href="mailto:swapnil@rycerz.es">email</a
+				>
+			</div>
+			{#if commitLabel}
+				<a
+					class="font-mono text-[10px] tracking-widest text-uv-text-dim transition-colors hover:text-violet-400"
+					href={commitHref}
+					target="_blank"
+					rel="external noopener noreferrer">{commitLabel}</a
+				>
+			{/if}
 		</div>
 	</footer>
 
