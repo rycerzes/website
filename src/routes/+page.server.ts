@@ -1,4 +1,3 @@
-import { GITHUB_TOKEN } from '$env/static/private';
 import { env } from '$env/dynamic/public';
 import type { PageServerLoad } from './$types';
 
@@ -29,32 +28,14 @@ export const load: PageServerLoad = async ({ setHeaders }) => {
 	try {
 		const lanyardUserId = env.PUBLIC_LANYARD_USER_ID?.trim() ?? '';
 
-		const [userRes, lanyardPresence] = await Promise.all([
-			fetch('https://api.github.com/user', {
-				headers: {
-					Authorization: `Bearer ${GITHUB_TOKEN}`,
-					'User-Agent': 'SvelteKit-App'
-				}
-			}),
-			fetchLanyardPresence(lanyardUserId)
-		]);
-
-		let avatarUrl = 'https://github.com/rycerzes.png';
-		if (userRes.ok) {
-			const userData = await userRes.json();
-			avatarUrl = userData.avatar_url ?? avatarUrl;
-		} else {
-			console.error('Failed to fetch GitHub user:', await userRes.text());
-		}
+		const lanyardPresence = await fetchLanyardPresence(lanyardUserId);
 
 		return {
-			avatarUrl,
 			lanyard: lanyardPresence
 		};
 	} catch (error) {
 		console.error('Error in load function:', error);
 		return {
-			avatarUrl: 'https://github.com/rycerzes.png',
 			lanyard: null
 		};
 	}
