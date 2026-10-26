@@ -44,7 +44,7 @@
 		errorTextColor: text.primary
 	} as const;
 
-	let { Component } = $props<{ Component?: SvelteComponent }>();
+	let { Component }: { Component?: SvelteComponent } = $props();
 	let contentElement: HTMLDivElement;
 	let mermaidReady = false;
 
