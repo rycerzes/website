@@ -57,13 +57,13 @@
 		<div
 			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
 				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-uv-text-main
-				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
+				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-body
 				prose-a:text-uv-link prose-a:underline prose-a:decoration-uv-link/30 prose-a:underline-offset-2 prose-blockquote:border-l-ctp-pink/40 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1
 				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
 				prose-code:text-[1em] prose-code:font-normal prose-code:text-ctp-green prose-code:before:content-none
 				prose-code:after:content-none
-				prose-li:text-uv-text-dim/80 [&_a:hover]:text-uv-link-hover [&_a:hover]:decoration-uv-link-hover
+				prose-li:text-uv-text-body [&_a:hover]:text-uv-link-hover [&_a:hover]:decoration-uv-link-hover
 			"
 		>
 			<p>

@@ -22,26 +22,31 @@ the derived values below.
 
 ## Role mapping
 
-| Style-guide role       | Mocha                 | Site token                                       |
-| ---------------------- | --------------------- | ------------------------------------------------ |
-| Background pane        | Base                  | `uv-black` (`#030205`) — see deviations          |
-| Secondary panes        | Mantle, Crust         | `uv-deep` (`#0e0a14`), `uv-raised` (Mantle)      |
-| Popovers, tooltips     | Base                  | `uv-overlay`                                     |
-| Surface elements       | Surface 0 / 1 / 2     | `uv-mute`, `uv-border`, `uv-border-strong`       |
-| Main headline          | Text                  | `uv-text-main`                                   |
-| Body copy              | Text                  | `uv-text-main` for emphasis, `uv-text-dim` today |
-| Sub-headlines, labels  | Subtext 0 / 1         | `uv-text-dim` (Subtext 0), `ctp-subtext1`        |
-| Subtle text            | Overlay 1             | `ctp-overlay1`                                   |
-| On accent              | Crust                 | `ctp-crust` (text on a filled accent)            |
-| Links                  | Blue / Lavender / Sky | `uv-link` (Blue), hover `uv-link-hover` (Sky)    |
-| Tags, pills            | Blue                  | `uv-tag` (Blue text on a `/10` Blue tint)        |
-| Navigation, focus      | —                     | `uv-highlight` (Mauve), the site accent          |
-| Success / warn / error | Green / Yellow / Red  | `ctp-green`, `ctp-yellow`, `ctp-red`             |
-| Selection background   | Overlay 2 at 20–30%   | `::selection` in `app.css` (30%)                 |
-| Cursor                 | Rosewater             | `caret-color` on `html` in `app.css`             |
+| Style-guide role       | Mocha                 | Site token                                    |
+| ---------------------- | --------------------- | --------------------------------------------- |
+| Background pane        | Base                  | `uv-black` (`#030205`) — see deviations       |
+| Secondary panes        | Mantle, Crust         | `uv-deep` (`#0e0a14`), `uv-raised` (Mantle)   |
+| Popovers, tooltips     | Base                  | `uv-overlay`                                  |
+| Surface elements       | Surface 0 / 1 / 2     | `uv-mute`, `uv-border`, `uv-border-strong`    |
+| Main headline          | Text                  | `uv-text-main`                                |
+| Body copy              | Text                  | `uv-text-body`                                |
+| Sub-headlines, labels  | Subtext 0 / 1         | `uv-text-dim` (Subtext 0), `ctp-subtext1`     |
+| Subtle text            | Overlay 1             | `ctp-overlay1`                                |
+| On accent              | Crust                 | `ctp-crust` (text on a filled accent)         |
+| Links                  | Blue / Lavender / Sky | `uv-link` (Blue), hover `uv-link-hover` (Sky) |
+| Tags, pills            | Blue                  | `uv-tag` (Blue text on a `/10` Blue tint)     |
+| Navigation, focus      | —                     | `uv-highlight` (Mauve), the site accent       |
+| Success / warn / error | Green / Yellow / Red  | `ctp-green`, `ctp-yellow`, `ctp-red`          |
+| Selection background   | Overlay 2 at 20–30%   | `::selection` in `app.css` (30%)              |
+| Cursor                 | Rosewater             | `caret-color` on `html` in `app.css`          |
 
 `html` also sets `color-scheme: dark`, and `app.html` sets `theme-color` to `uv-black`, so
 native scrollbars, form controls and the mobile browser bar match the backdrop.
+
+Body copy (`uv-text-body`) is Text; `uv-text-dim` is for labels, metadata, excerpts and
+captions only. Prose colours come from the `.prose` block in `app.css`, which maps the
+typography plugin's `--tw-prose-invert-*` variables onto these tokens — add a role there
+rather than reaching for the plugin's greys.
 
 Code blocks use Shiki's `catppuccin-mocha` theme (`svelte.config.js`), so syntax colours
 already follow the guide's code-editor table. Inline code is Green, matching the guide's
@@ -79,5 +84,3 @@ label. For any other hue, compute the same 15% mix over Base rather than eyeball
   states and focus rings — uses Mauve (`uv-highlight`), as do figure marks (`accent`).
   Don't make the accent Blue: it would sit on top of `series.blue` in figures. Visited
   links are not distinguished (the guide's Lavender), since the site has few repeat links.
-- **Body copy is mostly Subtext 0.** Long-form text uses `uv-text-dim` rather than Text,
-  to keep the page quiet. Headlines and emphasis use Text.

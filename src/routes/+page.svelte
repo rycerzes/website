@@ -23,16 +23,16 @@
 					>
 				</p>
 
-				<p class="text-sm leading-relaxed text-uv-text-dim">
+				<p class="text-sm leading-relaxed text-uv-text-body">
 					currently working on agentic systems, evals, durable workflows and tooling
 				</p>
 
-				<p class="text-sm leading-relaxed text-uv-text-dim">
+				<p class="text-sm leading-relaxed text-uv-text-body">
 					also interested in post training models, rl envs, inference, kernels and all things
 					related
 				</p>
 
-				<p class="text-sm leading-relaxed text-uv-text-dim">
+				<p class="text-sm leading-relaxed text-uv-text-body">
 					I've written a longer introduction <a
 						href={resolve('/about')}
 						class="font-medium text-uv-link underline decoration-uv-link underline-offset-4 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
@@ -40,7 +40,7 @@
 					>
 					:)
 				</p>
-				<p class="mt-12 text-sm leading-relaxed text-uv-text-dim">
+				<p class="mt-12 text-sm leading-relaxed text-uv-text-body">
 					this website is for a collection of incomplete notes, thoughts and tools
 				</p>
 				<p class="mt-6">
