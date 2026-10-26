@@ -29,9 +29,7 @@
 	const commitSha = __APP_COMMIT_SHA__;
 	const commitBranch = __APP_COMMIT_BRANCH__;
 	const commitLabel = commitSha ? `${commitBranch}@${commitSha.slice(0, 7)}` : '';
-	const commitHref = commitSha
-		? `https://github.com/rycerzes/website/commit/${commitSha}`
-		: '';
+	const commitHref = commitSha ? `https://github.com/rycerzes/website/commit/${commitSha}` : '';
 
 	let pageTitle = $derived.by(() => {
 		const path = $page.url.pathname;

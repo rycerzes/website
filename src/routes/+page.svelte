@@ -5,7 +5,9 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<div class="fixed top-1/2 left-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-6 md:px-12">
+<div
+	class="fixed top-1/2 left-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-6 md:px-12"
+>
 	<div class="w-full">
 		<section id="about" class="fade-in mb-6">
 			<div class="flex flex-col gap-3">
@@ -26,7 +28,8 @@
 				</p>
 
 				<p class="text-sm leading-relaxed text-uv-text-dim">
-					also interested in post training models, rl envs, inference, kernels and all things related
+					also interested in post training models, rl envs, inference, kernels and all things
+					related
 				</p>
 
 				<p class="text-sm leading-relaxed text-uv-text-dim">

@@ -9,8 +9,8 @@ tags: ['gsoc', 'fossology', 'licensing', 'ml', 'evals']
 
 _This year I had the amazing opportunity to work with folks from [FOSSology](https://github.com/fossology) for [GSOC 2026](https://summerofcode.withgoogle.com/programs/2026/projects/GY4LO3iv), mentored by [Shaheem Azmal](https://www.linkedin.com/in/shaheemazmalmmd/), [Kaushlendra Pratap](https://www.linkedin.com/in/kaushl2208/) and [Ayush Bhardwaj](https://www.linkedin.com/in/hastagab/)_
 
-[Problem Statement](https://github.com/fossology/fossology/issues/3632) - was to rebuild license identification across FOSSology ecosystem. 
-The engine that shipped reads no license text with any model. It is a **deterministic lexical cascade with a small gradient-boosted ranker** over match evidence. It is level with ScanCode on the corpora I can measure, and it runs at **20.7 ms per file on CPU**. 
+[Problem Statement](https://github.com/fossology/fossology/issues/3632) - was to rebuild license identification across FOSSology ecosystem.
+The engine that shipped reads no license text with any model. It is a **deterministic lexical cascade with a small gradient-boosted ranker** over match evidence. It is level with ScanCode on the corpora I can measure, and it runs at **20.7 ms per file on CPU**.
 _~~gpus~~ cpus go brrr!_
 
 DEP-5 precision went from **0.652 to 0.885** over the rebuild. The learned ranker accounts for about the last **0.04** of that. Most of the rest came from finding defects.
@@ -296,10 +296,10 @@ The concrete next experiment:
 
 ## shipped
 
-- **Atarashi**, as three stacked PRs that merge bottom-up. 
-	- [#130](https://github.com/fossology/atarashi/pull/130) is the deterministic cascade and index, with no model binary, so the first reviewer sees a working engine. 
-	- [#131](https://github.com/fossology/atarashi/pull/131) adds the learned ranker. 
-	- [#132](https://github.com/fossology/atarashi/pull/132) adds compound expressions and the constant sweeps. 131 tests.
+- **Atarashi**, as three stacked PRs that merge bottom-up.
+  - [#130](https://github.com/fossology/atarashi/pull/130) is the deterministic cascade and index, with no model binary, so the first reviewer sees a working engine.
+  - [#131](https://github.com/fossology/atarashi/pull/131) adds the learned ranker.
+  - [#132](https://github.com/fossology/atarashi/pull/132) adds compound expressions and the constant sweeps. 131 tests.
 - **Nirjas** [#76](https://github.com/fossology/Nirjas/pull/76) and [#77](https://github.com/fossology/Nirjas/pull/77) are merged. [#82](https://github.com/fossology/Nirjas/pull/82) and [#78](https://github.com/fossology/Nirjas/pull/78) (the gate) are open.
 - **Datasets:** [`rycerzes/atarashi-dep5`](https://huggingface.co/datasets/rycerzes/atarashi-dep5) and [`rycerzes/nirjas-dataset`](https://huggingface.co/datasets/rycerzes/nirjas-dataset). The evaluation suite lives in [Minerva-Dataset-Generation#6](https://github.com/fossology/Minerva-Dataset-Generation/pull/6).
 - **Reports and weekly notes:** [fossology/gsoc · enhancing-atarashi](https://github.com/fossology/gsoc/tree/main/docs/2026/enhancing-atarashi).
