@@ -158,6 +158,8 @@
 
 html {
 	scrollbar-gutter: stable;
+	color-scheme: dark;
+	caret-color: var(--color-ctp-rosewater);
 }
 
 body {

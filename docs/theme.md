@@ -37,7 +37,10 @@ the derived values below.
 | Tags, pills            | Blue                  | `uv-highlight` today                             |
 | Success / warn / error | Green / Yellow / Red  | `ctp-green`, `ctp-yellow`, `ctp-red`             |
 | Selection background   | Overlay 2 at 20–30%   | `::selection` in `app.css` (30%)                 |
-| Cursor                 | Rosewater             | not set                                          |
+| Cursor                 | Rosewater             | `caret-color` on `html` in `app.css`             |
+
+`html` also sets `color-scheme: dark`, and `app.html` sets `theme-color` to `uv-black`, so
+native scrollbars, form controls and the mobile browser bar match the backdrop.
 
 Code blocks use Shiki's `catppuccin-mocha` theme (`svelte.config.js`), so syntax colours
 already follow the guide's code-editor table. Inline code is Green, matching the guide's
