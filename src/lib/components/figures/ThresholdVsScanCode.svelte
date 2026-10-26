@@ -90,7 +90,7 @@
 		</span>
 		<span class="flex items-center gap-1.5 text-uv-text-dim/70">
 			<svg width="10" height="10" aria-hidden="true"
-				><rect x="1" y="1" width="8" height="8" fill={series.orange} /></svg
+				><rect x="1" y="1" width="8" height="8" fill={series.peach} /></svg
 			> ScanCode
 		</span>
 	</div>
@@ -149,7 +149,7 @@
 					y={py(corpus.sc.prec) - 5}
 					width="10"
 					height="10"
-					fill={series.orange}
+					fill={series.peach}
 					stroke="var(--color-uv-deep)"
 					stroke-width="2"
 				/>
@@ -171,7 +171,7 @@
 			max={corpus.rows.length - 1}
 			step="1"
 			bind:value={idx}
-			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-violet-400"
+			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-uv-highlight"
 		/>
 		<span class="unit w-10 shrink-0 font-mono text-[11px] text-uv-text-main"
 			>{row.tau.toFixed(2)}</span

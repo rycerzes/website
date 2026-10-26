@@ -18,9 +18,9 @@
 	};
 
 	const NIRJAS = series.blue;
-	const ATARASHI = series.orange;
-	const MINERVA = series.aqua;
-	const LICENSE_PACKET = series.yellow;
+	const ATARASHI = series.peach;
+	const MINERVA = series.teal;
+	const LICENSE_PACKET = series.sapphire;
 
 	// wide: left to right, reads like the pipeline
 	const wide: Layout = {

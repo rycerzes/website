@@ -90,7 +90,7 @@
 	const groupColour: Record<Group, string> = {
 		input: ink.dim,
 		nirjas: series.blue,
-		atarashi: series.orange,
+		atarashi: series.peach,
 		output: ink.dim
 	};
 	const outcomeColour: Record<Outcome, string> = {

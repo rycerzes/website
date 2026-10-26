@@ -151,7 +151,7 @@
 		</span>
 		<span class="flex items-center gap-1.5">
 			<svg width="10" height="10" aria-hidden="true"
-				><circle cx="5" cy="5" r="4.5" fill={series.orange} /></svg
+				><circle cx="5" cy="5" r="4.5" fill={series.peach} /></svg
 			> worst admitted
 		</span>
 	</div>
@@ -212,7 +212,7 @@
 					cx={PAD_L + x(r.worst)}
 					cy={y}
 					r="4.5"
-					fill={series.orange}
+					fill={series.peach}
 					stroke="var(--color-uv-deep)"
 					stroke-width="2"
 				/>

@@ -183,7 +183,7 @@
 		</div>
 		<div>
 			<dt class="text-uv-text-dim/60">bin</dt>
-			<dd class="text-violet-300">&lt;{bin}&gt;</dd>
+			<dd class="text-uv-highlight">&lt;{bin}&gt;</dd>
 		</div>
 		<div>
 			<dt class="text-uv-text-dim/60">recon</dt>
@@ -207,7 +207,7 @@
 				max="1"
 				step="0.0001"
 				bind:value={xNorm}
-				class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-violet-400"
+				class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-uv-highlight"
 			/>
 		</div>
 		<div class="flex items-center gap-3">
@@ -221,7 +221,7 @@
 				max="4096"
 				step="16"
 				bind:value={imageWidth}
-				class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-violet-400"
+				class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-uv-highlight"
 			/>
 			<span class="w-20 shrink-0 text-right font-mono text-[11px] text-uv-text-dim">
 				{imageWidth}px

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { series, semantic, text as ink, border } from '$lib/palette';
+	import { series, semantic, surface, text as ink, border } from '$lib/palette';
 
 	// Matcher evidence for one real Apache-2.0 LICENSE file (11,350 chars), top candidates.
 	type Cand = { name: string; family: string; run: number; cov: number };
@@ -95,7 +95,7 @@
 					y={y + 15}
 					font-size="10"
 					text-anchor="end"
-					fill={ink.primary}>{c.run}</text
+					fill={chosen ? surface.page : ink.primary}>{c.run}</text
 				>
 				<rect
 					x={PAD_L + half + 16}
@@ -110,7 +110,7 @@
 					y={y + 4}
 					width={c.cov * half}
 					height="14"
-					fill={series.orange}
+					fill={series.peach}
 					opacity={chosen ? 1 : 0.55}
 				/>
 				<text
@@ -118,7 +118,7 @@
 					y={y + 15}
 					font-size="10"
 					text-anchor="end"
-					fill={ink.primary}>{c.cov.toFixed(3)}</text
+					fill={chosen ? surface.page : ink.primary}>{c.cov.toFixed(3)}</text
 				>
 				{#if chosen}
 					<!-- centred on the bars (y+4 .. y+18) and ending where the coverage track ends -->

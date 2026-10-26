@@ -33,7 +33,7 @@
 		</span>
 		<span class="flex items-center gap-1.5">
 			<svg width="10" height="10" aria-hidden="true"
-				><rect x="1" y="1" width="8" height="8" rx="2" fill={series.orange} /></svg
+				><rect x="1" y="1" width="8" height="8" rx="2" fill={series.peach} /></svg
 			> min_run 3
 		</span>
 		<button
@@ -78,7 +78,7 @@
 						width={Math.max(v * plotW, 2)}
 						height="9"
 						rx="2"
-						fill={j === 0 ? series.blue : series.orange}
+						fill={j === 0 ? series.blue : series.peach}
 					/>
 					<text x={PAD_L + plotW + 6} y={y + 23 + j * 12} font-size="10" fill={ink.primary}
 						>{m.lowerIsBetter ? pct(v) : v.toFixed(3)}</text

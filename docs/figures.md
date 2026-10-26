@@ -38,11 +38,13 @@ is being stored globally that shouldn't be.
 
 ## 4. Colors
 
-The site is **dark-only**. There is exactly one palette. Never hardcode a color.
+The site is **dark-only**. There is exactly one palette: Catppuccin Mocha over the site's
+own darker backdrop (`surface.page`, `surface.deep`). Never hardcode a color.
 
-- In markup and CSS: the `--color-uv-*` custom properties from `src/app.css`.
+- In markup and CSS: the `--color-uv-*` role tokens from `src/app.css`, or a raw Mocha
+  colour via `--color-ctp-*` when no role fits (e.g. `text-ctp-green`).
 - In JS/TS (canvas, WebGL, any library that needs a string):
-  `import { surface, border, text, accent } from '$lib/palette'`.
+  `import { surface, border, text, accent, ctp } from '$lib/palette'`.
 
 Ramps, in order:
 
@@ -61,23 +63,27 @@ tooltips and popovers on `surface.overlay`. If you find yourself wanting a shade
 two ramp steps, add a token to both `app.css` and `palette.ts` — do not inline it. Inlined
 one-off hexes are exactly the drift this palette exists to prevent.
 
-Categorical series take `categorical` from `$lib/palette` — a fixed, validated hue order.
-Assign slots in sequence and never cycle. Do **not** derive series colours from `accent`:
-the UV violet sits outside the OKLCH lightness band a categorical palette needs, and a
-single-hue set cannot separate more than two series under colour-vision deficiency.
+Categorical series take `categorical` from `$lib/palette`: four Mocha accents (blue,
+peach, teal, sapphire) in a fixed, validated order. Assign slots in sequence and never
+cycle. Do **not** pick series colours from `ctp` by hand — most Mocha pairs that look
+distinct collapse under colour-vision deficiency (mauve and blue are 1.2 apart under
+protanopia), and the order is what keeps them apart.
 
-The palette is not eyeballed. It is checked with a six-check validator — lightness band
-0.48–0.67 for dark, chroma floor 0.10, CVD separation under protanopia/deuteranopia, a
-normal-vision floor, and ≥3:1 contrast against `surface.deep`. Re-run it before changing
-any slot. An earlier hand-picked set failed the band on all six hues and put green and
-rose 7.5 apart under deuteranopia, which would have made a pass/fail encoding unreadable.
+The order is not eyeballed. `bun scripts/check-palette.ts` checks it: ≥3:1 contrast
+against `surface.deep`, neighbours ≥9 apart and every pair within the first three ≥9.5
+apart (OKLab ΔE×100, worst of normal, protan and deutan vision). Re-run it before
+changing any slot. Green, yellow and red are left out because they are the status hues,
+and mauve because it is the accent. The scale stops at four because every fifth Mocha hue
+either drops a neighbour below 7 or, like maroon, sits on top of `semantic.fail`.
 
 Scatter-like figures (roofline, bubble, small multiples) need _every_ pair to separate,
 not just neighbours, and only the first `ALL_PAIRS_SAFE_SERIES` (3) slots clear that.
 More than three series there means faceting, not more hues.
 
-`semantic` carries reserved state colours (pass/warn/fail). Never reuse them as "series
-4", and never let one carry meaning alone — always pair with a label.
+`semantic` carries reserved state colours (pass/warn/fail). Never reuse them as a series,
+and never let one carry meaning alone — always pair with a label. Under deuteranopia pass
+sits 2.9 from warn and 3.8 from `series.peach`; the label is what carries the state. The
+same goes for `accent` next to `series.blue`.
 
 Text stays in the `text` tokens, never a series colour. A coloured mark beside a label
 carries identity; the label itself does not.
