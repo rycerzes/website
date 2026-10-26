@@ -39,7 +39,8 @@ is being stored globally that shouldn't be.
 ## 4. Colors
 
 The site is **dark-only**. There is exactly one palette: Catppuccin Mocha over the site's
-own darker backdrop (`surface.page`, `surface.deep`). Never hardcode a color.
+own darker backdrop (`surface.page`, `surface.deep`). Never hardcode a color. Which Mocha
+colour fills which UI role is in `docs/theme.md`; this section adds the figure-specific rules.
 
 - In markup and CSS: the `--color-uv-*` role tokens from `src/app.css`, or a raw Mocha
   colour via `--color-ctp-*` when no role fits (e.g. `text-ctp-green`).

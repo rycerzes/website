@@ -30,4 +30,4 @@
   - **Arbitrary values**: Use `()` instead of `[]` for vars (e.g., `bg-(--color)`).
 - **Error Handling**: Use try/catch blocks for async operations.
 - **Env**: Use `$env/dynamic/private` for sensitive server-side env vars.
-- **Theme**: The site is dark-only. `<html>` always carries `class="dark"`. The palette is Catppuccin Mocha over the site's own backdrop (`uv-black`, `uv-deep`). Never hardcode colors — use `--color-uv-*` role tokens (or `--color-ctp-*` for a raw Mocha colour) in CSS, `$lib/palette` in JS.
+- **Theme**: The site is dark-only. `<html>` always carries `class="dark"`. The palette is Catppuccin Mocha over the site's own backdrop (`uv-black`, `uv-deep`). Never hardcode colors — use `--color-uv-*` role tokens (or `--color-ctp-*` for a raw Mocha colour) in CSS, `$lib/palette` in JS. Read `docs/theme.md` before choosing a colour for a role; it maps the [Catppuccin style guide](https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md) onto the site tokens and lists the deliberate deviations.
