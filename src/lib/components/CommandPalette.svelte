@@ -6,8 +6,8 @@
 	import Newspaper from '@lucide/svelte/icons/newspaper';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
 	import FileText from '@lucide/svelte/icons/file-text';
-	import Github from '@lucide/svelte/icons/github';
-	import Twitter from '@lucide/svelte/icons/twitter';
+	import GitBranch from '@lucide/svelte/icons/git-branch';
+	import AtSign from '@lucide/svelte/icons/at-sign';
 	import Mail from '@lucide/svelte/icons/mail';
 
 	let open = $state(false);
@@ -33,8 +33,8 @@
 			icon: FileText,
 			newTab: true
 		},
-		{ href: 'https://github.com/rycerzes', label: 'GitHub', icon: Github, newTab: true },
-		{ href: 'https://x.com/swaapppyyy', label: 'x / twitter', icon: Twitter, newTab: true },
+		{ href: 'https://github.com/rycerzes', label: 'GitHub', icon: GitBranch, newTab: true },
+		{ href: 'https://x.com/swaapppyyy', label: 'x / twitter', icon: AtSign, newTab: true },
 		{ href: 'mailto:swapnil@rycerz.es', label: 'Email', icon: Mail, newTab: false }
 	];
 </script>

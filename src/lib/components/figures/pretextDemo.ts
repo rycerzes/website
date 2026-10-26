@@ -385,7 +385,7 @@ function computeLines(state: DemoState, width: number, height: number): Position
 				continue;
 			}
 
-			const line = layoutNextLine(state.prepared, cursor, Math.max(1, slot.right - slot.left));
+			const line = layoutNextLine(state.prepared, Math.max(1, slot.right - slot.left), cursor);
 			if (line === null) return result;
 
 			result.push({ x: slot.left, y, text: line.text });
