@@ -81,7 +81,7 @@ main {
 	--color-border-default: #45475a;
 	--color-border-muted: #313244;
 	--color-neutral-muted: rgba(147, 153, 178, 0.2);
-	--color-accent-fg: #cba6f7;
+	--color-accent-fg: #89b4fa;
 	--color-accent-emphasis: #cba6f7;
 	--color-accent-muted: rgba(var(--primary-default), 0.45);
 	--color-accent-subtle: rgba(var(--primary-default), 0.14);

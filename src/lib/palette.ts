@@ -69,6 +69,10 @@ export const text = {
 /** Used for lines, marks, and interactive affordances. */
 export const accent = ctp.mauve;
 
+/** In-content links and tag pills; navigation uses `accent`. */
+export const link = { default: ctp.blue, hover: ctp.sky } as const;
+export const tag = ctp.blue;
+
 /**
  * Peak colour of the dither backdrop as 0-1 RGB for the shader, which mixes from black up to
  * it. Mauve scaled to 38% keeps the wave at its previous luminance (~5.6%), so text over the
@@ -125,6 +129,8 @@ export const palette = {
 	border,
 	text,
 	accent,
+	link,
+	tag,
 	ditherWave,
 	series,
 	categorical,

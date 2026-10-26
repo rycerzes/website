@@ -51,6 +51,10 @@
 	--color-uv-text-main: var(--color-ctp-text);
 	--color-uv-text-dim: var(--color-ctp-subtext0);
 	--color-uv-highlight: var(--color-ctp-mauve);
+	/* In-content links and tag pills, per the Catppuccin style guide. Navigation keeps uv-highlight. */
+	--color-uv-link: var(--color-ctp-blue);
+	--color-uv-link-hover: var(--color-ctp-sky);
+	--color-uv-tag: var(--color-ctp-blue);
 
 	/* shadcn/bits-ui component tokens (src/lib/components/ui), aliased onto the role tokens. */
 	--color-popover: var(--color-uv-overlay);

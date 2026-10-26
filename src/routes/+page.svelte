@@ -18,7 +18,7 @@
 						href="https://atlan.com"
 						target="_blank"
 						rel="external noopener noreferrer"
-						class="underline decoration-uv-highlight/70 underline-offset-4 transition-colors hover:text-uv-highlight"
+						class="text-uv-link underline decoration-uv-link/40 underline-offset-4 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
 						>atlan</a
 					>
 				</p>
@@ -35,7 +35,7 @@
 				<p class="text-sm leading-relaxed text-uv-text-dim">
 					I've written a longer introduction <a
 						href={resolve('/about')}
-						class="font-medium text-uv-text-main underline decoration-uv-highlight underline-offset-4 transition-colors hover:text-ctp-lavender"
+						class="font-medium text-uv-link underline decoration-uv-link underline-offset-4 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
 						>here</a
 					>
 					:)

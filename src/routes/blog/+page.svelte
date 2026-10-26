@@ -29,7 +29,7 @@
 					{#if post.tags.length > 0}
 						<div class="flex gap-2">
 							{#each post.tags as tag}
-								<span class="text-xs text-uv-text-dim/50 lowercase">
+								<span class="text-xs text-uv-tag/60 lowercase">
 									{tag}
 								</span>
 							{/each}

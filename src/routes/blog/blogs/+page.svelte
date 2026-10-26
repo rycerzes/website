@@ -28,7 +28,7 @@
 						<div class="mt-2 flex gap-2">
 							{#each post.tags as tag (tag)}
 								<span
-									class="rounded-full bg-uv-highlight/10 px-2 py-1 text-[10px] tracking-wide text-uv-highlight uppercase"
+									class="rounded-full bg-uv-tag/10 px-2 py-1 text-[10px] tracking-wide text-uv-tag uppercase"
 								>
 									{tag}
 								</span>

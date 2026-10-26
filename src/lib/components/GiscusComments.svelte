@@ -22,7 +22,7 @@
 				href="https://giscus.app"
 				target="_blank"
 				rel="noreferrer"
-				class="text-uv-highlight underline decoration-uv-highlight/30 underline-offset-2 transition-colors hover:text-ctp-lavender hover:decoration-ctp-lavender"
+				class="text-uv-link underline decoration-uv-link/30 underline-offset-2 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
 			>
 				giscus</a
 			>

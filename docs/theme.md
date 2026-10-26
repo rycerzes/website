@@ -33,8 +33,9 @@ the derived values below.
 | Sub-headlines, labels  | Subtext 0 / 1         | `uv-text-dim` (Subtext 0), `ctp-subtext1`        |
 | Subtle text            | Overlay 1             | `ctp-overlay1`                                   |
 | On accent              | Crust                 | `ctp-crust` (text on a filled accent)            |
-| Links                  | Blue / Lavender / Sky | `uv-highlight` (Mauve), hover `ctp-lavender`     |
-| Tags, pills            | Blue                  | `uv-highlight` today                             |
+| Links                  | Blue / Lavender / Sky | `uv-link` (Blue), hover `uv-link-hover` (Sky)    |
+| Tags, pills            | Blue                  | `uv-tag` (Blue text on a `/10` Blue tint)        |
+| Navigation, focus      | —                     | `uv-highlight` (Mauve), the site accent          |
 | Success / warn / error | Green / Yellow / Red  | `ctp-green`, `ctp-yellow`, `ctp-red`             |
 | Selection background   | Overlay 2 at 20–30%   | `::selection` in `app.css` (30%)                 |
 | Cursor                 | Rosewater             | `caret-color` on `html` in `app.css`             |
@@ -72,9 +73,11 @@ label. For any other hue, compute the same 15% mix over Base rather than eyeball
 
 - **Backdrop is darker than Base.** The page sits on `uv-black` with the dither
   background on top; Base reads as grey against it. This is intentional and should stay.
-- **Mauve is the accent, not Blue.** Links, active nav, focus marks and the "for those who
-  come after" line use Mauve (`uv-highlight`), where the guide says Blue for links and
-  tags. Don't switch individual elements to Blue; if that changes, it changes in
-  `--color-uv-highlight` and `accent` together.
+- **Mauve is the site accent; Blue is only for links and tags.** In-content hyperlinks
+  (prose, the home bio, the about page, the Giscus credit) and tag pills use `uv-link` /
+  `uv-tag`. Navigation chrome — the nav bar, footer, back links, table of contents, active
+  states and focus rings — uses Mauve (`uv-highlight`), as do figure marks (`accent`).
+  Don't make the accent Blue: it would sit on top of `series.blue` in figures. Visited
+  links are not distinguished (the guide's Lavender), since the site has few repeat links.
 - **Body copy is mostly Subtext 0.** Long-form text uses `uv-text-dim` rather than Text,
   to keep the page quiet. Headlines and emphasis use Text.
