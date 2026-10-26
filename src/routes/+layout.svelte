@@ -7,6 +7,7 @@
 
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
 	import { cn } from '$lib/utils';
+	import { ditherWave } from '$lib/palette';
 
 	import Dither from '$lib/components/dither/Dither.svelte';
 
@@ -64,7 +65,7 @@
 		style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
 	>
 		<Dither
-			waveColor={[0.28, 0.2, 0.55]}
+			waveColor={ditherWave}
 			disableAnimation={false}
 			enableMouseInteraction={false}
 			mouseRadius={0}
@@ -99,7 +100,7 @@
 				>
 					{#if showBackground}
 						<Dither
-							waveColor={[0.28, 0.2, 0.55]}
+							waveColor={ditherWave}
 							disableAnimation={false}
 							enableMouseInteraction={false}
 							mouseRadius={0}

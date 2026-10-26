@@ -82,19 +82,8 @@
 	--font-family-mono: var(--font-mono);
 }
 
-@utility dither-bg {
-	background-color: var(--color-uv-black);
-	background-image:
-		radial-gradient(at 50% 10%, rgba(20, 10, 30, 0.8) 0px, transparent 60%),
-		radial-gradient(at 90% 40%, rgba(15, 8, 25, 1) 0px, transparent 50%),
-		radial-gradient(at 0% 80%, rgba(15, 8, 25, 1) 0px, transparent 50%);
-	position: fixed;
-	inset: 0;
-	z-index: -20;
-}
-
 @utility dither-overlay {
-	background-image: radial-gradient(#3a2c4d 0.5px, transparent 0.5px);
+	background-image: radial-gradient(var(--color-ctp-surface0) 0.5px, transparent 0.5px);
 	background-size: 2px 2px;
 	background-position: center top;
 	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
@@ -153,16 +142,9 @@
 	}
 }
 
-@utility purple-glow {
-	transition: text-shadow 0.3s ease;
-	&:hover {
-		text-shadow: 0 0 8px color-mix(in srgb, var(--color-ctp-mauve) 40%, transparent);
-	}
-}
-
 :root {
 	/* Mapping UV colors to generic variables for compatibility */
-	--background: #030205;
+	--background: var(--color-uv-black);
 	--foreground: var(--color-ctp-text);
 
 	font-feature-settings: 'ss01', 'ss02', 'zero', 'tnum';

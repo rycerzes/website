@@ -10,11 +10,11 @@ Figures have their own, stricter rules on top of this: see `docs/figures.md`.
 
 ## Where the colours live
 
-| Context                                | Use                                                       |
-| -------------------------------------- | --------------------------------------------------------- |
-| Markup, Tailwind classes, CSS          | `--color-uv-*` role tokens; `--color-ctp-*` for a raw hue |
-| JS/TS (canvas, WebGL, mermaid config)  | `$lib/palette` (`ctp`, `surface`, `text`, `accent`, ...)  |
-| Iframes, Typst, mermaid `style` lines  | Literal Mocha hex values (they cannot read `app.css`)     |
+| Context                               | Use                                                       |
+| ------------------------------------- | --------------------------------------------------------- |
+| Markup, Tailwind classes, CSS         | `--color-uv-*` role tokens; `--color-ctp-*` for a raw hue |
+| JS/TS (canvas, WebGL, mermaid config) | `$lib/palette` (`ctp`, `surface`, `text`, `accent`, ...)  |
+| Iframes, Typst, mermaid `style` lines | Literal Mocha hex values (they cannot read `app.css`)     |
 
 The `--color-ctp-*` values in `src/app.css` and `ctp` in `src/lib/palette.ts` are Mocha
 verbatim. Never edit them, and never add a hex that is not either a Mocha value or one of
@@ -22,22 +22,22 @@ the derived values below.
 
 ## Role mapping
 
-| Style-guide role       | Mocha                    | Site token                                         |
-| ---------------------- | ------------------------ | -------------------------------------------------- |
-| Background pane        | Base                     | `uv-black` (`#030205`) — see deviations            |
-| Secondary panes        | Mantle, Crust            | `uv-deep` (`#0e0a14`), `uv-raised` (Mantle)        |
-| Popovers, tooltips     | Base                     | `uv-overlay`                                       |
-| Surface elements       | Surface 0 / 1 / 2        | `uv-mute`, `uv-border`, `uv-border-strong`         |
-| Main headline          | Text                     | `uv-text-main`                                     |
-| Body copy              | Text                     | `uv-text-main` for emphasis, `uv-text-dim` today   |
-| Sub-headlines, labels  | Subtext 0 / 1            | `uv-text-dim` (Subtext 0), `ctp-subtext1`          |
-| Subtle text            | Overlay 1                | `ctp-overlay1`                                     |
-| On accent              | Crust                    | `ctp-crust` (text on a filled accent)              |
-| Links                  | Blue / Lavender / Sky    | `uv-highlight` (Mauve), hover `ctp-lavender`       |
-| Tags, pills            | Blue                     | `uv-highlight` today                               |
-| Success / warn / error | Green / Yellow / Red     | `ctp-green`, `ctp-yellow`, `ctp-red`               |
-| Selection background   | Overlay 2 at 20–30%      | `::selection` in `app.css` (30%)                   |
-| Cursor                 | Rosewater                | not set                                            |
+| Style-guide role       | Mocha                 | Site token                                       |
+| ---------------------- | --------------------- | ------------------------------------------------ |
+| Background pane        | Base                  | `uv-black` (`#030205`) — see deviations          |
+| Secondary panes        | Mantle, Crust         | `uv-deep` (`#0e0a14`), `uv-raised` (Mantle)      |
+| Popovers, tooltips     | Base                  | `uv-overlay`                                     |
+| Surface elements       | Surface 0 / 1 / 2     | `uv-mute`, `uv-border`, `uv-border-strong`       |
+| Main headline          | Text                  | `uv-text-main`                                   |
+| Body copy              | Text                  | `uv-text-main` for emphasis, `uv-text-dim` today |
+| Sub-headlines, labels  | Subtext 0 / 1         | `uv-text-dim` (Subtext 0), `ctp-subtext1`        |
+| Subtle text            | Overlay 1             | `ctp-overlay1`                                   |
+| On accent              | Crust                 | `ctp-crust` (text on a filled accent)            |
+| Links                  | Blue / Lavender / Sky | `uv-highlight` (Mauve), hover `ctp-lavender`     |
+| Tags, pills            | Blue                  | `uv-highlight` today                             |
+| Success / warn / error | Green / Yellow / Red  | `ctp-green`, `ctp-yellow`, `ctp-red`             |
+| Selection background   | Overlay 2 at 20–30%   | `::selection` in `app.css` (30%)                 |
+| Cursor                 | Rosewater             | not set                                          |
 
 Code blocks use Shiki's `catppuccin-mocha` theme (`svelte.config.js`), so syntax colours
 already follow the guide's code-editor table. Inline code is Green, matching the guide's
@@ -45,20 +45,22 @@ colour for strings.
 
 ## Derived values
 
-Only two kinds of non-Mocha colour are allowed:
+Only these non-Mocha colours are allowed:
 
 - **The backdrop**: `uv-black` and `uv-deep`, darker than Crust on purpose.
+- **The dither wave**: `ditherWave` in `$lib/palette`, Mauve scaled to 38% so the animated
+  backdrop keeps its brightness. Derive from `ctp`, never type shader colours by hand.
 - **Tints**: an accent at 15% over Base, the same mix Catppuccin uses for diff
   backgrounds. Use `color-mix(in srgb, var(--color-ctp-<hue>) 15%, var(--color-ctp-base))`
   in CSS. Where only a literal works (mermaid, Typst), these are the precomputed values:
 
-| Tint            | Hex       | Used for                                      |
-| --------------- | --------- | --------------------------------------------- |
-| Red 15%         | `#3e2e40` | `uv-error`, failing nodes in diagrams         |
-| Green 15%       | `#323c3f` | passing / success nodes in diagrams           |
-| Blue 15%        | `#2e354d` | diagram nodes paired with a Blue stroke       |
-| Peach 15%       | `#3f343b` | diagram nodes paired with a Peach stroke      |
-| Lavender 15%    | `#35364d` | diagram nodes paired with a Lavender stroke   |
+| Tint         | Hex       | Used for                                    |
+| ------------ | --------- | ------------------------------------------- |
+| Red 15%      | `#3e2e40` | `uv-error`, failing nodes in diagrams       |
+| Green 15%    | `#323c3f` | passing / success nodes in diagrams         |
+| Blue 15%     | `#2e354d` | diagram nodes paired with a Blue stroke     |
+| Peach 15%    | `#3f343b` | diagram nodes paired with a Peach stroke    |
+| Lavender 15% | `#35364d` | diagram nodes paired with a Lavender stroke |
 
 Pair a tinted fill with the full-strength hue as its stroke, and Text (`#cdd6f4`) for the
 label. For any other hue, compute the same 15% mix over Base rather than eyeballing one.

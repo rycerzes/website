@@ -70,6 +70,15 @@ export const text = {
 export const accent = ctp.mauve;
 
 /**
+ * Peak colour of the dither backdrop as 0-1 RGB for the shader, which mixes from black up to
+ * it. Mauve scaled to 38% keeps the wave at its previous luminance (~5.6%), so text over the
+ * backdrop keeps its contrast.
+ */
+export const ditherWave = [1, 3, 5].map(
+	(i) => (parseInt(ctp.mauve.slice(i, i + 2), 16) / 255) * 0.38
+) as [number, number, number];
+
+/**
  * Categorical hues for figures carrying several series: Mocha accents in a validated order.
  *
  * The order is NOT eyeballed. It was searched exhaustively over the Mocha accents and is
@@ -116,6 +125,7 @@ export const palette = {
 	border,
 	text,
 	accent,
+	ditherWave,
 	series,
 	categorical,
 	semantic,
