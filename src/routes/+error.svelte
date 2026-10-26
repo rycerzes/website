@@ -17,7 +17,7 @@
 		<p class="text-uv-text-dim">{$page.error?.message}</p>
 		<a
 			href={resolve('/')}
-			class="text-uv-text mt-4 rounded-full border border-uv-highlight/30 px-6 py-2 text-sm tracking-widest uppercase transition-all hover:border-uv-highlight hover:text-uv-text-main"
+			class="mt-4 rounded-full border border-uv-highlight/30 px-6 py-2 text-sm tracking-widest text-uv-text-dim uppercase transition-all hover:border-uv-highlight hover:text-uv-text-main"
 		>
 			Return Home
 		</a>

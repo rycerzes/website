@@ -4,7 +4,7 @@
 </script>
 
 <article class="prose w-full max-w-none py-12 prose-invert prose-a:text-uv-highlight">
-	<header class="border-theme/30 mb-8 border-b pb-8">
+	<header class="mb-8 border-b border-uv-mute/30 pb-8">
 		<div class="flex flex-col gap-4">
 			<div class="flex items-center gap-4 font-mono text-xs text-uv-highlight">
 				<span>{data.post.date}</span>

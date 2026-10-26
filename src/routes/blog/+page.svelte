@@ -16,7 +16,7 @@
 				<div class="flex flex-col gap-1">
 					<div class="flex w-full items-baseline justify-between">
 						<h2
-							class="text-uv-text font-mono text-xl font-medium transition-colors group-hover:text-uv-highlight"
+							class="font-mono text-xl font-medium text-uv-text-main transition-colors group-hover:text-uv-highlight"
 						>
 							{post.title}
 						</h2>
@@ -38,7 +38,7 @@
 					-->
 
 					<p
-						class="group-hover:text-uv-text/80 mt-1 text-xs wrap-break-word text-uv-text-dim transition-colors"
+						class="mt-1 text-xs wrap-break-word text-uv-text-dim transition-colors group-hover:text-uv-text-main/80"
 					>
 						{post.excerpt}
 					</p>

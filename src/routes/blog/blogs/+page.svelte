@@ -11,12 +11,12 @@
 		{#each data.posts as post (post.slug)}
 			<a
 				href={resolve('/blog/blogs/[slug]', { slug: post.slug })}
-				class="group border-theme/30 block rounded-sm border p-6 transition-all duration-300 hover:border-uv-highlight hover:bg-uv-mute/10"
+				class="group block rounded-sm border border-uv-mute/30 p-6 transition-all duration-300 hover:border-uv-highlight hover:bg-uv-mute/10"
 			>
 				<div class="flex flex-col gap-2">
 					<div class="flex items-center justify-between">
 						<h2
-							class="text-uv-text text-xl font-bold transition-colors group-hover:text-ctp-lavender"
+							class="text-xl font-bold text-uv-text-main transition-colors group-hover:text-ctp-lavender"
 						>
 							{post.title}
 						</h2>

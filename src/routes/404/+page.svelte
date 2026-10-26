@@ -19,7 +19,7 @@
 <div class="flex min-h-[70vh] flex-col items-center justify-center gap-8" in:fade>
 	<!-- Image Container with CRT Effect -->
 	<div
-		class="bg-uv-surface border-theme/50 crt-effect relative flex aspect-4/3 w-full max-w-lg items-center justify-center overflow-hidden rounded-none border"
+		class="crt-effect relative flex aspect-4/3 w-full max-w-lg items-center justify-center overflow-hidden rounded-none border border-uv-mute/50 bg-uv-raised"
 	>
 		{#if imageUrl}
 			<img
@@ -51,7 +51,7 @@
 
 		<a
 			href={resolve('/')}
-			class="text-uv-text mt-6 border border-uv-highlight/30 px-8 py-3 text-xs tracking-widest uppercase transition-all hover:border-uv-highlight hover:bg-uv-mute/40 hover:text-uv-text-main"
+			class="mt-6 border border-uv-highlight/30 px-8 py-3 text-xs tracking-widest text-uv-text-dim uppercase transition-all hover:border-uv-highlight hover:bg-uv-mute/40 hover:text-uv-text-main"
 		>
 			Return Home
 		</a>

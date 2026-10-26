@@ -13,7 +13,7 @@
 	});
 </script>
 
-<section class="border-theme/20 mt-16 border-t border-dashed pt-10">
+<section class="mt-16 border-t border-dashed border-uv-mute/20 pt-10">
 	<div class="mb-6">
 		<h2 class="font-mono text-sm tracking-widest text-ctp-subtext1 uppercase">comments</h2>
 		<p class="mt-2 text-sm text-uv-text-dim/70">

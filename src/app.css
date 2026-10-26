@@ -52,6 +52,22 @@
 	--color-uv-text-dim: var(--color-ctp-subtext0);
 	--color-uv-highlight: var(--color-ctp-mauve);
 
+	/* shadcn/bits-ui component tokens (src/lib/components/ui), aliased onto the role tokens. */
+	--color-popover: var(--color-uv-overlay);
+	--color-popover-foreground: var(--color-uv-text-main);
+	--color-primary: var(--color-uv-highlight);
+	--color-primary-foreground: var(--color-ctp-crust);
+	--color-secondary: var(--color-uv-mute);
+	--color-secondary-foreground: var(--color-uv-text-main);
+	--color-muted: var(--color-uv-mute);
+	--color-muted-foreground: var(--color-uv-text-dim);
+	--color-accent: var(--color-uv-mute);
+	--color-accent-foreground: var(--color-uv-text-main);
+	--color-destructive: var(--color-ctp-red);
+	--color-border: var(--color-uv-border);
+	--color-input: var(--color-uv-border);
+	--color-ring: var(--color-uv-highlight);
+
 	/* Categorical + status hues for figures, in validated slot order; mirrored in
 	   src/lib/palette.ts and checked by scripts/check-palette.ts. */
 	--color-fig-blue: var(--color-ctp-blue);
@@ -135,10 +151,6 @@
 		pointer-events: none;
 		z-index: 21;
 	}
-}
-
-@utility border-theme {
-	border-color: var(--color-uv-mute);
 }
 
 @utility purple-glow {

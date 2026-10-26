@@ -41,7 +41,7 @@
 
 	<!-- Main Content -->
 	<article class="w-full min-w-0">
-		<header class="border-theme/20 relative mb-12 border-b border-dashed pb-8">
+		<header class="relative mb-12 border-b border-dashed border-uv-mute/20 pb-8">
 			<!-- Section Splitter visual enhancement (optional dot in middle like Chiri? User asked for general splitter) -->
 			<div class="flex flex-col gap-4">
 				<div

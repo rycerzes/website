@@ -153,7 +153,7 @@
 
 	<footer
 		class={cn(
-			'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-8 gap-y-3 border-t border-theme py-10 opacity-0',
+			'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-8 gap-y-3 border-t border-uv-mute py-10 opacity-0',
 			isLoaded && 'animate-enter delay-200'
 		)}
 		id="contact"

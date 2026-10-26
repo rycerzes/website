@@ -39,7 +39,7 @@
 	</aside>
 
 	<article class="w-full min-w-0">
-		<header class="border-theme/20 relative mb-12 border-b border-dashed pb-8">
+		<header class="relative mb-12 border-b border-dashed border-uv-mute/20 pb-8">
 			<div class="flex flex-col gap-4">
 				<div
 					class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-widest text-uv-text-dim/60 uppercase"
