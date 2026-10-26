@@ -38,7 +38,7 @@ function rehypeStripPreTabindex() {
 
 /** @type {import('rehype-pretty-code').Options} */
 const prettyCodeOptions = {
-	theme: 'github-dark-dimmed',
+	theme: 'catppuccin-mocha',
 	keepBackground: false
 };
 

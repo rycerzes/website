@@ -57,7 +57,7 @@ function renderTypstToSvg(source) {
 
 	const template = `#import "@preview/cetz:0.4.2": canvas, draw
 #set page(width: auto, height: auto, margin: 0pt, fill: rgb("#030205"))
-#set text(fill: rgb("#f5f3ff"), font: "Libertinus Sans")
+#set text(fill: rgb("#cdd6f4"), font: "Libertinus Sans")
 
 #canvas({
   ${source}
