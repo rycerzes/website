@@ -38,12 +38,12 @@
 			</div>
 		{/if}
 		<!-- Overlay for un-loaded state or extra vibe if needed -->
-		<div class="pointer-events-none absolute inset-0 bg-violet-900/10 mix-blend-overlay"></div>
+		<div class="pointer-events-none absolute inset-0 bg-uv-highlight/5 mix-blend-overlay"></div>
 	</div>
 
 	<div class="flex flex-col items-center gap-4 text-center">
-		<h1 class="text-2xl font-bold tracking-tight text-white">
-			<span class="text-violet-400">404</span> Not Found
+		<h1 class="text-2xl font-bold tracking-tight text-uv-text-main">
+			<span class="text-uv-highlight">404</span> Not Found
 		</h1>
 		<p class="max-w-md text-sm text-uv-text-dim">
 			the page you seek is elsewhere. the cat is here.
@@ -51,7 +51,7 @@
 
 		<a
 			href={resolve('/')}
-			class="text-uv-text mt-6 border border-violet-500/30 px-8 py-3 text-xs tracking-widest uppercase transition-all hover:border-violet-500 hover:bg-uv-mute/40 hover:text-white"
+			class="text-uv-text mt-6 border border-uv-highlight/30 px-8 py-3 text-xs tracking-widest uppercase transition-all hover:border-uv-highlight hover:bg-uv-mute/40 hover:text-uv-text-main"
 		>
 			Return Home
 		</a>

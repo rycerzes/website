@@ -75,7 +75,7 @@
 		{#each headings as heading (heading.id)}
 			<a
 				href="#{heading.id}"
-				class="group relative flex h-8 items-center transition-colors hover:text-violet-300 {activeId ===
+				class="group relative flex h-8 items-center transition-colors hover:text-ctp-lavender {activeId ===
 				heading.id
 					? 'active'
 					: ''}"
@@ -83,7 +83,7 @@
 			>
 				<!-- The Line -->
 				<div
-					class="h-px w-6 shrink-0 bg-uv-text-dim/30 transition-all duration-200 ease-out group-hover:w-2 group-hover:bg-violet-300 group-hover:opacity-100 group-[.active]:w-8 group-[.active]:bg-violet-400 group-[.active]:opacity-80"
+					class="h-px w-6 shrink-0 bg-uv-text-dim/30 transition-all duration-200 ease-out group-hover:w-2 group-hover:bg-ctp-lavender group-hover:opacity-100 group-[.active]:w-8 group-[.active]:bg-uv-highlight group-[.active]:opacity-80"
 					style="background-color: var(--color-uv-text-dim); opacity: 0.3;"
 				></div>
 
@@ -111,7 +111,7 @@
 
 	a:hover div {
 		width: 0.5rem !important;
-		background-color: #c4b5fd !important;
+		background-color: var(--color-ctp-lavender) !important;
 		opacity: 1 !important;
 	}
 

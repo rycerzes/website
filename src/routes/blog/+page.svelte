@@ -6,7 +6,7 @@
 
 <div class="w-full py-8">
 	<div class="mb-12">
-		<h1 class="mb-2 font-mono text-4xl font-bold text-violet-400">blog</h1>
+		<h1 class="mb-2 font-mono text-4xl font-bold text-uv-highlight">blog</h1>
 		<p class="text-sm tracking-wide text-uv-text-dim">all opinions are my own</p>
 	</div>
 
@@ -16,7 +16,7 @@
 				<div class="flex flex-col gap-1">
 					<div class="flex w-full items-baseline justify-between">
 						<h2
-							class="text-uv-text font-mono text-xl font-medium transition-colors group-hover:text-violet-300"
+							class="text-uv-text font-mono text-xl font-medium transition-colors group-hover:text-uv-highlight"
 						>
 							{post.title}
 						</h2>
@@ -50,7 +50,7 @@
 	<div class="mt-20">
 		<a
 			href={resolve('/')}
-			class="font-mono text-sm text-uv-text-dim transition-colors hover:text-violet-300"
+			class="font-mono text-sm text-uv-text-dim transition-colors hover:text-uv-highlight"
 		>
 			← back to home
 		</a>

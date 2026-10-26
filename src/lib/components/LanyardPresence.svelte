@@ -148,7 +148,7 @@
 
 {#if spotify}
 	<section id="listening" class="fade-in mt-12 w-full">
-		<h2 class="mb-4 text-xs font-bold tracking-[0.2em] text-violet-200">listening to</h2>
+		<h2 class="mb-4 text-xs font-bold tracking-[0.2em] text-ctp-subtext1">listening to</h2>
 
 		<a
 			href={spotify.track_id
@@ -167,10 +167,10 @@
 					/>
 				{/if}
 				<div class="min-w-0 flex-1">
-					<p class="truncate text-sm font-medium text-white">
+					<p class="truncate text-sm font-medium text-uv-text-main">
 						{spotify.song ?? 'Unknown track'}
 					</p>
-					<p class="truncate text-xs text-violet-200">
+					<p class="truncate text-xs text-ctp-subtext1">
 						{spotify.artist ?? 'Unknown artist'}
 					</p>
 					<p class="mt-1 text-[11px] text-uv-text-dim">
@@ -181,9 +181,9 @@
 					</p>
 				</div>
 			</div>
-			<span class="font-mono text-[10px] tracking-widest text-green-400">SPOTIFY</span>
+			<span class="font-mono text-[10px] tracking-widest text-ctp-green">SPOTIFY</span>
 			<span
-				class="material-symbols-outlined text-sm text-violet-400 transition-transform duration-300 group-hover:translate-x-1"
+				class="material-symbols-outlined text-sm text-uv-highlight transition-transform duration-300 group-hover:translate-x-1"
 				>open_in_new</span
 			>
 		</a>

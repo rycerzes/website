@@ -13,7 +13,7 @@
 			<div class="mb-8">
 				<a
 					href={resolve('/blog')}
-					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-violet-300"
+					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-uv-highlight"
 				>
 					<svg
 						width="16"
@@ -48,7 +48,7 @@
 					<span class="text-uv-text-dim/30">•</span>
 					<span>1 min read</span>
 				</div>
-				<h1 class="text-3xl leading-tight font-bold tracking-tight text-violet-100/90 md:text-4xl">
+				<h1 class="text-3xl leading-tight font-bold tracking-tight text-uv-text-main md:text-4xl">
 					How I Use (and Don't Use) AI
 				</h1>
 			</div>
@@ -56,14 +56,14 @@
 
 		<div
 			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
-				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
+				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-uv-text-main
 				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
-				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
+				prose-a:text-uv-highlight prose-a:underline prose-a:decoration-uv-highlight/30 prose-a:underline-offset-2 prose-blockquote:border-l-ctp-pink/40 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1
-				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
-				prose-code:text-[0.8em] prose-code:text-violet-300/90 prose-code:before:content-none
+				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
+				prose-code:text-[1em] prose-code:font-normal prose-code:text-ctp-green prose-code:before:content-none
 				prose-code:after:content-none
-				prose-li:text-uv-text-dim/80 [&_a:hover]:text-violet-300 [&_a:hover]:decoration-violet-300
+				prose-li:text-uv-text-dim/80 [&_a:hover]:text-ctp-lavender [&_a:hover]:decoration-ctp-lavender
 			"
 		>
 			<p>

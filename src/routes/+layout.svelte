@@ -122,24 +122,24 @@
 			class="no-scrollbar relative z-10 flex w-full items-center justify-center gap-6 overflow-x-auto text-sm md:w-auto md:justify-end md:gap-10"
 		>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/')}>Home</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/blog')}>Blog</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
 				target="_blank">Resume</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/about')}>About</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/ai')}>AI</a
 			>
 		</nav>
@@ -165,22 +165,22 @@
 		</div>
 		<div class="flex items-center justify-end gap-8">
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="https://x.com/swaapppyyy">x/twtr</a
 			>
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="https://github.com/rycerzes">github</a
 			>
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="mailto:swapnil@rycerz.es">email</a
 			>
 		</div>
 		<div class="text-xs font-medium tracking-wider text-uv-text-dim">swappy</div>
 		{#if commitLabel}
 			<a
-				class="justify-self-end text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="justify-self-end text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href={commitHref}
 				target="_blank"
 				rel="external noopener noreferrer">{commitLabel}</a
