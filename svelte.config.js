@@ -1,10 +1,10 @@
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import rehypeMermaid from 'rehype-mermaid';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeTypst from '@myriaddreamin/rehype-typst';
 import remarkMath from 'remark-math';
+import rehypeMermaidPre from './src/lib/mdx/rehype-mermaid-pre.js';
 import rehypeTypstDiagram from './src/lib/mdx/rehype-typst-diagram.js';
 
 /**
@@ -55,7 +55,7 @@ const config = {
 			rehypePlugins: [
 				rehypeTypst,
 				rehypeTypstDiagram,
-				[rehypeMermaid, { strategy: 'pre-mermaid' }],
+				rehypeMermaidPre,
 				[rehypePrettyCode, prettyCodeOptions],
 				rehypeStripPreTabindex
 			]
