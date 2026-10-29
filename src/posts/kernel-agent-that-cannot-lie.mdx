@@ -35,9 +35,9 @@ flowchart LR
     D -->|"rejected"| A
     A -.->|"cannot reach"| D
 
-    style A fill:#161022,stroke:#5f4e7d,color:#f5f3ff
-    style D fill:#12261a,stroke:#0ca30c,color:#f5f3ff
-    style E fill:#2a1f34,stroke:#d03b3b,color:#f5f3ff
+    style A fill:#181825,stroke:#585b70,color:#cdd6f4
+    style D fill:#323c3f,stroke:#a6e3a1,color:#cdd6f4
+    style E fill:#3e2e40,stroke:#f38ba8,color:#cdd6f4
 ```
 
 The insight is that the documented ways of faking a kernel speedup are all properties of _measurement code_. Making that code ours does not detect them — it makes them **unrepresentable**.
@@ -55,8 +55,8 @@ flowchart TB
     end
     S -->|"measurement.json"| R
 
-    style S fill:#12261a,stroke:#0ca30c,color:#f5f3ff
-    style W fill:#2a1f34,stroke:#d03b3b,color:#f5f3ff
+    style S fill:#323c3f,stroke:#a6e3a1,color:#cdd6f4
+    style W fill:#3e2e40,stroke:#f38ba8,color:#cdd6f4
 ```
 
 A single process cannot both execute a candidate and be trusted to report on it. That sentence cost two admitted forgeries to learn.
@@ -219,7 +219,7 @@ flowchart LR
     S --> G["nine gates"]
     G --> O["18 ops × 6 toolchains × 4 precisions"]
 
-    style S fill:#12261a,stroke:#0ca30c,color:#f5f3ff
+    style S fill:#323c3f,stroke:#a6e3a1,color:#cdd6f4
 ```
 
 Adding a backend means writing a harness that emits that schema. Five toolchains — CUDA, Triton, Helion, CuTe DSL, TileLang — went in with **zero changes to any gate**.

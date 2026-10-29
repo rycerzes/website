@@ -6,6 +6,7 @@ node_modules
 .netlify
 .wrangler
 /.svelte-kit
+worker-configuration.d.ts
 /build
 
 # OS
@@ -21,3 +22,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+docs/*.md
+!docs/figures.md
+!docs/theme.md

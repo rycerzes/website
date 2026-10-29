@@ -8,50 +8,87 @@
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 
-	/* Custom UV Theme Colors mapped to standard shadcn/tailwind names where possible, or kept custom */
+	/* Catppuccin Mocha, verbatim from https://catppuccin.com/palette. Do not edit these values;
+	   the role tokens below alias them. */
+	--color-ctp-rosewater: #f5e0dc;
+	--color-ctp-flamingo: #f2cdcd;
+	--color-ctp-pink: #f5c2e7;
+	--color-ctp-mauve: #cba6f7;
+	--color-ctp-red: #f38ba8;
+	--color-ctp-maroon: #eba0ac;
+	--color-ctp-peach: #fab387;
+	--color-ctp-yellow: #f9e2af;
+	--color-ctp-green: #a6e3a1;
+	--color-ctp-teal: #94e2d5;
+	--color-ctp-sky: #89dceb;
+	--color-ctp-sapphire: #74c7ec;
+	--color-ctp-blue: #89b4fa;
+	--color-ctp-lavender: #b4befe;
+	--color-ctp-text: #cdd6f4;
+	--color-ctp-subtext1: #bac2de;
+	--color-ctp-subtext0: #a6adc8;
+	--color-ctp-overlay2: #9399b2;
+	--color-ctp-overlay1: #7f849c;
+	--color-ctp-overlay0: #6c7086;
+	--color-ctp-surface2: #585b70;
+	--color-ctp-surface1: #45475a;
+	--color-ctp-surface0: #313244;
+	--color-ctp-base: #1e1e2e;
+	--color-ctp-mantle: #181825;
+	--color-ctp-crust: #11111b;
+
+	/* Role tokens; mirrored in src/lib/palette.ts for JS consumers.
+	   uv-black and uv-deep are the site's own backdrop and sit darker than Mocha's crust. */
 	--color-uv-black: #030205;
 	--color-uv-deep: #0e0a14;
-	--color-uv-mute: #3e3450; /* Slightly lighter for better border visibility */
-	/* Surface + border ramps; mirrored in src/lib/palette.ts for JS consumers. */
-	--color-uv-raised: #161022;
-	--color-uv-overlay: #211a31;
-	--color-uv-error: #2a1f34;
-	--color-uv-border: #4c3f63;
-	--color-uv-border-strong: #5f4e7d;
-	--color-uv-text-main: #f5f3ff; /* Brighter, near white */
-	--color-uv-text-dim: #d8b4fe; /* Lighter, more readable violet-grey */
-	--color-uv-highlight: #a78bfa; /* More vibrant/neon purple */
+	--color-uv-raised: var(--color-ctp-mantle);
+	--color-uv-overlay: var(--color-ctp-base);
+	/* ctp-red at 15% over ctp-base, the same tint Catppuccin uses for its diff backgrounds. */
+	--color-uv-error: #3e2e40;
+	--color-uv-mute: var(--color-ctp-surface0);
+	--color-uv-border: var(--color-ctp-surface1);
+	--color-uv-border-strong: var(--color-ctp-surface2);
+	--color-uv-text-main: var(--color-ctp-text);
+	--color-uv-text-body: var(--color-ctp-text);
+	--color-uv-text-dim: var(--color-ctp-subtext0);
+	--color-uv-highlight: var(--color-ctp-mauve);
+	/* In-content links and tag pills, per the Catppuccin style guide. Navigation keeps uv-highlight. */
+	--color-uv-link: var(--color-ctp-blue);
+	--color-uv-link-hover: var(--color-ctp-sky);
+	--color-uv-tag: var(--color-ctp-blue);
 
-	/* Validated categorical + status hues for figures; mirrored in src/lib/palette.ts.
-	   Checked against surface #0e0a14 with the six-check palette validator. */
-	--color-fig-blue: #3987e5;
-	--color-fig-orange: #d95926;
-	--color-fig-aqua: #199e70;
-	--color-fig-yellow: #c98500;
-	--color-fig-magenta: #d55181;
-	--color-fig-green: #008300;
-	--color-fig-violet: #9085e9;
-	--color-fig-red: #e66767;
-	--color-fig-pass: #0ca30c;
-	--color-fig-warn: #fab219;
-	--color-fig-fail: #d03b3b;
+	/* shadcn/bits-ui component tokens (src/lib/components/ui), aliased onto the role tokens. */
+	--color-popover: var(--color-uv-overlay);
+	--color-popover-foreground: var(--color-uv-text-main);
+	--color-primary: var(--color-uv-highlight);
+	--color-primary-foreground: var(--color-ctp-crust);
+	--color-secondary: var(--color-uv-mute);
+	--color-secondary-foreground: var(--color-uv-text-main);
+	--color-muted: var(--color-uv-mute);
+	--color-muted-foreground: var(--color-uv-text-dim);
+	--color-accent: var(--color-uv-mute);
+	--color-accent-foreground: var(--color-uv-text-main);
+	--color-destructive: var(--color-ctp-red);
+	--color-border: var(--color-uv-border);
+	--color-input: var(--color-uv-border);
+	--color-ring: var(--color-uv-highlight);
 
-	--font-family-mono: 'JetBrains Mono', monospace;
-}
+	/* Categorical + status hues for figures, in validated slot order; mirrored in
+	   src/lib/palette.ts and checked by scripts/check-palette.ts. */
+	--color-fig-blue: var(--color-ctp-blue);
+	--color-fig-peach: var(--color-ctp-peach);
+	--color-fig-teal: var(--color-ctp-teal);
+	--color-fig-sapphire: var(--color-ctp-sapphire);
+	--color-fig-pass: var(--color-ctp-green);
+	--color-fig-warn: var(--color-ctp-yellow);
+	--color-fig-fail: var(--color-ctp-red);
 
-@utility dither-bg {
-	background-color: var(--color-uv-black);
-	background-image:
-		radial-gradient(at 50% 10%, rgba(20, 10, 30, 0.8) 0px, transparent 60%),
-		radial-gradient(at 90% 40%, rgba(15, 8, 25, 1) 0px, transparent 50%),
-		radial-gradient(at 0% 80%, rgba(15, 8, 25, 1) 0px, transparent 50%);
-	position: fixed;
-	inset: 0;
-	z-index: -20;
+	--font-mono: 'JetBrains Mono', monospace;
+	--font-family-mono: var(--font-mono);
 }
 
 @utility dither-overlay {
-	background-image: radial-gradient(#3a2c4d 0.5px, transparent 0.5px);
+	background-image: radial-gradient(var(--color-ctp-surface0) 0.5px, transparent 0.5px);
 	background-size: 2px 2px;
 	background-position: center top;
 	mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
@@ -110,29 +147,46 @@
 	}
 }
 
-@utility border-theme {
-	border-color: var(--color-uv-mute);
-}
-
-@utility purple-glow {
-	transition: text-shadow 0.3s ease;
-	&:hover {
-		text-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
-	}
-}
-
 :root {
 	/* Mapping UV colors to generic variables for compatibility */
-	--background: #030205;
-	--foreground: #eaddff;
+	--background: var(--color-uv-black);
+	--foreground: var(--color-ctp-text);
 
 	font-feature-settings: 'ss01', 'ss02', 'zero', 'tnum';
 }
 
+/* Typography plugin colours, mapped onto the role tokens so .prose-invert never falls back to
+   the plugin's Tailwind greys. Unlayered, so it wins over the plugin without !important. */
+.prose {
+	--tw-prose-invert-body: var(--color-uv-text-body);
+	--tw-prose-invert-headings: var(--color-uv-text-main);
+	--tw-prose-invert-lead: var(--color-uv-text-dim);
+	--tw-prose-invert-links: var(--color-uv-link);
+	--tw-prose-invert-bold: var(--color-uv-text-main);
+	--tw-prose-invert-counters: var(--color-uv-text-dim);
+	--tw-prose-invert-bullets: var(--color-uv-border-strong);
+	--tw-prose-invert-hr: var(--color-uv-mute);
+	--tw-prose-invert-quotes: var(--color-uv-text-dim);
+	--tw-prose-invert-quote-borders: var(--color-uv-border);
+	--tw-prose-invert-captions: var(--color-uv-text-dim);
+	--tw-prose-invert-kbd: var(--color-uv-text-main);
+	--tw-prose-invert-code: var(--color-ctp-green);
+	--tw-prose-invert-pre-code: var(--color-uv-text-main);
+	--tw-prose-invert-pre-bg: var(--color-uv-deep);
+	--tw-prose-invert-th-borders: var(--color-uv-border);
+	--tw-prose-invert-td-borders: var(--color-uv-mute);
+}
+
 /* Global Selection Style */
 ::selection {
-	background: #4c3070;
-	color: #ffffff;
+	background: color-mix(in srgb, var(--color-ctp-overlay2) 30%, transparent);
+	color: var(--color-ctp-text);
+}
+
+html {
+	scrollbar-gutter: stable;
+	color-scheme: dark;
+	caret-color: var(--color-ctp-rosewater);
 }
 
 body {
@@ -140,7 +194,7 @@ body {
 	background-color: var(--background);
 	color: var(--foreground);
 	min-height: 100vh;
-	overflow-x: hidden;
+	overflow-x: clip;
 	-webkit-font-smoothing: antialiased;
 	text-transform: lowercase;
 }
@@ -207,11 +261,9 @@ pre code * {
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
-		transform: translateY(20px);
 	}
 	to {
 		opacity: 1;
-		transform: translateY(0);
 	}
 }
 
@@ -316,8 +368,8 @@ code[data-theme*=' '] span {
 	margin: 1.5rem 0;
 	overflow-x: auto;
 	border-radius: 0.75rem;
-	border: 1px solid rgba(248, 113, 113, 0.45);
-	background: rgba(127, 29, 29, 0.2);
+	border: 1px solid color-mix(in srgb, var(--color-ctp-red) 45%, transparent);
+	background: var(--color-uv-error);
 	padding: 1rem;
 }
 
@@ -343,15 +395,15 @@ pre code .line {
 }
 
 pre code .line.highlighted {
-	background-color: rgba(168, 85, 247, 0.1);
-	border-left: 2px solid rgb(168, 85, 247);
+	background-color: color-mix(in srgb, var(--color-ctp-text) 7%, transparent);
+	border-left: 2px solid var(--color-ctp-mauve);
 	padding-left: 0.5rem;
 	margin-left: -0.5rem;
 }
 
 /* Word highlighting in code blocks */
 pre code .word {
-	background-color: rgba(168, 85, 247, 0.2);
+	background-color: color-mix(in srgb, var(--color-ctp-overlay2) 25%, transparent);
 	padding: 0.125rem 0.25rem;
 	border-radius: 0.25rem;
 }

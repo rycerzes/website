@@ -51,7 +51,7 @@
 	];
 
 	const SCANCODE = 0.8404;
-	const colour: Record<Kind, string> = { plumbing: series.blue, ranker: series.orange };
+	const colour: Record<Kind, string> = { plumbing: series.blue, ranker: series.peach };
 
 	const Y_MIN = 0.62,
 		Y_MAX = 0.92;
@@ -85,7 +85,7 @@
 		</span>
 		<span class="flex items-center gap-1.5">
 			<svg width="10" height="10" aria-hidden="true"
-				><circle cx="5" cy="5" r="4.5" fill={series.orange} /></svg
+				><circle cx="5" cy="5" r="4.5" fill={series.peach} /></svg
 			> learned ranker
 		</span>
 		<span class="flex items-center gap-1.5">
@@ -181,7 +181,7 @@
 			max={steps.length - 1}
 			step="1"
 			bind:value={active}
-			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-violet-400"
+			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-uv-highlight"
 		/>
 	</div>
 

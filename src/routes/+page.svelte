@@ -5,155 +5,53 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<section id="about" class="fade-in mb-6 max-w-2xl">
-	<div class="flex flex-col items-start gap-8 md:flex-row">
-		<div class="relative shrink-0">
-			<!-- Profile Image with CRT scanline effect overlay -->
-			<div
-				class="border-theme/50 group crt-effect relative h-32 w-32 overflow-hidden rounded-none border md:h-40 md:w-40"
-			>
-				<img
-					src={data.avatarUrl}
-					alt="Profile"
-					class="h-full w-full object-cover transition-all duration-500"
-				/>
-				<div class="pointer-events-none absolute inset-0 bg-violet-900/10 mix-blend-overlay"></div>
-			</div>
-		</div>
+<div
+	class="fixed top-1/2 left-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-6 md:px-12"
+>
+	<div class="w-full">
+		<section id="about" class="fade-in mb-6">
+			<div class="flex flex-col gap-3">
+				<h1 class="text-3xl font-bold tracking-tight text-uv-text-main md:text-4xl">swappy</h1>
 
-		<div class="flex flex-col gap-3">
-			<h1 class="text-3xl font-bold tracking-tight text-white md:text-4xl">swappy</h1>
-
-			<div class="text-sm font-medium tracking-wide text-uv-text-dim">
-				<p>eng intern @ atlan</p>
-				<p>programmer. tinkerer. nerd.</p>
-			</div>
-
-			<p class="mt-1 max-w-lg text-sm leading-relaxed text-uv-text-dim">
-				currently interning at atlan, working on agentic systems
-			</p>
-
-			<p class="mt-2 text-sm text-uv-text-dim">
-				I've written a longer introduction <a
-					href={resolve('/about')}
-					class="underline transition-colors hover:text-violet-400">here</a
-				> if you're interested :)
-			</p>
-			<div class="mt-2 text-sm">
-				<span class="text-uv-text-dim/80">e33: </span>
-				<span
-					class="cursor-pointer font-medium text-violet-400 italic transition-colors hover:text-violet-300"
-					>for those who come after</span
-				>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section id="projects">
-	<div class="mb-6 flex items-end justify-between border-b border-theme pb-2">
-		<h2 class="text-xs font-bold tracking-[0.2em] text-violet-200">Projects</h2>
-		<span class="font-mono text-[10px] tracking-widest text-uv-text-dim"
-			>[01-{String(data.projects?.length || 0).padStart(2, '0')}]</span
-		>
-	</div>
-	<div class="flex flex-col gap-3">
-		{#if data.projects && data.projects.length > 0}
-			{#each data.projects as project, i (project.html_url)}
-				<a
-					class="group border-theme/80 relative flex flex-col justify-between gap-4 overflow-hidden rounded-none border bg-uv-deep/50 px-4 py-4 transition-all duration-500 hover:bg-uv-mute/40 md:flex-row md:items-center md:px-6"
-					href={project.html_url}
-					target="_blank"
-					rel="external noopener noreferrer"
-				>
-					<div
-						class="absolute inset-y-0 left-0 w-1 bg-violet-600 transition-colors duration-500 group-hover:bg-violet-400"
-					></div>
-					<div class="flex flex-col gap-1 md:w-2/5">
-						<span class="mb-0.5 text-[9px] font-bold text-violet-400"
-							>[{String(i + 1).padStart(2, '0')}]</span
-						>
-						<h3
-							class="text-base font-medium text-white transition-colors group-hover:text-violet-200"
-						>
-							{project.full_name}
-						</h3>
-						<div class="mt-1 flex flex-wrap gap-1.5">
-							{#each project.languages.slice(0, 3) as lang (lang)}
-								<span class="rounded bg-violet-900/30 px-1.5 py-0.5 text-[9px] text-violet-300"
-									>{lang}</span
-								>
-							{/each}
-						</div>
-					</div>
-					<div class="flex flex-col gap-1.5 md:w-2/5">
-						<p
-							class="line-clamp-2 text-xs leading-relaxed text-uv-text-dim transition-colors group-hover:text-uv-text-main"
-						>
-							{project.description || 'No description available.'}
-						</p>
-						<p class="mt-auto font-mono text-[9px] text-uv-text-dim">
-							Last update: {new Date(project.pushed_at).toLocaleDateString()}
-						</p>
-					</div>
-					<div class="flex justify-end md:w-1/5">
-						<span
-							class="material-symbols-outlined text-sm text-uv-text-dim transition-all duration-300 group-hover:translate-x-1 group-hover:text-violet-400"
-							>arrow_right_alt</span
-						>
-					</div>
-				</a>
-			{/each}
-		{:else}
-			<p class="text-xs text-uv-text-dim">No projects found.</p>
-		{/if}
-	</div>
-	<div class="mt-4 flex justify-end px-4 md:px-6">
-		<a
-			href="https://github.com/rycerzes"
-			target="_blank"
-			rel="noopener noreferrer"
-			class="group flex items-center gap-2 text-xs font-medium text-uv-text-dim transition-colors hover:text-violet-400"
-		>
-			more projects
-			<span class="transition-transform duration-300 group-hover:translate-x-1">-&gt;</span>
-		</a>
-	</div>
-</section>
-
-<section id="Blog">
-	<div class="mb-6 flex items-end justify-between border-b border-theme pb-2">
-		<h2 class="text-xs font-bold tracking-[0.2em] text-violet-200">Blog</h2>
-		<span class="font-mono text-[10px] tracking-widest text-uv-text-dim"
-			>[01-{String(data.posts?.length || 0).padStart(2, '0')}]</span
-		>
-	</div>
-	<div class="bg-theme/30 space-y-px">
-		{#if data.posts && data.posts.length > 0}
-			{#each data.posts as post (post.slug)}
-				<a
-					class="group flex items-center justify-between rounded-sm px-4 py-3 transition-all duration-300 hover:bg-uv-mute/20 md:px-4"
-					href={resolve('/blog/[slug]', { slug: post.slug })}
-				>
-					<div class="flex w-full flex-col gap-2 md:flex-row md:items-center md:gap-8">
-						<span class="w-24 font-mono text-[10px] tracking-wider text-violet-400"
-							>{post.date}</span
-						>
-						<span
-							class="text-sm font-medium tracking-wide text-uv-text-dim transition-colors duration-300 group-hover:text-violet-100"
-							>{post.title}</span
-						>
-					</div>
-					<span
-						class="material-symbols-outlined text-xs text-violet-900 transition-all duration-300 group-hover:text-violet-400"
-						>terminal</span
+				<p class="text-sm font-medium tracking-wide text-uv-text-dim">
+					engineering @ <a
+						href="https://atlan.com"
+						target="_blank"
+						rel="external noopener noreferrer"
+						class="text-uv-link underline decoration-uv-link/40 underline-offset-4 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
+						>atlan</a
 					>
-				</a>
-			{/each}
-		{:else}
-			<div class="px-4 py-3 text-xs text-uv-text-dim">No posts found.</div>
-		{/if}
-	</div>
-</section>
+				</p>
 
-<LanyardPresence initialPresence={data.lanyard} />
+				<p class="text-sm leading-relaxed text-uv-text-body">
+					currently working on agentic systems, evals, durable workflows and tooling
+				</p>
+
+				<p class="text-sm leading-relaxed text-uv-text-body">
+					also interested in post training models, rl envs, inference, kernels and all things
+					related
+				</p>
+
+				<p class="text-sm leading-relaxed text-uv-text-body">
+					I've written a longer introduction <a
+						href={resolve('/about')}
+						class="font-medium text-uv-link underline decoration-uv-link underline-offset-4 transition-colors hover:text-uv-link-hover hover:decoration-uv-link-hover"
+						>here</a
+					>
+					:)
+				</p>
+				<p class="mt-12 text-sm leading-relaxed text-uv-text-body">
+					this website is for a collection of incomplete notes, thoughts and tools
+				</p>
+				<p class="mt-6">
+					<span
+						class="cursor-pointer text-sm font-medium text-uv-highlight italic transition-colors hover:text-ctp-lavender"
+						>for those who come after</span
+					>
+				</p>
+			</div>
+		</section>
+
+		<LanyardPresence initialPresence={data.lanyard} />
+	</div>
+</div>

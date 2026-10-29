@@ -7,14 +7,14 @@
 	let { data } = $props();
 </script>
 
-<div class="relative mx-auto w-full max-w-2xl px-4 py-8">
+<div class="relative w-full py-8">
 	<!-- Left Sidebar with TOC - Hanging to the left -->
 	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">
 			<div class="mb-8">
 				<a
 					href={resolve('/blog')}
-					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-violet-300"
+					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-uv-highlight"
 				>
 					<svg
 						width="16"
@@ -41,7 +41,7 @@
 
 	<!-- Main Content -->
 	<article class="w-full min-w-0">
-		<header class="border-theme/20 relative mb-12 border-b border-dashed pb-8">
+		<header class="relative mb-12 border-b border-dashed border-uv-mute/20 pb-8">
 			<!-- Section Splitter visual enhancement (optional dot in middle like Chiri? User asked for general splitter) -->
 			<div class="flex flex-col gap-4">
 				<div
@@ -55,7 +55,7 @@
 						<div class="flex gap-2">
 							{#each data.post.tags as tag (tag)}
 								<span
-									class="cursor-default bg-uv-mute/30 px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-uv-text-dim uppercase transition-colors hover:bg-uv-mute/50"
+									class="cursor-default bg-uv-tag/10 px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-uv-tag uppercase transition-colors hover:bg-uv-tag/20"
 								>
 									{tag}
 								</span>
@@ -64,7 +64,7 @@
 					{/if}
 				</div>
 
-				<h1 class="text-3xl leading-tight font-bold tracking-tight text-violet-100/90 md:text-4xl">
+				<h1 class="text-3xl leading-tight font-bold tracking-tight text-uv-text-main md:text-4xl">
 					{data.post.title}
 				</h1>
 			</div>
@@ -72,14 +72,14 @@
 
 		<div
 			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
-				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-violet-100/90
-				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-dim/80
-				prose-a:text-violet-400/80 prose-a:underline prose-a:decoration-violet-500/30 prose-a:underline-offset-2 prose-blockquote:border-l-violet-500/30 prose-blockquote:bg-uv-mute/10
+				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-uv-text-main
+				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-body
+				prose-a:text-uv-link prose-a:underline prose-a:decoration-uv-link/30 prose-a:underline-offset-2 prose-blockquote:border-l-ctp-pink/40 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1
-				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-violet-200/90 prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
-				prose-code:text-[0.8em] prose-code:text-violet-300/90 prose-code:before:content-none
+				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
+				prose-code:text-[1em] prose-code:font-normal prose-code:text-ctp-green prose-code:before:content-none
 				prose-code:after:content-none
-				prose-li:text-uv-text-dim/80 [&_a:hover]:text-violet-300 [&_a:hover]:decoration-violet-300
+				prose-li:text-uv-text-body [&_a:hover]:text-uv-link-hover [&_a:hover]:decoration-uv-link-hover
 			"
 		>
 			<MdxContent Component={data.post.component} />

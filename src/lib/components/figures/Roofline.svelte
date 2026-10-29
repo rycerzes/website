@@ -120,14 +120,14 @@
 					y1="0"
 					x2={px(intensity)}
 					y2={PLOT_H}
-					stroke={series.orange}
+					stroke={series.peach}
 					stroke-width="1.5"
 				/>
 				<circle
 					cx={px(intensity)}
 					cy={py(ceiling)}
 					r="4.5"
-					fill={series.orange}
+					fill={series.peach}
 					stroke="var(--color-uv-deep)"
 					stroke-width="2"
 				/>
@@ -150,7 +150,7 @@
 			step="0.01"
 			value={Math.log10(intensity)}
 			oninput={(e) => (intensity = Math.pow(10, +e.currentTarget.value))}
-			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-violet-400"
+			class="h-1 w-full cursor-pointer appearance-none bg-uv-mute accent-uv-highlight"
 		/>
 	</div>
 

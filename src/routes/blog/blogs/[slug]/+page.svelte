@@ -3,10 +3,10 @@
 	import MdxContent from '$lib/components/MdxContent.svelte';
 </script>
 
-<article class="container mx-auto prose max-w-3xl px-4 py-12 prose-invert prose-violet">
-	<header class="border-theme/30 mb-8 border-b pb-8">
+<article class="prose w-full max-w-none py-12 prose-invert prose-a:text-uv-link">
+	<header class="mb-8 border-b border-uv-mute/30 pb-8">
 		<div class="flex flex-col gap-4">
-			<div class="flex items-center gap-4 font-mono text-xs text-violet-400">
+			<div class="flex items-center gap-4 font-mono text-xs text-uv-highlight">
 				<span>{data.post.date}</span>
 				<span>•</span>
 				<span>{data.post.readingTime}</span>
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 
-			<h1 class="mb-0! text-4xl font-bold tracking-tight text-violet-100">{data.post.title}</h1>
+			<h1 class="mb-0! text-4xl font-bold tracking-tight text-uv-text-main">{data.post.title}</h1>
 			<p class="mt-2! text-xl text-uv-text-dim">{data.post.excerpt}</p>
 		</div>
 	</header>

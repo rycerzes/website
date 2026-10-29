@@ -1,102 +1,137 @@
 /**
- * Single source of truth for the UV palette in JS/TS contexts — mermaid theming,
+ * Single source of truth for the palette in JS/TS contexts — mermaid theming,
  * canvas, WebGL, and figure components — where CSS custom properties can't be
  * read directly.
  *
  * These values mirror the `@theme` block in src/app.css and must stay in sync.
  * The site is dark-only, so there is exactly one palette.
  *
- * The surface and border ramps were extracted from the mermaid theme config in
- * MdxContent.svelte, which was the only place the intermediate steps existed.
+ * Everything except the two backdrop steps (`surface.page`, `surface.deep`) is
+ * Catppuccin Mocha. The backdrop sits darker than Mocha's crust on purpose.
  */
+
+/** Catppuccin Mocha, verbatim from https://catppuccin.com/palette. Never edit these values. */
+export const ctp = {
+	rosewater: '#f5e0dc',
+	flamingo: '#f2cdcd',
+	pink: '#f5c2e7',
+	mauve: '#cba6f7',
+	red: '#f38ba8',
+	maroon: '#eba0ac',
+	peach: '#fab387',
+	yellow: '#f9e2af',
+	green: '#a6e3a1',
+	teal: '#94e2d5',
+	sky: '#89dceb',
+	sapphire: '#74c7ec',
+	blue: '#89b4fa',
+	lavender: '#b4befe',
+	text: '#cdd6f4',
+	subtext1: '#bac2de',
+	subtext0: '#a6adc8',
+	overlay2: '#9399b2',
+	overlay1: '#7f849c',
+	overlay0: '#6c7086',
+	surface2: '#585b70',
+	surface1: '#45475a',
+	surface0: '#313244',
+	base: '#1e1e2e',
+	mantle: '#181825',
+	crust: '#11111b'
+} as const;
 
 /** Background ramp, from the page backdrop upward through raised surfaces. */
 export const surface = {
 	page: '#030205',
 	deep: '#0e0a14',
-	raised: '#161022',
-	overlay: '#211a31',
-	/** Warm-shifted; sits off the ramp and is semantic rather than an elevation step. */
-	error: '#2a1f34'
+	raised: ctp.mantle,
+	overlay: ctp.base,
+	/** ctp.red at 15% over ctp.base. Semantic rather than an elevation step. */
+	error: '#3e2e40'
 } as const;
 
 /** Border ramp, subtle through prominent. */
 export const border = {
-	subtle: '#3e3450',
-	default: '#4c3f63',
-	strong: '#5f4e7d'
+	subtle: ctp.surface0,
+	default: ctp.surface1,
+	strong: ctp.surface2
 } as const;
 
 export const text = {
-	/** Near-white, for headings and high-contrast labels. */
-	primary: '#f5f3ff',
+	/** Headings and high-contrast labels. */
+	primary: ctp.text,
 	/** Default body copy. */
-	body: '#eaddff',
-	/** Muted violet, for secondary labels and axis text. */
-	dim: '#d8b4fe'
+	body: ctp.text,
+	/** Secondary labels and axis text. */
+	dim: ctp.subtext0
 } as const;
 
-/** Neon violet used for lines, marks, and interactive affordances. */
-export const accent = '#a78bfa';
+/** Used for lines, marks, and interactive affordances. */
+export const accent = ctp.mauve;
+
+/** In-content links and tag pills; navigation uses `accent`. */
+export const link = { default: ctp.blue, hover: ctp.sky } as const;
+export const tag = ctp.blue;
 
 /**
- * Categorical hues for figures carrying several series.
+ * Peak colour of the dither backdrop as 0-1 RGB for the shader, which mixes from black up to
+ * it. Mauve scaled to 38% keeps the wave at its previous luminance (~5.6%), so text over the
+ * backdrop keeps its contrast.
+ */
+export const ditherWave = [1, 3, 5].map(
+	(i) => (parseInt(ctp.mauve.slice(i, i + 2), 16) / 255) * 0.38
+) as [number, number, number];
+
+/**
+ * Categorical hues for figures carrying several series: Mocha accents in a validated order.
  *
- * These are NOT eyeballed. They are the validated dark-mode steps, checked against this
- * site's figure surface (#0e0a14) with the six-check validator: OKLCH lightness band
- * 0.48-0.67, chroma floor 0.10, CVD separation under protanopia/deuteranopia, a
- * normal-vision floor, and >=3:1 contrast. An earlier hand-picked set (violet/cyan/amber/
- * rose/green/blue) failed the lightness band on all six and put green and rose 7.5 apart
- * under deuteranopia - which would have made a pass/fail encoding unreadable.
+ * The order is NOT eyeballed. It was searched exhaustively over the Mocha accents and is
+ * checked by `node scripts/check-palette.ts` (OKLab deltaE x100, Machado 2009 simulation):
+ * neighbours separate by >= 9 under normal, protan and deutan vision, and every pair within
+ * the first three by >= 9.5. The status hues (green, yellow, red) and the accent (mauve) are
+ * excluded so a series cannot impersonate either. Maroon would be slot 5 but sits 2.5 from
+ * `semantic.fail` under deuteranopia, and every other fifth hue drops neighbours below 7,
+ * so the scale stops at four.
  *
  * Order is the CVD-safety mechanism. Assign slots in sequence and never cycle.
  */
 export const series = {
-	blue: '#3987e5',
-	orange: '#d95926',
-	aqua: '#199e70',
-	yellow: '#c98500',
-	magenta: '#d55181',
-	green: '#008300',
-	violet: '#9085e9',
-	red: '#e66767'
+	blue: ctp.blue,
+	peach: ctp.peach,
+	teal: ctp.teal,
+	sapphire: ctp.sapphire
 } as const;
 
 /** Ordered categorical scale; take the first n for an n-series figure. */
-export const categorical = [
-	series.blue,
-	series.orange,
-	series.aqua,
-	series.yellow,
-	series.magenta,
-	series.green,
-	series.violet,
-	series.red
-] as const;
+export const categorical = [series.blue, series.peach, series.teal, series.sapphire] as const;
 
 /**
  * Scatter-like figures (roofline, bubble, small multiples) need every pair to separate,
  * not just neighbours. Only the first three slots clear all-pairs CVD; slot 4 collapses
- * into slot 2 (deltaE 4.8 deutan). More than three series there means faceting, not more hues.
+ * into slot 1 (deltaE 4.5 deutan). More than three series there means faceting, not more hues.
  */
 export const ALL_PAIRS_SAFE_SERIES = 3;
 
 /**
- * Reserved state colours. Never reuse these for "series 4", and never let one carry
- * meaning alone - always pair with a label or icon. They sit outside the categorical
- * lightness band on purpose, so a status colour cannot impersonate a series.
+ * Reserved state colours. Never reuse these as a series, and never let one carry meaning
+ * alone - always pair with a label or icon. Under deuteranopia pass and warn are only 2.9
+ * apart, and pass is 3.8 from `series.peach`, so the label is what carries the state.
  */
 export const semantic = {
-	pass: '#0ca30c',
-	warn: '#fab219',
-	fail: '#d03b3b'
+	pass: ctp.green,
+	warn: ctp.yellow,
+	fail: ctp.red
 } as const;
 
 export const palette = {
+	ctp,
 	surface,
 	border,
 	text,
 	accent,
+	link,
+	tag,
+	ditherWave,
 	series,
 	categorical,
 	semantic,

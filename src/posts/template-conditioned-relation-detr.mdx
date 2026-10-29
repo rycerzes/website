@@ -26,18 +26,18 @@ For a Relation-DETR-like detector, this is appealing because the detector alread
 The original detector and the template-conditioned variant share the same image path. The change is isolated to the semantic branch after the decoder: the closed-set classifier is replaced by a query-template similarity head.
 
 ```typst-diagram
-draw.set-style(stroke: rgb("#94a3b8"), mark: (fill: rgb("#94a3b8"), scale: .75))
+draw.set-style(stroke: rgb("#9399b2"), mark: (fill: rgb("#9399b2"), scale: .75))
 
 draw.content((0, 7), text(weight: "bold", size: 11pt)[Original Relation-DETR], anchor: "west")
 
-draw.content((1.5, 5.5), text(size: 8pt)[target image], name: "a1", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((5.5, 5.5), text(size: 8pt)[backbone + neck], name: "a2", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((10, 5.5), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "a3", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((14.5, 5.5), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "a4", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((19, 6.3), text(size: 8pt, align(center)[linear class\ head]), name: "a5", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
-draw.content((19, 4.7), text(size: 8pt)[box head], name: "a6", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
-draw.content((23.2, 6.3), text(size: 8pt, align(center)[class logits\ $(B, N, C)$]), name: "a7", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
-draw.content((23.2, 4.7), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "a8", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+draw.content((1.5, 5.5), text(size: 8pt)[target image], name: "a1", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((5.5, 5.5), text(size: 8pt)[backbone + neck], name: "a2", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((10, 5.5), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "a3", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((14.5, 5.5), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "a4", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((19, 6.3), text(size: 8pt, align(center)[linear class\ head]), name: "a5", frame: "rect", stroke: rgb("#89b4fa"), fill: rgb("#2e354d"), padding: .15)
+draw.content((19, 4.7), text(size: 8pt)[box head], name: "a6", frame: "rect", stroke: rgb("#89b4fa"), fill: rgb("#2e354d"), padding: .15)
+draw.content((23.2, 6.3), text(size: 8pt, align(center)[class logits\ $(B, N, C)$]), name: "a7", frame: "rect", stroke: rgb("#b4befe"), fill: rgb("#35364d"), padding: .15)
+draw.content((23.2, 4.7), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "a8", frame: "rect", stroke: rgb("#b4befe"), fill: rgb("#35364d"), padding: .15)
 
 draw.line("a1.east", "a2.west", mark: (end: ">"))
 draw.line("a2.east", "a3.west", mark: (end: ">"))
@@ -49,18 +49,18 @@ draw.line("a6.east", "a8.west", mark: (end: ">"))
 
 draw.content((0, 2.5), text(weight: "bold", size: 11pt)[Template-conditioned variant], anchor: "west")
 
-draw.content((1.5, 0.7), text(size: 8pt)[target image], name: "b1", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((5.5, 0.7), text(size: 8pt)[backbone + neck], name: "b2", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((10, 0.7), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "b3", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((14.5, 0.7), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "b4", frame: "rect", stroke: rgb("#7c3aed"), fill: rgb("#111827"), padding: .15)
-draw.content((19, 1.5), text(size: 8pt, align(center)[template similarity\ head]), name: "b5", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
-draw.content((19, -0.1), text(size: 8pt)[box head], name: "b6", frame: "rect", stroke: rgb("#60a5fa"), fill: rgb("#172554"), padding: .15)
-draw.content((23.2, 1.5), text(size: 8pt, align(center)[match logits\ $(B, N, 1)$]), name: "b7", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
-draw.content((23.2, -0.1), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "b8", frame: "rect", stroke: rgb("#a78bfa"), fill: rgb("#312e81"), padding: .15)
+draw.content((1.5, 0.7), text(size: 8pt)[target image], name: "b1", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((5.5, 0.7), text(size: 8pt)[backbone + neck], name: "b2", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((10, 0.7), text(size: 8pt, align(center)[Relation-DETR\ decoder]), name: "b3", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((14.5, 0.7), text(size: 8pt, align(center)[object queries\ $(B, N, D)$]), name: "b4", frame: "rect", stroke: rgb("#cba6f7"), fill: rgb("#181825"), padding: .15)
+draw.content((19, 1.5), text(size: 8pt, align(center)[template similarity\ head]), name: "b5", frame: "rect", stroke: rgb("#fab387"), fill: rgb("#3f343b"), padding: .15)
+draw.content((19, -0.1), text(size: 8pt)[box head], name: "b6", frame: "rect", stroke: rgb("#89b4fa"), fill: rgb("#2e354d"), padding: .15)
+draw.content((23.2, 1.5), text(size: 8pt, align(center)[match logits\ $(B, N, 1)$]), name: "b7", frame: "rect", stroke: rgb("#b4befe"), fill: rgb("#35364d"), padding: .15)
+draw.content((23.2, -0.1), text(size: 8pt, align(center)[boxes\ $(B, N, 4)$]), name: "b8", frame: "rect", stroke: rgb("#b4befe"), fill: rgb("#35364d"), padding: .15)
 
-draw.content((5.5, -1.8), text(size: 8pt)[template crop], name: "c1", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
-draw.content((10, -1.8), text(size: 8pt, align(center)[visual prompt\ encoder]), name: "c2", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
-draw.content((14.5, -1.8), text(size: 8pt, align(center)[template embedding\ $(B, 1, D)$]), name: "c3", frame: "rect", stroke: rgb("#fb923c"), fill: rgb("#431407"), padding: .15)
+draw.content((5.5, -1.8), text(size: 8pt)[template crop], name: "c1", frame: "rect", stroke: rgb("#fab387"), fill: rgb("#3f343b"), padding: .15)
+draw.content((10, -1.8), text(size: 8pt, align(center)[visual prompt\ encoder]), name: "c2", frame: "rect", stroke: rgb("#fab387"), fill: rgb("#3f343b"), padding: .15)
+draw.content((14.5, -1.8), text(size: 8pt, align(center)[template embedding\ $(B, 1, D)$]), name: "c3", frame: "rect", stroke: rgb("#fab387"), fill: rgb("#3f343b"), padding: .15)
 
 draw.line("b1.east", "b2.west", mark: (end: ">"))
 draw.line("b2.east", "b3.west", mark: (end: ">"))
@@ -71,10 +71,10 @@ draw.line("b5.east", "b7.west", mark: (end: ">"))
 draw.line("b6.east", "b8.west", mark: (end: ">"))
 draw.line("c1.east", "c2.west", mark: (end: ">"))
 draw.line("c2.east", "c3.west", mark: (end: ">"))
-draw.line("c3.east", "b5.south", mark: (end: ">"), stroke: rgb("#fb923c"))
+draw.line("c3.east", "b5.south", mark: (end: ">"), stroke: rgb("#fab387"))
 
-draw.line("a5.south", "b5.north", stroke: (paint: rgb("#fb923c"), dash: "dashed"), mark: (end: ">", fill: rgb("#fb923c")))
-draw.content((20, 3.9), text(size: 7pt, fill: rgb("#fb923c"))[replace classifier], anchor: "west")
+draw.line("a5.south", "b5.north", stroke: (paint: rgb("#fab387"), dash: "dashed"), mark: (end: ">", fill: rgb("#fab387")))
+draw.content((20, 3.9), text(size: 7pt, fill: rgb("#fab387"))[replace classifier], anchor: "west")
 ```
 
 The conceptual diff is: keep the backbone, decoder, query set, and box head fixed; remove the `Linear(D, C)` classifier; add a template encoder and replace the classifier with normalized query-template matching.

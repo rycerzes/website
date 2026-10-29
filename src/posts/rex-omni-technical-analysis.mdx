@@ -171,8 +171,8 @@ flowchart LR
         A["... token_151521<br/>token_151522<br/>..."] -->|"repurposed"| B["<0><1>...<999>"]
     end
 
-    style A fill:#0e0a14,stroke:#5f4e7d,color:#f5f3ff
-    style B fill:#161022,stroke:#5f4e7d,color:#f5f3ff
+    style A fill:#0e0a14,stroke:#585b70,color:#cdd6f4
+    style B fill:#181825,stroke:#585b70,color:#cdd6f4
 ```
 
 ### Structured Output Format
@@ -246,8 +246,8 @@ flowchart TD
         R --> B
     end
 
-    style Stage1 fill:#0e0a14,stroke:#5f4e7d,color:#f5f3ff
-    style Stage2 fill:#161022,stroke:#5f4e7d,color:#f5f3ff
+    style Stage1 fill:#0e0a14,stroke:#585b70,color:#cdd6f4
+    style Stage2 fill:#181825,stroke:#585b70,color:#cdd6f4
 ```
 
 SFT uses teacher forcing — the model sees ground-truth tokens at each step. This creates a train-inference gap that manifests as two characteristic failure modes: **duplicate predictions** (the same coordinates generated dozens of times) and **large-box predictions** (one oversized box covering multiple objects, affecting 20.5% of Dense200 predictions).

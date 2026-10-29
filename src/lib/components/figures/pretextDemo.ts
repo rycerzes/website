@@ -259,7 +259,7 @@ function renderLinesHtml(items: PositionedLine[]): string {
 	return items
 		.map((line) => {
 			const text = escapeHtml(line.text);
-			return `<span class="absolute whitespace-pre" style="left:${line.x}px; top:${line.y}px; font-family:${FONT_FAMILY}; font-size:${FONT_SIZE}px; line-height:${LINE_HEIGHT}px; font-weight:${FONT_WEIGHT}; color:var(--color-uv-text-dim, #d8b4fe); opacity:0.8;">${text}</span>`;
+			return `<span class="absolute whitespace-pre" style="left:${line.x}px; top:${line.y}px; font-family:${FONT_FAMILY}; font-size:${FONT_SIZE}px; line-height:${LINE_HEIGHT}px; font-weight:${FONT_WEIGHT}; color:var(--color-uv-text-dim, #a6adc8); opacity:0.8;">${text}</span>`;
 		})
 		.join('');
 }
@@ -385,7 +385,7 @@ function computeLines(state: DemoState, width: number, height: number): Position
 				continue;
 			}
 
-			const line = layoutNextLine(state.prepared, cursor, Math.max(1, slot.right - slot.left));
+			const line = layoutNextLine(state.prepared, Math.max(1, slot.right - slot.left), cursor);
 			if (line === null) return result;
 
 			result.push({ x: slot.left, y, text: line.text });

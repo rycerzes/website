@@ -7,6 +7,7 @@
 
 	import CommandPalette from '$lib/components/CommandPalette.svelte';
 	import { cn } from '$lib/utils';
+	import { ditherWave } from '$lib/palette';
 
 	import Dither from '$lib/components/dither/Dither.svelte';
 
@@ -26,6 +27,11 @@
 			isLoaded = true;
 		}
 	});
+	const commitSha = __APP_COMMIT_SHA__;
+	const commitBranch = __APP_COMMIT_BRANCH__;
+	const commitLabel = commitSha ? `${commitBranch}@${commitSha.slice(0, 7)}` : '';
+	const commitHref = commitSha ? `https://github.com/rycerzes/website/commit/${commitSha}` : '';
+
 	let pageTitle = $derived.by(() => {
 		const path = $page.url.pathname;
 		if (path === '/') return 'swappy';
@@ -59,7 +65,7 @@
 		style="width: 100vw; height: 100vh; background-color: var(--color-uv-black);"
 	>
 		<Dither
-			waveColor={[0.28, 0.2, 0.55]}
+			waveColor={ditherWave}
 			disableAnimation={false}
 			enableMouseInteraction={false}
 			mouseRadius={0}
@@ -94,7 +100,7 @@
 				>
 					{#if showBackground}
 						<Dither
-							waveColor={[0.28, 0.2, 0.55]}
+							waveColor={ditherWave}
 							disableAnimation={false}
 							enableMouseInteraction={false}
 							mouseRadius={0}
@@ -115,25 +121,25 @@
 			class="no-scrollbar relative z-10 flex w-full items-center justify-center gap-6 overflow-x-auto text-sm md:w-auto md:justify-end md:gap-10"
 		>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/')}>Home</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/about')}>About</a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				href={resolve('/blog')}>Blog</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/ai')}>AI</a
-			>
-			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
 				target="_blank">Resume</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-violet-500/50 hover:text-white"
-				href={resolve('/blog')}>Blog</a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				href={resolve('/about')}>About</a
+			>
+			<a
+				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				href={resolve('/ai')}>AI</a
 			>
 		</nav>
 	</header>
@@ -148,31 +154,37 @@
 
 	<footer
 		class={cn(
-			'mt-12 flex flex-col items-start justify-between gap-8 border-t border-theme py-10 opacity-0 md:flex-row md:items-center',
+			'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-8 gap-y-3 border-t border-uv-mute py-10 opacity-0',
 			isLoaded && 'animate-enter delay-200'
 		)}
 		id="contact"
 	>
-		<div class="flex flex-col gap-2">
-			<div class="text-[10px] tracking-widest text-uv-text-dim">
-				© {new Date().getFullYear()} rycerzes
-			</div>
-			<div class="text-[10px] tracking-widest text-violet-500/60">swappy</div>
+		<div class="text-xs font-medium tracking-wider text-uv-text-dim">
+			© {new Date().getFullYear()} rycerzes
 		</div>
-		<div class="flex items-center gap-8">
+		<div class="flex items-center justify-end gap-8">
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="https://x.com/swaapppyyy">x/twtr</a
 			>
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="https://github.com/rycerzes">github</a
 			>
 			<a
-				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-violet-400"
+				class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
 				href="mailto:swapnil@rycerz.es">email</a
 			>
 		</div>
+		<div class="text-xs font-medium tracking-wider text-uv-text-dim">swappy</div>
+		{#if commitLabel}
+			<a
+				class="justify-self-end text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
+				href={commitHref}
+				target="_blank"
+				rel="external noopener noreferrer">{commitLabel}</a
+			>
+		{/if}
 	</footer>
 
 	<CommandPalette />

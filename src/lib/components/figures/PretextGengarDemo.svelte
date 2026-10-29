@@ -18,7 +18,7 @@
 	bind:this={stageEl}
 	role="img"
 	aria-label="Pretext line routing demo with a cursor-following gengar sprite"
-	class="relative h-[520px] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_30%,#181326_0%,#0d0a14_55%,#07060b_100%)]"
+	class="relative h-[520px] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_30%,var(--color-uv-raised)_0%,var(--color-uv-deep)_55%,var(--color-uv-black)_100%)]"
 >
 	<div bind:this={linesEl} class="pointer-events-none absolute inset-0 z-10"></div>
 
