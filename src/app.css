@@ -175,6 +175,58 @@
 	--tw-prose-invert-pre-bg: var(--color-uv-deep);
 	--tw-prose-invert-th-borders: var(--color-uv-border);
 	--tw-prose-invert-td-borders: var(--color-uv-mute);
+	font-size: 0.875rem;
+	line-height: 1.714;
+}
+
+.prose :where(p, li) {
+	font-weight: 400;
+	line-height: 1.714;
+}
+
+/* Hang markers in the column gutter so list text shares the paragraph edge. */
+.prose :where(ul, ol) {
+	margin-inline-start: 0;
+	padding-inline-start: 0;
+	list-style: none;
+}
+
+.prose :where(li) {
+	position: relative;
+	padding-inline-start: 0;
+}
+
+.prose :where(ul > li)::before {
+	content: '';
+	position: absolute;
+	left: -0.9em;
+	top: 0.68em;
+	width: 0.28em;
+	height: 0.28em;
+	border-radius: 999px;
+	background: var(--color-uv-highlight);
+}
+
+.prose :where(ol) {
+	counter-reset: reading-item;
+}
+
+.prose :where(ol > li) {
+	counter-increment: reading-item;
+}
+
+.prose :where(ol > li)::before {
+	content: counter(reading-item) '.';
+	position: absolute;
+	top: 0;
+	right: calc(100% + 0.45em);
+	color: var(--color-uv-text-dim);
+	font-variant-numeric: tabular-nums;
+}
+
+.prose :where(li > ul, li > ol) {
+	margin-top: 0.35em;
+	padding-inline-start: 1.15em;
 }
 
 /* Global Selection Style */
@@ -322,7 +374,7 @@ code[data-theme*=' '] span {
 
 /* Constrain code blocks and content to container width */
 .mdx-content {
-	overflow: hidden;
+	min-width: 0;
 }
 
 .mdx-content pre,

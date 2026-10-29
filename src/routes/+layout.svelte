@@ -129,39 +129,38 @@
 {/if}
 
 <div
-	class="relative z-10 mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 transition-opacity duration-1000 md:px-12"
+	class="relative z-10 mx-auto flex min-h-screen w-full max-w-2xl flex-col px-6 transition-opacity duration-1000"
 >
-	<!-- Header from design -->
 	<header
 		bind:this={headerEl}
 		class={cn(
-			'sticky top-0 z-50 -mx-6 mb-4 flex flex-col justify-end bg-transparent px-6 pt-4 pb-2 opacity-0 transition-all duration-300 md:-mx-12 md:flex-row md:items-center md:px-12 md:pt-6',
-			scrollY > 20 && 'py-4 md:py-4',
+			'sticky top-0 z-50 -mx-6 mb-8 flex items-center bg-transparent px-6 pt-6 pb-2 opacity-0 transition-all duration-300',
+			scrollY > 20 && 'py-4',
 			isLoaded && 'animate-enter'
 		)}
 	>
 		<nav
-			class="no-scrollbar relative z-10 flex w-full items-center justify-center gap-6 overflow-x-auto text-sm md:w-auto md:justify-end md:gap-10"
+			class="no-scrollbar relative z-10 flex w-full items-center justify-end gap-5 overflow-x-auto text-xs"
 		>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/')}>Home</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/blog')}>Blog</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
 				target="_blank">Resume</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/about')}>About</a
 			>
 			<a
-				class="border-b border-transparent pb-1 text-xs tracking-widest text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href={resolve('/ai')}>AI</a
 			>
 		</nav>
@@ -182,32 +181,27 @@
 
 		<footer
 			class={cn(
-				'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-8 gap-y-3 border-t border-uv-mute py-10 opacity-0',
+				'mt-12 grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2 border-t border-uv-mute py-10 text-[11px] tracking-wide text-uv-text-dim opacity-0',
 				isLoaded && 'animate-enter delay-200'
 			)}
 			id="contact"
 		>
-			<div class="text-xs font-medium tracking-wider text-uv-text-dim">
-				© {new Date().getFullYear()} rycerzes
-			</div>
-			<div class="flex items-center justify-end gap-8">
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
-					href="https://x.com/swaapppyyy">x/twtr</a
+			<div>© {new Date().getFullYear()} rycerzes</div>
+			<div class="flex items-center justify-end gap-4">
+				<a class="transition-colors hover:text-uv-highlight" href="https://x.com/swaapppyyy"
+					>x/twtr</a
 				>
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
-					href="https://github.com/rycerzes">github</a
+				<a class="transition-colors hover:text-uv-highlight" href="https://github.com/rycerzes"
+					>github</a
 				>
-				<a
-					class="text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
-					href="mailto:swapnil@rycerz.es">email</a
+				<a class="transition-colors hover:text-uv-highlight" href="mailto:swapnil@rycerz.es"
+					>email</a
 				>
 			</div>
-			<div class="text-xs font-medium tracking-wider text-uv-text-dim">swappy</div>
+			<div>swappy</div>
 			{#if commitLabel}
 				<a
-					class="justify-self-end text-xs font-medium tracking-wider text-uv-text-dim transition-colors hover:text-uv-highlight"
+					class="justify-self-end text-right transition-colors hover:text-uv-highlight"
 					href={commitHref}
 					target="_blank"
 					rel="external noopener noreferrer">{commitLabel}</a
