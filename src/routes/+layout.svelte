@@ -11,7 +11,7 @@
 
 	import Dither from '$lib/components/dither/Dither.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	let isLoaded = $state(false);
 	let scrollY = $state(0);
@@ -63,17 +63,32 @@
 	const commitLabel = commitSha ? `${commitBranch}@${commitSha.slice(0, 7)}` : '';
 	const commitHref = commitSha ? `https://github.com/rycerzes/website/commit/${commitSha}` : '';
 
-	let pageTitle = $derived.by(() => {
-		const path = $page.url.pathname;
-		if (path === '/') return 'swappy';
-		const segment = path.split('/').filter(Boolean).pop();
-		const title = segment?.replace(/-/g, ' ');
-		return `${title} | swappy`;
-	});
+	let indexable = $derived($page.status === 200);
 </script>
 
 <svelte:head>
-	<title>{pageTitle}</title>
+	<title>{data.seo.title}</title>
+	<meta name="description" content={data.seo.description} />
+	<meta name="robots" content={indexable ? 'index, follow' : 'noindex'} />
+	{#if indexable}
+		<link rel="canonical" href={data.seo.canonical} />
+	{/if}
+	<meta property="og:site_name" content="swappy" />
+	<meta property="og:type" content={data.seo.type} />
+	<meta property="og:title" content={data.seo.title} />
+	<meta property="og:description" content={data.seo.description} />
+	<meta property="og:url" content={data.seo.canonical} />
+	<meta property="og:image" content={data.seo.image} />
+	<meta property="og:image:alt" content={data.seo.imageAlt} />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={data.seo.title} />
+	<meta name="twitter:description" content={data.seo.description} />
+	<meta name="twitter:image" content={data.seo.image} />
+	<meta name="twitter:image:alt" content={data.seo.imageAlt} />
+	{@html `<script type="application/ld+json">${data.seo.jsonLd}</script>`}
 	<link rel="icon" href={favicon} />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />

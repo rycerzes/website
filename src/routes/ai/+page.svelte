@@ -3,10 +3,6 @@
 	import TableOfContents from '../../components/TableOfContents.svelte';
 </script>
 
-<svelte:head>
-	<title>How I Use (and Don't Use) AI | swappy</title>
-</svelte:head>
-
 <div class="relative w-full py-8">
 	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
 		<div class="sticky top-32">
