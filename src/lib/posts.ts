@@ -88,6 +88,14 @@ export function getPosts(): Post[] {
 	});
 }
 
+export function getPostSource(slug: string): string | undefined {
+	for (const [path, raw] of Object.entries(rawPostImport)) {
+		const filename = path.split('/').pop()?.split('.').shift();
+		if (filename === slug && typeof raw === 'string') return raw;
+	}
+	return undefined;
+}
+
 export function getPost(slug: string): Post | undefined {
 	for (const [path, resolver] of Object.entries(glob_import)) {
 		const filename = path.split('/').pop()?.split('.').shift();

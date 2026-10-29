@@ -3,7 +3,7 @@ import { getPost, getPosts } from '$lib/posts';
 export const SITE_ORIGIN = 'https://rycerz.es';
 export const SITE_NAME = 'swappy';
 export const CONTENT_SIGNAL = 'search=yes, ai-train=no, ai-input=yes';
-export const OG_IMAGE_PATH = '/og.png';
+export const OG_IMAGE_PATH = '/banner.png';
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
 export const OG_IMAGE_ALT = 'swappy — rycerz.es';

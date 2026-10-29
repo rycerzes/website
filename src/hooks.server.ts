@@ -1,6 +1,7 @@
 import { redirect, type Handle } from '@sveltejs/kit';
-import { CONTENT_SIGNAL, SITE_ORIGIN } from '$lib/server/seo';
-import { htmlToMarkdown, prefersMarkdown } from '$lib/server/markdown';
+import { getPost, getPostSource } from '$lib/posts';
+import { CONTENT_SIGNAL, seoFor, SITE_ORIGIN } from '$lib/server/seo';
+import { htmlToMarkdown, postToMarkdown, prefersMarkdown } from '$lib/server/markdown';
 
 const APEX = 'rycerz.es';
 
@@ -40,12 +41,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		});
 	}
 
-	const html = await response.text();
+	const slug = /^\/blog\/([^/]+)\/?$/.exec(url.pathname)?.[1];
+	const source = slug ? getPostSource(slug) : undefined;
+	const post = slug ? getPost(slug) : undefined;
 	const pageUrl = `${SITE_ORIGIN}${url.pathname === '/' ? '/' : url.pathname}`;
-	const markdown = htmlToMarkdown(html, pageUrl);
+	const markdown =
+		source && post
+			? postToMarkdown(source, post, seoFor(url.pathname))
+			: htmlToMarkdown(await response.text(), pageUrl);
 	headers.set('content-type', 'text/markdown; charset=utf-8');
-	headers.set('x-markdown-tokens', String(Math.ceil(markdown.length / 4)));
 	headers.delete('content-length');
+	headers.delete('content-encoding');
+	headers.delete('etag');
+	headers.delete('last-modified');
 
 	return new Response(markdown, { status: 200, headers });
 };
