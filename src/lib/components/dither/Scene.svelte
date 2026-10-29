@@ -6,6 +6,7 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	import { Vector2, Color, Uniform } from 'three';
 	import type { EffectComposer } from 'postprocessing';
 	import { waveVertexShader, waveFragmentShader } from './shaders';
+	import { ditherTime } from './phase';
 	import type { RetroEffect } from './RetroEffect';
 
 	interface Props {
@@ -113,8 +114,7 @@ https://github.com/DavidHDev/react-bits/blob/main/src/demo/Backgrounds/DitherDem
 	// Render Loop
 	useTask(() => {
 		if (!disableAnimation) {
-			// Use absolute time so that multiple instances (header + background) are synced
-			uniforms.time.value = (performance.now() / 1000) % 10000;
+			uniforms.time.value = ditherTime();
 		}
 
 		if (enableMouseInteraction) {
