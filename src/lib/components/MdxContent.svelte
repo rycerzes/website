@@ -122,7 +122,6 @@
 			// Remove prose styles from pre
 			pre.classList.add(
 				'overflow-x-auto',
-				'rounded-lg',
 				'border',
 				'border-uv-mute/30',
 				'bg-uv-deep/50',
@@ -144,7 +143,7 @@
 
 			const wrapper = document.createElement('div');
 			wrapper.className =
-				'table-wrapper overflow-x-auto my-8 rounded-lg border border-uv-mute/30 bg-uv-deep/30';
+				'table-wrapper overflow-x-auto my-8 border border-uv-mute/30 bg-uv-deep/30';
 
 			table.parentNode?.insertBefore(wrapper, table);
 			wrapper.appendChild(table);

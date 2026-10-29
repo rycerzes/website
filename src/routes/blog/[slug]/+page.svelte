@@ -9,12 +9,12 @@
 
 <div class="relative w-full py-8">
 	<!-- Left Sidebar with TOC - Hanging to the left -->
-	<aside class="absolute top-0 right-full hidden h-full w-72 pr-12 lg:block">
+	<aside class="absolute top-0 right-full hidden h-full w-64 pr-8 xl:block">
 		<div class="sticky top-32">
 			<div class="mb-8">
 				<a
 					href={resolve('/blog')}
-					class="group inline-flex items-center gap-2 font-mono text-[13px] text-uv-text-dim transition-colors hover:text-uv-highlight"
+					class="group inline-flex items-center gap-2 text-xs text-uv-text-dim transition-colors hover:text-uv-highlight"
 				>
 					<svg
 						width="16"
@@ -41,21 +41,19 @@
 
 	<!-- Main Content -->
 	<article class="w-full min-w-0">
-		<header class="relative mb-12 border-b border-dashed border-uv-mute/20 pb-8">
+		<header class="relative mb-6 border-b border-uv-border pb-4">
 			<!-- Section Splitter visual enhancement (optional dot in middle like Chiri? User asked for general splitter) -->
 			<div class="flex flex-col gap-4">
-				<div
-					class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] tracking-widest text-uv-text-dim/60 uppercase"
-				>
+				<div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-uv-text-dim">
 					<span>{data.post.date}</span>
 					<span class="text-uv-text-dim/30">•</span>
 					<span>{data.post.readingTime}</span>
 					{#if data.post.tags.length > 0}
 						<span class="text-uv-text-dim/30">•</span>
-						<div class="flex gap-2">
+						<div class="flex flex-wrap gap-1.5">
 							{#each data.post.tags as tag (tag)}
 								<span
-									class="cursor-default bg-uv-tag/10 px-1.5 py-0.5 text-[10px] font-medium tracking-wider text-uv-tag uppercase transition-colors hover:bg-uv-tag/20"
+									class="border border-uv-tag/50 bg-uv-tag/15 px-1.5 py-0.5 text-xs leading-4 text-uv-tag"
 								>
 									{tag}
 								</span>
@@ -64,16 +62,16 @@
 					{/if}
 				</div>
 
-				<h1 class="text-3xl leading-tight font-bold tracking-tight text-uv-text-main md:text-4xl">
+				<h1 class="text-lg leading-6 font-medium text-uv-text-main">
 					{data.post.title}
 				</h1>
 			</div>
 		</header>
 
 		<div
-			class="mdx-content prose prose-sm max-w-none overflow-hidden prose-invert
-				prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-uv-text-main
-				prose-p:leading-7 prose-p:font-light prose-p:text-uv-text-body
+			class="mdx-content prose max-w-none prose-invert
+				prose-headings:scroll-mt-24 prose-headings:text-sm prose-headings:leading-5 prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-uv-text-main
+				prose-p:text-uv-text-body
 				prose-a:text-uv-link prose-a:underline prose-a:decoration-uv-link/30 prose-a:underline-offset-2 prose-blockquote:border-l-ctp-pink/40 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1
 				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono

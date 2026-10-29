@@ -181,6 +181,12 @@
 	}
 
 	let width = $state(0);
+	let frameWidth = $state(0);
+	// Two columns need a diagram wide enough for a label and its sub-label, plus a
+	// step column that can hold a sentence. The post column is narrower than that,
+	// so this keys off the figure, not the viewport.
+	const SPLIT_AT = 760;
+	const split = $derived(frameWidth >= SPLIT_AT);
 	const nodeW = $derived(Math.max(0, width - PAD * 2));
 	const DOT_X = PAD + 14;
 	// JetBrains Mono advances ~0.6em; draw the sub-label only when both fit on one line
@@ -193,7 +199,7 @@
 	const off = 'border-uv-border text-uv-text-dim/70 hover:text-uv-text-main';
 </script>
 
-<div class="flex flex-col gap-3 p-4">
+<div class="flex flex-col gap-3 p-4" bind:clientWidth={frameWidth}>
 	<div
 		class="flex flex-wrap items-center gap-2 font-mono text-[11px]"
 		role="group"
@@ -243,7 +249,7 @@
 		</span>
 	</div>
 
-	<div class="grid gap-4 sm:grid-cols-2">
+	<div class="grid gap-4 {split ? 'grid-cols-2' : ''}">
 		<div bind:clientWidth={width}>
 			{#if width > 0}
 				<svg
@@ -346,7 +352,7 @@
 		<div class="flex min-w-0 flex-col gap-3 font-mono text-[11px] leading-relaxed">
 			<pre
 				class="overflow-x-auto border border-uv-border/60 bg-uv-black p-2 text-[10.5px] whitespace-pre-wrap text-uv-text-main">{current.snippet}</pre>
-			<ol class="flex flex-col gap-1" aria-live="polite">
+			<ol class="flex list-none flex-col gap-1" aria-live="polite">
 				{#each current.steps as s, i (s.stage)}
 					<li
 						class="flex gap-2 transition-opacity {i <= step ? 'opacity-100' : 'opacity-30'} {i ===
