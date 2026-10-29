@@ -86,7 +86,7 @@ export const ditherWave = [1, 3, 5].map(
  * Categorical hues for figures carrying several series: Mocha accents in a validated order.
  *
  * The order is NOT eyeballed. It was searched exhaustively over the Mocha accents and is
- * checked by `bun scripts/check-palette.ts` (OKLab deltaE x100, Machado 2009 simulation):
+ * checked by `node scripts/check-palette.ts` (OKLab deltaE x100, Machado 2009 simulation):
  * neighbours separate by >= 9 under normal, protan and deutan vision, and every pair within
  * the first three by >= 9.5. The status hues (green, yellow, red) and the accent (mauve) are
  * excluded so a series cannot impersonate either. Maroon would be slot 5 but sits 2.5 from

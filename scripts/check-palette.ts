@@ -1,7 +1,7 @@
 /**
  * Validates the categorical figure palette in src/lib/palette.ts.
  *
- * Run with `bun scripts/check-palette.ts`; exits non-zero on any failure.
+ * Run with `node scripts/check-palette.ts`; exits non-zero on any failure.
  *
  * Separation is OKLab deltaE x100. Colour-vision deficiency is simulated with the
  * Machado et al. (2009) matrices at full severity, applied in linear sRGB.

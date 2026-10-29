@@ -70,7 +70,7 @@ cycle. Do **not** pick series colours from `ctp` by hand — most Mocha pairs th
 distinct collapse under colour-vision deficiency (mauve and blue are 1.2 apart under
 protanopia), and the order is what keeps them apart.
 
-The order is not eyeballed. `bun scripts/check-palette.ts` checks it: ≥3:1 contrast
+The order is not eyeballed. `node scripts/check-palette.ts` checks it: ≥3:1 contrast
 against `surface.deep`, neighbours ≥9 apart and every pair within the first three ≥9.5
 apart (OKLab ΔE×100, worst of normal, protan and deutan vision). Re-run it before
 changing any slot. Green, yellow and red are left out because they are the status hues,
@@ -227,4 +227,4 @@ Before a figure is done:
 - [ ] Renders meaningfully before interaction; no layout shift on hydration
 - [ ] No `window`/`document` at module scope
 - [ ] Lazy-loaded if below the fold
-- [ ] `bun run check` clean; `bunx eslint <file>` clean
+- [ ] `npm run check` clean; `npx eslint <file>` clean

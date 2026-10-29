@@ -2,11 +2,11 @@
 
 ## Commands
 
-- **Package Manager**: `bun` is preferred (`bun.lock` exists). Use `bun install`, `bun run ...`.
-- **Dev Server**: `bun run dev`
-- **Type Check**: `bun run check` (runs `svelte-check`)
-- **Lint**: `bun run lint` (ESLint + Prettier)
-- **Format**: `bun run format`
+- **Package Manager**: npm, pinned by `packageManager`. Node is pinned in `.node-version` for fnm. Use `npm install`, `npm run ...`.
+- **Dev Server**: `npm run dev`
+- **Type Check**: `npm run check` (runs `svelte-check`)
+- **Lint**: `npm run lint` (ESLint + Prettier)
+- **Format**: `npm run format`
 - **Tests**: No test runner is currently configured.
 
 ## Code Style
