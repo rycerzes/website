@@ -224,9 +224,25 @@
 	font-variant-numeric: tabular-nums;
 }
 
+/* Figure lists sit in an overflow-clipped frame, so the hanging number needs
+   its own inset or the left edge is cut off. */
+.figure-literal ol {
+	padding-inline-start: 1.75rem;
+}
+
 .prose :where(li > ul, li > ol) {
 	margin-top: 0.35em;
 	padding-inline-start: 1.15em;
+}
+
+.prose :where(hr) {
+	margin-block: 1.25rem;
+	border-color: var(--color-uv-border);
+	border-top-width: 1px;
+}
+
+.prose :where(hr + *) {
+	margin-top: 0;
 }
 
 /* Global Selection Style */

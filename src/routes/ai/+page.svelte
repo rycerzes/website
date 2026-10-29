@@ -35,7 +35,7 @@
 	</aside>
 
 	<article class="w-full min-w-0">
-		<header class="relative mb-12 border-b border-dashed border-uv-mute/20 pb-8">
+		<header class="relative mb-6 border-b border-uv-border pb-4">
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-uv-text-dim">
 					<span>10-08-2026</span>

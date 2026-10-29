@@ -41,6 +41,6 @@
 	</button>
 	<pre
 		bind:this={preElement}
-		class="overflow-x-auto rounded-lg border border-uv-mute/30 bg-uv-deep/50 p-4 text-sm leading-relaxed"
+		class="overflow-x-auto border border-uv-mute/30 bg-uv-deep/50 p-4 text-sm leading-relaxed"
 		{...props}>{@render children?.()}</pre>
 </div>
