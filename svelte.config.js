@@ -6,6 +6,7 @@ import rehypeTypst from '@myriaddreamin/rehype-typst';
 import remarkMath from 'remark-math';
 import rehypeMermaidPre from './src/lib/mdx/rehype-mermaid-pre.js';
 import rehypeTypstDiagram from './src/lib/mdx/rehype-typst-diagram.js';
+import rehypeCallouts from './src/lib/mdx/rehype-callouts.js';
 
 /**
  * Svelte warns when noninteractive elements (like <pre>) have tabindex >= 0.
@@ -56,6 +57,7 @@ const config = {
 				rehypeTypst,
 				rehypeTypstDiagram,
 				rehypeMermaidPre,
+				rehypeCallouts,
 				[rehypePrettyCode, prettyCodeOptions],
 				rehypeStripPreTabindex
 			]
