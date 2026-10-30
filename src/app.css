@@ -400,6 +400,54 @@ code[data-theme*=' '] span {
 	overflow-x: auto;
 }
 
+/* GitHub-style alerts (`> [!TLDR]`), rewritten to <aside class="callout"> by rehype-callouts. */
+.mdx-content .callout {
+	margin-block: 1.5rem;
+	border: 1px solid var(--color-uv-border);
+	border-left: 2px solid var(--color-uv-highlight);
+	background: var(--color-uv-deep);
+	padding: 0.75rem 1rem;
+}
+
+.mdx-content .callout > :first-child {
+	margin-top: 0;
+}
+
+.mdx-content .callout > :last-child {
+	margin-bottom: 0;
+}
+
+.mdx-content .callout :where(ul, ol) {
+	padding-inline-start: 1.1em;
+}
+
+.mdx-content .callout .callout-title {
+	margin-bottom: 0.5rem;
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	color: var(--color-uv-highlight);
+}
+
+.mdx-content .callout-warning,
+.mdx-content .callout-caution {
+	border-left-color: var(--color-ctp-yellow);
+}
+
+.mdx-content .callout-warning .callout-title,
+.mdx-content .callout-caution .callout-title {
+	color: var(--color-ctp-yellow);
+}
+
+.mdx-content .callout-note .callout-title,
+.mdx-content .callout-tip .callout-title {
+	color: var(--color-uv-link);
+}
+
+.mdx-content .callout-note,
+.mdx-content .callout-tip {
+	border-left-color: var(--color-uv-link);
+}
+
 /* Keep Mermaid diagrams visually centered in prose content. */
 .mdx-content pre.mermaid {
 	display: flex;
