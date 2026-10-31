@@ -111,6 +111,7 @@ function replaceFigures(source: string): string {
 		out += source.slice(index, start);
 		let cursor = start + '<Figure'.length;
 		let quote: string | null = null;
+		let braces = 0;
 		let selfClosing = false;
 		let openEnd = -1;
 
@@ -124,6 +125,15 @@ function replaceFigures(source: string): string {
 				quote = char;
 				continue;
 			}
+			if (char === '{') {
+				braces++;
+				continue;
+			}
+			if (char === '}') {
+				braces = Math.max(0, braces - 1);
+				continue;
+			}
+			if (braces > 0) continue;
 			if (char === '/' && source[cursor + 1] === '>') {
 				selfClosing = true;
 				openEnd = cursor + 2;
@@ -168,7 +178,7 @@ function replaceFigures(source: string): string {
  */
 export function postToMarkdown(source: string, post: Post, page: AgentPage): string {
 	let body = source.replace(/^---[\s\S]*?---\s*/, '');
-	body = body.replace(/<script\b[\s\S]*?<\/script>/gi, '');
+	body = body.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<\/?span\b[^>]*>/gi, '');
 	body = replaceFigures(body)
 		.replace(/\n{3,}/g, '\n\n')
 		.trim();

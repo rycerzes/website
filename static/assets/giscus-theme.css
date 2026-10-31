@@ -121,10 +121,11 @@ main .gsc-comment-box-textarea::placeholder {
 	background-color: #030205;
 }
 
-.gsc-comment-box,
-.gsc-comment,
-.gsc-reactions {
-	border-radius: 0.75rem;
+/* The site has no rounded corners, including GitHub's own boxes, buttons and avatars. */
+*,
+::before,
+::after {
+	border-radius: 0 !important;
 }
 
 .gsc-is-fixed-width,

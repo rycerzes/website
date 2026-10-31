@@ -35,26 +35,24 @@
 	</aside>
 
 	<article class="w-full min-w-0">
-		<header class="relative mb-6 border-b border-uv-border pb-4">
-			<div class="flex flex-col gap-4">
-				<div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-uv-text-dim">
-					<span>10-08-2026</span>
-					<span class="text-uv-text-dim/30">•</span>
-					<span>1 min read</span>
-				</div>
-				<h1 class="text-xl leading-snug font-medium tracking-tight text-uv-text-main">
-					How I Use (and Don't Use) AI
-				</h1>
+		<header class="relative mb-8 border-b border-uv-border pb-6">
+			<h1 class="text-2xl leading-tight font-semibold tracking-tight text-uv-text-main sm:text-3xl">
+				How I Use (and Don't Use) AI
+			</h1>
+			<div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-uv-text-dim">
+				<span>10-08-2026</span>
+				<span class="text-uv-text-dim/30">•</span>
+				<span>1 min read</span>
 			</div>
 		</header>
 
 		<div
 			class="mdx-content prose max-w-none prose-invert
-				prose-headings:scroll-mt-24 prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-uv-text-main
+				prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-headings:text-uv-text-main
 				prose-p:text-uv-text-body
 				prose-a:text-uv-link prose-a:underline prose-a:decoration-uv-link/30 prose-a:underline-offset-2 prose-blockquote:border-l-ctp-pink/40 prose-blockquote:bg-uv-mute/10
 				prose-blockquote:px-4 prose-blockquote:py-1
-				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:rounded prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
+				prose-blockquote:text-uv-text-dim/60 prose-blockquote:not-italic prose-strong:font-medium prose-strong:text-uv-text-main prose-code:bg-uv-mute/30 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono
 				prose-code:text-[1em] prose-code:font-normal prose-code:text-ctp-green prose-code:before:content-none
 				prose-code:after:content-none
 				prose-li:text-uv-text-body [&_a:hover]:text-uv-link-hover [&_a:hover]:decoration-uv-link-hover

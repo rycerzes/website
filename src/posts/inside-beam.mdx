@@ -25,15 +25,13 @@ Here the unit is an expert. Beam has 12,544 routed experts, and each one got fou
 3. **Self-label.** Have Beam name the expert itself.
 4. **Ban.** Remove every expert with a given name and check what Beam can no longer answer.
 
+Beam is used in two ways: as the subject (every intervention runs inside it) and as the labeller (it named all 10,926 + poles from their top tokens, and each ban arm is every expert with a coherent Beam label of that subject). The blind judge is a different model; Beam was one of the pilot judges.
+
 ---
 
 ## beam, briefly
 
-[Beam-1.0-501B-A23B](https://huggingface.co/reflection/Beam-1.0-501B-A23B) has 52 layers: 3 dense SwiGLU layers, then 49 mixture-of-experts layers. Each MoE layer has 256 routed experts, uses 8 per token and has no shared expert (hidden size 5,120, expert width 2,560). Other details that matter for this work:
-
-- **Residual.** It uses sandwich norms and a depth-scaled residual.
-- **Format.** It speaks the Harmony format, with separate analysis (thinking) and final channels.
-- **Effort.** Reasoning effort is a line in the system prompt, `Reasoning effort: N`. It was trained on 8, 32, 64, 128, 256 and 512, and the default is 512.
+[Beam-1.0-501B-A23B](https://huggingface.co/reflection/Beam-1.0-501B-A23B) has 52 layers: 3 dense SwiGLU layers, then 49 mixture-of-experts layers. Each MoE layer has 256 routed experts, uses 8 per token and has no shared expert (hidden size 5,120, expert width 2,560). It uses sandwich norms and a depth-scaled residual, and speaks the Harmony format, with separate analysis (thinking) and final channels. Reasoning effort is a line in the system prompt, `Reasoning effort: N`, trained on 8, 32, 64, 128, 256 and 512, with 512 the default.
 
 The router is where an MoE can be edited, so it is worth seeing exactly. Each expert's selection score is `sigmoid(logit) + e_score_correction_bias`. The 256 experts sit in 8 groups of 32. A group's score is the sum of its two best experts. The router keeps the 4 best groups and takes the top 8 experts inside them. The bias only decides _which_ experts are chosen. The routing weights come from the sigmoid scores alone.
 
@@ -70,14 +68,14 @@ The plugin works like this:
 - **Bans.** Correction-bias changes apply to the whole batch. That is how the exact bans work.
 - **Capture.** It saves the residual leaving every layer and the router logits at every MoE layer, at named positions, across chunked prefill and on generated tokens.
 
-It is tested against transformers' own Beam implementation. [`vllm_tiny_check.py`](https://github.com/rycerzes/beam-inside/blob/main/scripts/vllm_tiny_check.py) builds a tiny random Beam from the real `config.json` in FP8, BF16 and NVFP4 and holds every case to the reference within the BF16 floor, in eager mode and with CUDA graphs:
+[`vllm_tiny_check.py`](https://github.com/rycerzes/beam-inside/blob/main/scripts/vllm_tiny_check.py) tests it against transformers' own Beam implementation. It builds a tiny random Beam from the real `config.json` in FP8, BF16 and NVFP4, and holds every case to the reference within the BF16 floor, in eager mode and with CUDA graphs:
 
 - **Steering.** Steered requests match their own reference to 0.016–0.028 nats, against 0.28–0.42 for the unsteered reference.
 - **Isolation.** A request run alone and inside a mixed batch differs by 0.0000.
 - **Routing.** Routing deltas match to 0.030–0.037, against a floor of about 0.15.
 - **Capture.** Captured residuals are within 0.026 relative error.
 
-**Which weights.** Every run used [Beam-1.0-501B-A23B-NVFP4](https://huggingface.co/reflection/Beam-1.0-501B-A23B-NVFP4) on 4× RTX PRO 6000 (HF Jobs). Only the routed experts are FP4 in that release. Dense layers, attention and routers stay BF16. I dequantized 48 expert `down_proj` matrices and compared them with FP8. They differ by about 9% elementwise, but their top-8 write directions agree to |cos| ≥ 0.997. Directions computed from the FP8 weights therefore transfer. The MoE kernel is Marlin (W4A16), whose numerics don't depend on what else shares the batch. That matters when steered and unsteered requests run together.
+**Which weights.** Every run used [Beam-1.0-501B-A23B-NVFP4](https://huggingface.co/reflection/Beam-1.0-501B-A23B-NVFP4) on 4× RTX PRO 6000 (HF Jobs). Only the routed experts are FP4 in that release; dense layers, attention and routers stay BF16. I dequantized 48 expert `down_proj` matrices and compared them with FP8. They differ by about 9% elementwise, but their top-8 write directions agree to |cos| ≥ 0.997, so directions computed from the FP8 weights transfer. The MoE kernel is Marlin (W4A16), whose numerics don't depend on what else shares the batch. That matters when steered and unsteered requests run together.
 
 ```python
 import os
@@ -100,17 +98,11 @@ llm.collective_rpc("beam_steer_set_bias", args=("/tmp/bans.pt",))
 llm.collective_rpc("beam_steer_reset_bias")
 ```
 
-It needs three settings:
-
-- `VLLM_USE_V2_MODEL_RUNNER=0`.
-- `async_scheduling=False`.
-- `enable_prefix_caching=False`. Cached prompt tokens skip the forward pass, so they would be neither steered nor captured.
-
-It is pinned to the nightly image `vllm/vllm-openai:nightly-5d35ce3934a7804b298559d2d99eec33792e1eb9`. The [README](https://github.com/rycerzes/beam-inside#the-plugin) lists every RPC and request key.
+It needs `VLLM_USE_V2_MODEL_RUNNER=0`, `async_scheduling=False` and `enable_prefix_caching=False` (cached prompt tokens skip the forward pass, so they would be neither steered nor captured), and is pinned to the nightly image `vllm/vllm-openai:nightly-5d35ce3934a7804b298559d2d99eec33792e1eb9`. The [README](https://github.com/rycerzes/beam-inside#the-plugin) lists every RPC and request key.
 
 ## units and doses
 
-**The unit.** For each expert, the unit is the top left singular vector of its `down_proj`: the direction it writes into the residual most strongly. I read the expert weights from the FP8 checkpoint with HTTP range requests, one tensor at a time. That reduced 3.4 GB per layer to its top 8 singular vectors, about 40 MB. Each direction has two poles. The + pole is the sign whose [logit lens](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) tokens it promotes: direction × (final norm ⊙ post-FF norm gain) against a centred `lm_head`, standardised within the layer. Those tokens are its label to start with. At layer 46 they read as multilingual concepts. For example, expert 9 promotes _say_ in several languages (說, nói, sagt, decir), and expert 0 promotes _frame_ (帧, フレ, рам).
+**The unit.** For each expert, the unit is the top left singular vector of its `down_proj`, the direction it writes into the residual most strongly. I read the expert weights from the FP8 checkpoint with HTTP range requests, one tensor at a time. That reduced 3.4 GB per layer to its top 8 singular vectors, about 40 MB. Each direction has two poles. The + pole is the sign whose [logit lens](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) tokens it promotes (direction × (final norm ⊙ post-FF norm gain) against a centred `lm_head`, standardised within the layer), and those tokens are its starting label. At layer 46 they read as multilingual concepts: expert 9 promotes _say_ in several languages (說, nói, sagt, decir), and expert 0 promotes _frame_ (帧, フレ, рам).
 
 **The push.** A push adds `direction × dose × median residual norm` to the residual leaving the expert's layer, from the first token after BOS onwards, with greedy decoding. The four prompts follow neuron-explorer, plus one for effort:
 
@@ -119,7 +111,7 @@ It is pinned to the nightly image `vllm/vllm-openai:nightly-5d35ce3934a7804b2985
 - "Describe an orange in two sentences.", at effort 8, up to 160 tokens.
 - The bat-and-ball question, at effort 32, up to 512 tokens.
 
-**The dose.** Doses are calibrated on effect, not on norm, because the same norm moves Beam very differently at different depths. At every layer, 8 random directions were pushed at seven doses. The effect is the <span class="normal-case">ΔNLL</span> Beam assigns to its own unsteered answers, in nats per token.
+**The dose.** Doses are calibrated on effect, not norm, because the same norm moves Beam very differently at different depths. At every layer, 8 random directions were pushed at seven doses; the effect is the <span class="normal-case">ΔNLL</span> Beam assigns to its own unsteered answers, in nats per token.
 
 <Figure
 	height={360}
@@ -127,15 +119,15 @@ It is pinned to the nightly image `vllm/vllm-openai:nightly-5d35ce3934a7804b2985
 	load={() => import('$lib/components/figures/DoseCliff.svelte')}
 />
 
-The response is a cliff, not a slope. Below the threshold Beam barely reacts, with <span class="normal-case">ΔNLL</span> under 0.05. Past it, <span class="normal-case">ΔNLL</span> is 1.5–3.5 nats per token, and the output degenerates into repetition. τ\* is the median, over layers, of the <span class="normal-case">ΔNLL</span> at the largest coherent dose: 0.38. Each layer's sweep pushes at the dose where random directions reach 0.4τ\* and τ\*, and at −τ\* for the − pole.
+The response is a cliff, not a slope. Below the threshold Beam barely reacts (<span class="normal-case">ΔNLL</span> under 0.05); past it, <span class="normal-case">ΔNLL</span> is 1.5–3.5 nats per token and the output degenerates into repetition. τ\*, the median over layers of the <span class="normal-case">ΔNLL</span> at the largest coherent dose, is 0.38. Each layer's sweep pushes at the doses where random directions reach 0.4τ\* and τ\*, and at −τ\* for the − pole.
 
-Expert directions are not random directions. At equal norm, expert pushes up to layer 19 moved Beam **5–40× less** than random ones (<span class="normal-case">ΔNLL</span> 0.01–0.09 against 0.2–0.4). Around layer 24 the two are about equal. From layer 48 on, expert pushes move Beam **6–10× more** than random ones and collapse into repetition. The early network absorbs its own experts' writes, and the late network amplifies them.
+Expert directions are not random directions. At equal norm, expert pushes up to layer 19 moved Beam **5–40× less** than random ones (<span class="normal-case">ΔNLL</span> 0.01–0.09 against 0.2–0.4). Around layer 24 the two are about equal. From layer 48 on, expert pushes move Beam **6–10× more** than random ones and collapse into repetition. The early network absorbs its own experts' writes; the late network amplifies them.
 
 ## which experts steer
 
-The sweep pushed every expert's top direction, at both poles and both doses. It also pushed 48 dense-layer neurons and 832 random controls. 12,066 of the 12,544 experts have data.
+The sweep pushed every expert's top direction at both poles and both doses, plus 48 dense-layer neurons and 832 random controls. 12,066 of the 12,544 experts have data.
 
-**The test.** A pole's _theme_ is the set of words its steered outputs share. Comparing it with controls of the same norm is unfair: experts and controls move Beam by very different amounts, and theme scores rise with the effect. Each pole is therefore compared with an effect-matched null: the controls within ±8 layers whose own <span class="normal-case">ΔNLL</span> is within 1.5× of the pole's. A pole is significant when its theme score beats 95% of that null. A pole stronger than every nearby control has no fair null and is marked untestable. That happens mostly in layers 48+.
+**The test.** A pole's _theme_ is the set of words its steered outputs share. Experts and controls move Beam by very different amounts, and theme scores rise with the effect, so equal-norm controls would be unfair. Each pole is instead compared with an effect-matched null: the controls within ±8 layers whose own <span class="normal-case">ΔNLL</span> is within 1.5× of the pole's. A pole is significant when its theme score beats 95% of that null. Poles stronger than every nearby control (mostly in layers 48+) have no fair null and are marked untestable.
 
 **2,092 poles are significant, against 1,128 expected by chance.**
 
@@ -145,7 +137,7 @@ The sweep pushed every expert's top direction, at both poles and both doses. It 
 	load={() => import('$lib/components/figures/DepthProfile.svelte')}
 />
 
-The readable experts sit in layers 24–39, where 17–20% of poles pass. Early layers (MoE layers 3–23) pass 0–5%, and the judge (next section) is at chance on their few hits. Read those as false positives of the theme metric, not as units. At these doses the early layers stay unmeasured rather than shown empty. Layers 48+ collapse before a push reads as a theme.
+The readable experts sit in layers 24–39, where 17–20% of poles pass. Early layers (MoE layers 3–23) pass 0–5%, and the judge (next section) is at chance on their few hits, so read those as false positives of the theme metric, not as units. At these doses the early layers stay unmeasured rather than shown empty. Layers 48+ collapse before a push reads as a theme.
 
 What a significant expert looks like:
 
@@ -172,16 +164,16 @@ Some examples:
 | significant, confident    | **98.7%**     | 670   |
 | label from the other pole | 34.7%         | 464   |
 
-The last row is a control. Given the tokens of the _other_ pole of the same direction, the judge is at chance. It reads the label rather than guessing from how strongly an output was disturbed.
+The last row is a control: given the tokens of the _other_ pole of the same direction, the judge is at chance. It reads the label rather than guessing from how strongly an output was disturbed.
 
-**Beam names its own experts.** [Li et al.](https://arxiv.org/abs/2511.08579) find that a model can explain its own computations better than another model can, so I asked Beam. Through HF Inference Providers (Baseten), at low effort, Beam saw a pole's 12 top tokens and nothing else. It never saw the steered outputs or the answer key. It returned a name, a description, a subject from a fixed list and whether the tokens form a coherent concept. It named all 10,926 + poles. Names read like "exponentiation and squaring", "identity and credential documents" and "Japanese language and locale".
+**Beam names its own experts.** [Li et al.](https://arxiv.org/abs/2511.08579) find that a model can explain its own computations better than another model can, so I asked Beam. Through HF Inference Providers (Baseten), at low effort, it saw only a pole's 12 top tokens (never the steered outputs or the answer key) and returned a name, a description, a subject from a fixed list and whether the tokens form a coherent concept. It named all 10,926 + poles: "exponentiation and squaring", "identity and credential documents", "Japanese language and locale".
 
 - **Names hold up.** The judge given Beam's two-to-six-word names instead of 12 raw tokens scores **71.3%** on significant poles against 49.2% on random ones.
-- **Beam knows which of its experts are readable.** Poles Beam calls coherent are steering-significant **19.5%** of the time, against 5.6% for the ones it calls incoherent: 3.5×. The flag is judged from tokens alone and significance from behaviour alone, since the theme metric never reads the tokens, so the comparison is not circular. Coherence rises with depth, from 29% in layers 3–7 to 90% in 32–39. That is the same curve the judge draws, from Beam's side.
+- **Beam knows which of its experts are readable.** Poles Beam calls coherent are steering-significant **19.5%** of the time, against 5.6% for those it calls incoherent (3.5×). The flag comes from tokens alone and significance from behaviour alone (the theme metric never reads the tokens), so this is not circular. Coherence rises with depth, from 29% in layers 3–7 to 90% in 32–39: the judge's curve, from Beam's side.
 
 <Figure
 	height={560}
-	caption="A map of all 12,544 experts: UMAP (cosine, 20 neighbours) of each expert's top write direction, coloured blue (early) to peach (late). Pick a subject to highlight the experts Beam gave it; larger points steer beyond controls."
+	caption="A map of all 12,544 experts: UMAP (cosine, 20 neighbours) of each expert's top write direction, coloured by depth from teal (early) through blue and pink to peach (late). Pick a subject to highlight the experts Beam gave it; larger points steer beyond controls."
 	load={() => import('$lib/components/figures/ExpertMap.svelte')}
 />
 
@@ -191,7 +183,7 @@ The map's horizontal axis follows depth (r = 0.82 with layer), although depth wa
 
 Steering shows what an expert writes. Banning it shows what Beam needs it for.
 
-- **Arms.** Each subject arm bans every expert with a coherent Beam label of that subject: 143 for law, 165 for health and 588 for math. Each ban sets the expert's correction bias to −1000 for the whole batch.
+- **Arms.** Each subject arm bans every expert with a coherent Beam label of that subject (143 for law, 165 for health, 588 for math) by setting its correction bias to −1000 for the whole batch.
 - **Controls.** Each arm's control bans the same number of experts per layer, none labelled with a tested subject. Each control expert is matched to a banned one on routing load. The load is the per-expert routing count in `reap_saliency.json` from [mrfakename/Beam-1.0-REAP-255B-A23B](https://huggingface.co/mrfakename/Beam-1.0-REAP-255B-A23B) (Apache-2.0). Every arm keeps at least 2 experts in every routing group.
 - **Scoring.** [MMLU-Pro](https://huggingface.co/datasets/TIGER-Lab/MMLU-Pro), all 12,032 questions, without thinking. The prompt closes the analysis channel and opens the final answer at "The answer is (". The score is the log-probabilities of the option letters, renormalised over the letters. Each arm runs in about 6 minutes on the 4 GPUs. Ban and control are compared question by question (exact McNemar).
 
@@ -209,20 +201,13 @@ The three bans compared:
 - **Health** (165 experts): **−6.5** on health (p = 4e-8), −0.1 on everything else.
 - **Math** (588 experts): **−8.7** on math (p = 3e-14), and also physics −9.2, chemistry −7.9, economics −6.2, business −4.8 and health −3.7. History, philosophy and psychology move by about 1 point.
 
-Law and health behave like subjects: remove the experts Beam names for them and Beam loses that subject and nothing else. "Math" is wider than its name. Those experts carry quantitative work across every number-heavy subject, and the verbal subjects don't notice them gone. The labels come from what each expert _writes_, its top tokens. The bans show that, for these three subjects, this also tells you what Beam _uses_ it for.
+Law and health behave like subjects: remove the experts Beam names for them and Beam loses that subject and nothing else. "Math" is wider than its name: those experts carry quantitative work across every number-heavy subject, and the verbal subjects don't notice them gone. The labels come from what each expert _writes_, its top tokens. The bans show that, for these three subjects, this also tells you what Beam _uses_ it for.
 
 ## the effort dial
 
 Effort reaches Beam as a number in the system prompt. Two questions: where is it represented, and can it be moved from inside?
 
-**Reading it out.** I ran 200 [GSM8K](https://huggingface.co/datasets/openai/gsm8k) questions at efforts 2 to 1000 and captured the residual leaving every layer at five positions:
-
-- the last digit of N;
-- the end of the system message;
-- the token that opens thinking;
-- the first two thought tokens.
-
-At each layer I fit one linear direction to log₂ N and scored it on held-out questions, as in [Sheng et al.](https://arxiv.org/abs/2506.08390)
+**Reading it out.** I ran 200 [GSM8K](https://huggingface.co/datasets/openai/gsm8k) questions at efforts 2 to 1000 and captured the residual leaving every layer at five positions: the last digit of N, the end of the system message, the token that opens thinking and the first two thought tokens. At each layer I fit one linear direction to log₂ N and scored it on held-out questions, as in [Sheng et al.](https://arxiv.org/abs/2506.08390)
 
 <Figure
 	height={340}
@@ -237,9 +222,9 @@ At each layer I fit one linear direction to log₂ N and scored it on held-out q
 | start of thinking     | 0.981                               | 20    |
 | first thought tokens  | 0.50–0.64                           | 22    |
 
-The digit's <span class="normal-case">R²</span> is mostly the token itself. The other two positions show the number being carried forward to where thinking starts. Values outside the trained range are clamped rather than computed. At layer 12, effort 2 reads as about 11, above effort 8. In behaviour, effort 2 thinks for 170 tokens on GSM8K, between effort 8 (108) and effort 16 (167). Beam reads the number as a position on a learned scale, not as arithmetic.
+The digit's <span class="normal-case">R²</span> is mostly the token itself. The end of the system message and the start of thinking show the number being carried forward to where thinking starts. Values outside the trained range are clamped rather than computed. At layer 12, effort 2 reads as about 11, above effort 8. In behaviour, effort 2 thinks for 170 tokens on GSM8K, between effort 8 (108) and effort 16 (167). Beam reads the number as a position on a learned scale, not as arithmetic.
 
-**Routing follows it.** The token that opens thinking is the same at every effort, so any difference in its routing comes from the setting alone. I recomputed Beam's grouped selection from the captured router logits. 192 experts change their selection rate between effort 8 and effort 512 by more than a shuffled-label control allows. Many are all-or-nothing switches in layers 15–22. Layer 21 expert 62 goes from 0% to 100%. Layer 18 expert 97 goes from 100% to 0%, and layer 22 expert 78 from 99% to 1%.
+**Routing follows it.** The token that opens thinking is the same at every effort, so any difference in its routing comes from the setting alone. I recomputed Beam's grouped selection from the captured router logits. 192 experts change their selection rate between effort 8 and effort 512 by more than a shuffled-label control allows. Many are all-or-nothing switches in layers 15–22: layer 21 expert 62 goes from 0% to 100%, layer 18 expert 97 from 100% to 0%, and layer 22 expert 78 from 99% to 1%.
 
 <Figure
 	height={470}
@@ -247,7 +232,7 @@ The digit's <span class="normal-case">R²</span> is mostly the token itself. The
 	load={() => import('$lib/components/figures/EffortRoute.svelte')}
 />
 
-**Moving it from inside.** GSM8K saturates at effort 64, so the interventions ran on 100 competition problems instead: [AIME 2024](https://huggingface.co/datasets/HuggingFaceH4/aime_2024), [AIME 2025](https://huggingface.co/datasets/MathArena/aime_2025) and [AMC 2023](https://huggingface.co/datasets/math-ai/amc23). Each problem got one greedy run with a 12k-token thinking cap. Every intervention starts from effort 8 and has a matched random control.
+**Moving it from inside.** GSM8K saturates at effort 64, so the interventions ran on 100 competition problems ([AIME 2024](https://huggingface.co/datasets/HuggingFaceH4/aime_2024), [AIME 2025](https://huggingface.co/datasets/MathArena/aime_2025), [AMC 2023](https://huggingface.co/datasets/math-ai/amc23)), one greedy run each with a 12k-token thinking cap. Every intervention starts from effort 8 and has a matched random control.
 
 <Figure
 	height={420}
@@ -255,9 +240,9 @@ The digit's <span class="normal-case">R²</span> is mostly the token itself. The
 	load={() => import('$lib/components/figures/EffortArms.svelte')}
 />
 
-- **The dial saturates at 32.** Effort 8 solves 80%. Efforts 32, 128 and 512 solve 93%, 93% and 92%. Effort 512 spends 2.55× effort 8's thinking for nothing more, and 8 of its 100 runs hit the 12k cap. On AIME alone, effort 8 is at 67% (2024) and 70% (2025).
+- **The dial saturates at 32.** Effort 8 solves 80%; efforts 32, 128 and 512 solve 93%, 93% and 92%. Effort 512 spends 2.55× effort 8's thinking for nothing more, and 8 of its 100 runs hit the 12k cap. On AIME alone, effort 8 is at 67% (2024) and 70% (2025).
 - **The digit is a specific but weak lever.** At effort 8, I added the difference between the mean residual at N's digit for effort 512 and for effort 8, at layer 12, on that one position. Thinking lengthened 1.20× relative to a random vector of the same norm at the same place (Wilcoxon p = 5e-8). The random vector left thinking unchanged (1.00×). The accuracy edge, 90% against 85%, is not significant (p = 0.27).
-- **Low effort is fragile.** I routed the 37 experts whose selection tracks effort as they are at effort 512 (19 forced in, 18 banned), on the prompt tokens only. That lifted effort 8 from 80% to 91%, with 1.80× the thinking. Routing 37 _random_ experts the same way lifted it to 94%, with 1.74× the thinking. The two are indistinguishable (p = 0.45). Almost any disturbance of the prompt's routing knocks Beam out of its low-effort mode into roughly effort-32 behaviour. The effort experts mark the setting; they are not a switch for it.
+- **Low effort is fragile.** Routing the 37 experts whose selection tracks effort as they are at effort 512 (19 forced in, 18 banned), on the prompt tokens only, lifted effort 8 from 80% to 91% with 1.80× the thinking. Routing 37 _random_ experts the same way lifted it to 94%, with 1.74× the thinking. The two are indistinguishable (p = 0.45). Almost any disturbance of the prompt's routing knocks Beam out of its low-effort mode into roughly effort-32 behaviour. The effort experts mark the setting; they are not a switch for it.
 
 ## using it
 
