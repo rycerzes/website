@@ -245,6 +245,31 @@
 	margin-top: 0;
 }
 
+/* Heading scale under the page title (h1, 1.5–1.875rem); body copy is 0.875rem. */
+.mdx-content :where(h2) {
+	margin-top: 2.25em;
+	margin-bottom: 0.75em;
+	font-size: 1.25rem;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.mdx-content :where(h3) {
+	margin-top: 1.75em;
+	margin-bottom: 0.5em;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.mdx-content :where(h4) {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
 /* Global Selection Style */
 ::selection {
 	background: color-mix(in srgb, var(--color-ctp-overlay2) 30%, transparent);
