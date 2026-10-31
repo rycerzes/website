@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { accent, border, surface, text as ink } from '$lib/palette';
-	import { beamData, depthColour } from '$lib/figures/insideBeam';
+	import { accent, border, spectrum, surface, text as ink } from '$lib/palette';
+	import { beamData, depthColour, FIRST_MOE_LAYER, LAST_LAYER } from '$lib/figures/insideBeam';
 
 	// [layer, expert, x, y, subject index, significant, coherent, name]
 	type Point = [number, number, number, number, number, number, number, string];
@@ -141,6 +141,24 @@
 			class="{btn} border-uv-border text-uv-text-dim/70 hover:text-uv-text-main"
 			>random labelled expert</button
 		>
+	</div>
+
+	<div class="flex items-center gap-2 text-uv-text-dim/70" aria-hidden="true">
+		<span>layer {FIRST_MOE_LAYER}</span>
+		<span
+			class="h-2 w-40 max-w-full"
+			style="background: linear-gradient(to right, {spectrum.join(
+				', '
+			)}); border: 1px solid {border.default}; border-radius: 2px; opacity: {subject >= 0
+				? 0.35
+				: 1}"
+		></span>
+		<span>layer {LAST_LAYER}</span>
+		{#if subject >= 0}
+			<span class="ml-2 inline-block size-2" style="background: {accent}; border-radius: 2px"
+			></span>
+			<span>{data.subjects[subject]}</span>
+		{/if}
 	</div>
 
 	{#if width > 0}

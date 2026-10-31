@@ -98,6 +98,7 @@
 		Layer {layer}{layer < 3 ? ' (dense)' : ''}: <span class="normal-case">ΔNLL</span> stays under τ*
 		up to
 		<span class="text-uv-text-main">{edge}×</span> the median residual norm. One dose step later it is
-		usually an order of magnitude higher. Faint lines are the other 51 layers, blue early to peach late.
+		usually an order of magnitude higher. Faint lines are the other 51 layers, teal early through blue
+		and pink to peach late.
 	</p>
 </div>

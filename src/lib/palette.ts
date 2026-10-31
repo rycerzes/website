@@ -106,6 +106,20 @@ export const series = {
 export const categorical = [series.blue, series.peach, series.teal, series.sapphire] as const;
 
 /**
+ * Ordered hue sweep for sequential data such as layer depth: interpolate along it, never pick
+ * single stops as categories. It skips the status hues and the accent, so no point on the ramp
+ * reads as a state or as the current selection.
+ */
+export const spectrum = [
+	ctp.teal,
+	ctp.sapphire,
+	ctp.blue,
+	ctp.lavender,
+	ctp.pink,
+	ctp.peach
+] as const;
+
+/**
  * Scatter-like figures (roofline, bubble, small multiples) need every pair to separate,
  * not just neighbours. Only the first three slots clear all-pairs CVD; slot 4 collapses
  * into slot 1 (deltaE 4.5 deutan). More than three series there means faceting, not more hues.
@@ -134,6 +148,7 @@ export const palette = {
 	ditherWave,
 	series,
 	categorical,
+	spectrum,
 	semantic,
 	ALL_PAIRS_SAFE_SERIES
 } as const;

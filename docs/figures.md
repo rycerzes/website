@@ -81,6 +81,12 @@ Scatter-like figures (roofline, bubble, small multiples) need _every_ pair to se
 not just neighbours, and only the first `ALL_PAIRS_SAFE_SERIES` (3) slots clear that.
 More than three series there means faceting, not more hues.
 
+Ordered quantities (layer depth, time, dose) take `spectrum` instead: teal → sapphire → blue →
+lavender → pink → peach, interpolated, never sampled as categories. It skips the status hues
+and the accent, so no point on it reads as a state or the current selection. Ordered hue plus
+lightness is enough under CVD because neighbours only need to read as "earlier" or "later";
+anything that needs exact values gets a legend or a hover readout.
+
 `semantic` carries reserved state colours (pass/warn/fail). Never reuse them as a series,
 and never let one carry meaning alone — always pair with a label. Under deuteranopia pass
 sits 2.9 from warn and 3.8 from `series.peach`; the label is what carries the state. The
