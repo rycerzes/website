@@ -147,7 +147,7 @@ export function llmsTxt(): string {
 	const writing = getPosts()
 		.map((post) => {
 			const blurb = post.excerpt ? `: ${post.excerpt}` : '';
-			return `- [${post.title}](${SITE_ORIGIN}/blog/${post.slug})${blurb}`;
+			return `- [${post.title}](${SITE_ORIGIN}/blog/${post.slug}.md)${blurb}`;
 		})
 		.join('\n');
 
