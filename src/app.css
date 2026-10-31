@@ -203,7 +203,6 @@
 	top: 0.68em;
 	width: 0.28em;
 	height: 0.28em;
-	border-radius: 999px;
 	background: var(--color-uv-highlight);
 }
 
@@ -243,6 +242,11 @@
 
 .prose :where(hr + *) {
 	margin-top: 0;
+}
+
+/* The site has no rounded corners; the typography plugin rounds these by default. */
+.prose :where(pre, code, kbd, img, video, figure) {
+	border-radius: 0;
 }
 
 /* Heading scale under the page title (h1, 1.5–1.875rem); body copy is 0.875rem. */
@@ -339,7 +343,6 @@ pre code * {
 ::-webkit-scrollbar-thumb {
 	background: var(--color-uv-mute);
 	border: 2px solid var(--color-uv-black); /* Padding effect */
-	border-radius: 2px; /* Slight rounding for retro feel but not too round */
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -483,12 +486,16 @@ code[data-theme*=' '] span {
 	margin-inline: auto;
 }
 
+/* Mermaid writes the tooltip's radius as an inline style. */
+body div.mermaidTooltip {
+	border-radius: 0 !important;
+}
+
 .mdx-content img[src*='/assets/blog/template-conditioned-relation-detr/'] {
 	display: block;
 	max-width: 100%;
 	height: auto;
 	margin: 1.5rem auto;
-	border-radius: 0.75rem;
 }
 
 .mdx-content .typst-diagram svg {
@@ -496,7 +503,6 @@ code[data-theme*=' '] span {
 	max-width: 100%;
 	height: auto;
 	margin: 1.5rem auto;
-	border-radius: 0.75rem;
 }
 
 .mdx-content svg.typst-doc {
@@ -508,7 +514,6 @@ code[data-theme*=' '] span {
 .mdx-content .typst-diagram-error {
 	margin: 1.5rem 0;
 	overflow-x: auto;
-	border-radius: 0.75rem;
 	border: 1px solid color-mix(in srgb, var(--color-ctp-red) 45%, transparent);
 	background: var(--color-uv-error);
 	padding: 1rem;
@@ -546,5 +551,4 @@ pre code .line.highlighted {
 pre code .word {
 	background-color: color-mix(in srgb, var(--color-ctp-overlay2) 25%, transparent);
 	padding: 0.125rem 0.25rem;
-	border-radius: 0.25rem;
 }

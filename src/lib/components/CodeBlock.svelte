@@ -28,7 +28,7 @@
 <div class="group not-prose relative my-4">
 	<button
 		onclick={copyCode}
-		class="absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-md border border-uv-mute/50 bg-uv-deep/80 px-2.5 py-1.5 font-mono text-xs text-uv-text-dim opacity-0 shadow-sm backdrop-blur-sm transition-all group-hover:opacity-100 hover:border-uv-highlight/50 hover:bg-uv-deep hover:text-uv-highlight"
+		class="absolute top-3 right-3 z-10 flex items-center gap-1.5 border border-uv-mute/50 bg-uv-deep/80 px-2.5 py-1.5 font-mono text-xs text-uv-text-dim opacity-0 shadow-sm backdrop-blur-sm transition-all group-hover:opacity-100 hover:border-uv-highlight/50 hover:bg-uv-deep hover:text-uv-highlight"
 		aria-label="Copy code"
 	>
 		{#if copied}

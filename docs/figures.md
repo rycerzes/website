@@ -126,8 +126,8 @@ sans stack — a figure in a different typeface reads as an embed from another s
 This split keeps controls accessible and stylable with Tailwind, and keeps the SVG
 layer purely about geometry.
 
-Legend swatches: 12×12px, `border-radius: 2px`, 1px `border.default` border — matching
-the retro-but-not-round radius used elsewhere in `app.css`.
+Legend swatches: 12×12px, square corners, 1px `border.default` border. Nothing on the site
+has rounded corners.
 
 ## 8. Rendering ladder
 

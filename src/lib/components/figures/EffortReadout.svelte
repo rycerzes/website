@@ -46,7 +46,7 @@
 					: 'text-uv-text-dim'}"
 			>
 				<span
-					class="inline-block h-3 w-3 rounded-[2px] border"
+					class="inline-block h-3 w-3 border"
 					style="background: {off ? 'transparent' : s.colour}; border-color: {border.default}"
 				></span>
 				{s.name}

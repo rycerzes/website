@@ -85,8 +85,8 @@
 					? 'border-uv-highlight bg-uv-raised text-uv-text-main'
 					: 'border-uv-border text-uv-text-dim/70 hover:text-uv-text-main'}"
 			>
-				<span class="inline-block h-2.5 w-2.5 rounded-[2px]" style="background: {colour(k)}"
-				></span>{ABOUT[k].name}
+				<span class="inline-block h-2.5 w-2.5" style="background: {colour(k)}"></span>{ABOUT[k]
+					.name}
 			</button>
 		{/each}
 	</div>

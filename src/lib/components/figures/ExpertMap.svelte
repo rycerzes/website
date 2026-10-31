@@ -149,14 +149,11 @@
 			class="h-2 w-40 max-w-full"
 			style="background: linear-gradient(to right, {spectrum.join(
 				', '
-			)}); border: 1px solid {border.default}; border-radius: 2px; opacity: {subject >= 0
-				? 0.35
-				: 1}"
+			)}); border: 1px solid {border.default}; opacity: {subject >= 0 ? 0.35 : 1}"
 		></span>
 		<span>layer {LAST_LAYER}</span>
 		{#if subject >= 0}
-			<span class="ml-2 inline-block size-2" style="background: {accent}; border-radius: 2px"
-			></span>
+			<span class="ml-2 inline-block size-2" style="background: {accent}"></span>
 			<span>{data.subjects[subject]}</span>
 		{/if}
 	</div>
