@@ -36,11 +36,13 @@ function parsePostDate(date: string): number {
 function stripReadableMarkdown(source: string): string {
 	return source
 		.replace(/^---[\s\S]*?---/, ' ')
+		.replace(/^##\s+references\b[\s\S]*/im, ' ')
 		.replace(/```[\s\S]*?```/g, ' ')
 		.replace(/`[^`]*`/g, ' ')
 		.replace(/^\s*(import|export)\s.+$/gm, ' ')
 		.replace(/<script[\s\S]*?<\/script>/gi, ' ')
 		.replace(/<style[\s\S]*?<\/style>/gi, ' ')
+		.replace(/<[A-Z][\s\S]*?\/>/g, ' ')
 		.replace(/<[^>]+>/g, ' ')
 		.replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
 		.replace(/\[([^\]]+)]\([^)]*\)/g, '$1')
