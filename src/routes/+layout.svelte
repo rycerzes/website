@@ -152,6 +152,10 @@
 			>
 			<a
 				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
+				href={resolve('/projects')}>Projects</a
+			>
+			<a
+				class="border-b border-transparent pb-1 tracking-wide text-uv-text-dim transition-colors hover:border-uv-highlight/50 hover:text-uv-text-main"
 				href="https://github.com/rycerzes/resume/blob/main/resume.pdf"
 				target="_blank">Resume</a
 			>

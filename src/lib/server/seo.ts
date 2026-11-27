@@ -1,4 +1,5 @@
 import { getPost, getPosts } from '$lib/posts';
+import { getProject, getProjects } from '$lib/projects';
 
 export const SITE_ORIGIN = 'https://rycerz.es';
 export const SITE_NAME = 'swappy';
@@ -29,6 +30,10 @@ const PAGES: Record<string, { title: string; description: string }> = {
 	'/blog': {
 		title: `blog | ${SITE_NAME}`,
 		description: 'Incomplete notes, thoughts, and tools.'
+	},
+	'/projects': {
+		title: `projects | ${SITE_NAME}`,
+		description: 'Selected experiments and things built: RL environments, verifiers, and agents.'
 	},
 	'/about': {
 		title: `about | ${SITE_NAME}`,
@@ -108,6 +113,13 @@ export function seoFor(pathname: string): PageSeo {
 	let type: 'website' | 'article' = 'website';
 	let datePublished: string | undefined;
 
+	const projectMatch = /^\/projects\/([^/]+)$/.exec(path);
+	const project = projectMatch ? getProject(projectMatch[1]) : undefined;
+	if (project) {
+		title = `${project.title} | ${SITE_NAME}`;
+		description = project.description || DEFAULT_DESCRIPTION;
+	}
+
 	if (post) {
 		title = `${post.title} | ${SITE_NAME}`;
 		description = post.excerpt || DEFAULT_DESCRIPTION;
@@ -129,7 +141,15 @@ export function seoFor(pathname: string): PageSeo {
 }
 
 export function sitemapXml(): string {
-	const paths = ['/', '/blog', '/about', '/ai', ...getPosts().map((post) => `/blog/${post.slug}`)];
+	const paths = [
+		'/',
+		'/blog',
+		'/projects',
+		'/about',
+		'/ai',
+		...getProjects().map((project) => `/projects/${project.slug}`),
+		...getPosts().map((post) => `/blog/${post.slug}`)
+	];
 	const urls = paths
 		.map((path) => {
 			const loc = path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${path}`;
@@ -161,6 +181,7 @@ Content-Signal: ${CONTENT_SIGNAL}
 
 - [Home](${SITE_ORIGIN}/): engineering notes
 - [Blog](${SITE_ORIGIN}/blog): notes and writeups
+- [Projects](${SITE_ORIGIN}/projects): selected experiments and things built
 - [About](${SITE_ORIGIN}/about): background and what he is working on
 - [How I Use (and Don't Use) AI](${SITE_ORIGIN}/ai): what is written by hand
 
