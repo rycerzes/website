@@ -1,0 +1,14 @@
+---
+title: 'repo codex'
+description: 'ask questions about a codebase and get a generated wiki for it'
+date: '2026-04-05'
+tag: 'uni project'
+featured: false
+links:
+  - label: 'github'
+    href: 'https://github.com/3xcaffeine/repo-codex'
+---
+
+ingests a repository, builds a searchable index over it, answers questions about the code with streaming responses, and generates wiki-style documentation pages.
+
+code is chunked along the syntax tree with tree-sitter, and retrieval mixes semantic vectors with bm25 keyword ranking. ingestion runs as tracked jobs with retry and cancellation. built with tanstack start, postgres + drizzle and bullmq.

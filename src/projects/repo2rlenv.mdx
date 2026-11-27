@@ -1,0 +1,36 @@
+---
+title: 'repo2rlenv'
+description: 'made swe rl graders reward the fix, not the test hack'
+date: '2026-11-10'
+featured: true
+links:
+  - label: 'prs'
+    href: 'https://github.com/huggingface/Repo2RLEnv/pulls?q=is%3Apr+author%3Arycerzes'
+  - label: 'repo'
+    href: 'https://github.com/huggingface/Repo2RLEnv'
+---
+
+[Repo2RLEnv](https://github.com/huggingface/Repo2RLEnv) turns merged GitHub PRs into RL tasks for coding agents. the agent gets the repo at the commit before the fix plus the issue, and the PR's own tests decide the reward.
+
+i wanted to know whether a reward of 1.0 actually meant the bug was fixed. so i ran a reward-hacking audit against it: an agent's only job was to score 1.0 without fixing anything. it found 18 separate ways in.
+
+## what broke
+
+most pipelines graded inside the agent's own container, after the agent had run as root in it. so the agent could change the grader instead of the code:
+
+- a `conftest.py` in the workspace that marks every test as passed
+- an `os._exit(0)` at import time, so pytest exits 0 having run nothing
+- a force-pass hook registered on the live pytest config by the module under test
+- forged `PASSED` lines that the log parser accepted
+
+in four pipelines, patches that left the bug in place scored 1.0. the diff pipeline scored non-fixes 0.9+ when no judge was configured, and an agent could make it print the reference fix through its own `.git/config`.
+
+## the fix
+
+- **a separate verifier.** only the agent's diff leaves its container. it gets applied to a clean checkout, test files and runner config come from the base commit, and the tests run as an unprivileged user with no network. task validation goes through the same path, with three reference runs to drop flaky tests.
+- **ungraded runs write no reward.** if the infra fails, rl drops the run instead of training on a false 0. failures the agent can cause still score 0.
+- **mutant runs.** flip the expected value in a hidden assertion and run again. if that test still passes, the results were forged. works for python, go, rust and js/ts tests, checked on modal and daytona.
+
+the verifier pr alone was +6.8k lines, and every one of three review rounds still found a real reward-1 forgery before it merged. since then i've kept sending smaller fixes to validation and the pr_runtime pipeline.
+
+the lesson: a test suite that rewards the right fix is not the same as one that rejects a wrong one. attack your own verifier before a model does.

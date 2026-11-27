@@ -1,0 +1,35 @@
+---
+title: 'inside beam'
+description: 'a steering-first map of all 12,544 experts in a 501B moe'
+date: '2026-10-30'
+tag: 'hackathon'
+featured: true
+links:
+  - label: 'github'
+    href: 'https://github.com/rycerzes/beam-inside'
+  - label: 'space'
+    href: 'https://huggingface.co/spaces/rycerzes/inside-beam'
+  - label: 'dataset'
+    href: 'https://huggingface.co/datasets/rycerzes/beam-expert-atlas'
+  - label: 'blog'
+    href: '/blog/inside-beam'
+---
+
+built for reflection and hugging face's _build with beam_ contest. every other entry measured beam-1.0 (a 501b mixture-of-experts) from the outside, with benchmarks, effort sweeps and quantizations. i wanted to open it up and ask what each of its 12,544 routed experts actually does.
+
+## how
+
+i wrote **beam-steer**, a vllm plugin that can add a steering direction to the residual stream at a chosen layer, and ban exact experts by lowering their routing bias. then every expert got four tests:
+
+1. **push** its top write direction into the running model and check the output drifts toward a theme more than random controls do
+2. **label:** a blind judge matches that theme to the expert's top tokens
+3. **self-label:** beam names the expert itself
+4. **ban** every expert with a given label and see what beam can no longer answer
+
+## what came out
+
+- **2,092** expert directions steer beam beyond matched random controls, mostly in layers 24–39. given their top tokens, the blind judge picks the right output 70% of the time (chance is 33%).
+- banning the 143 experts beam labels _law_ costs **13.4 points** on mmlu-pro law and nothing on any other subject.
+- reasoning effort 32 matches effort 512 on aime/amc with 21% less thinking.
+
+the full writeup has the method and figures, and the explorer lets you browse every expert.
