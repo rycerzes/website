@@ -1,0 +1,14 @@
+---
+title: 'fashion tagging engine'
+description: 'finds fashion items in videos and matches them to a catalog'
+date: '2025-06-28'
+tag: 'uni project'
+featured: false
+links:
+  - label: 'github'
+    href: 'https://github.com/rycerzes/tagging-engine'
+  - label: 'demo'
+    href: 'https://www.loom.com/share/5b447e689c724fa0ab940b907a22ef33'
+---
+
+takes a video or image, detects fashion items with grounding dino, cuts them out with sam 2, drops near-duplicates with faiss, then embeds them with clip and searches a qdrant catalog for similar products. gemini adds a transcript, descriptions and a read on the overall vibe. served as a fastapi app.

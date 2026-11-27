@@ -1,0 +1,33 @@
+---
+title: 'openenv'
+description: 'core contributor: environment spec, concurrent sessions, qed math and posttrain_env'
+date: '2026-10-27'
+featured: true
+links:
+  - label: 'merged prs'
+    href: 'https://github.com/openenv/OpenEnv/pulls?q=is%3Apr+author%3Arycerzes+is%3Amerged'
+  - label: 'qed math'
+    href: 'https://github.com/3xcaffeine/qed-math-openenv'
+  - label: 'mario'
+    href: 'https://github.com/3xcaffeine/mario-openenv'
+---
+
+[OpenEnv](https://github.com/openenv/OpenEnv) is the environment spec and runtime that TRL and other trainers use for agentic rl. i've been contributing since november 2025, mostly with ben burtenshaw, and these are the parts i built.
+
+## the runtime
+
+- **environment layout.** the standard directory structure every env follows: `pyproject.toml` + uv, an `openenv.yaml` manifest, and cli build and serve.
+- **typed api.** moved the models to pydantic and added parameterized `reset` / `step` with json-schema endpoints.
+- **concurrency.** i proposed it in an issue and then built it: environments are passed as factories, each websocket connection gets its own session, and capacity limits let many rollouts share one container.
+- **mcp fixes.** made http and websocket sessions keep the same mcp client lifecycle, and fixed action deserialization for mcp tools.
+- **validation that proves isolation.** "no network" and "public" are measured, not assumed. the subject is probed through a pinned, unprivileged helper, and a denial we couldn't prove counts as a skip, not a pass.
+
+## environments and design
+
+- **rfc 006: agentic rl through harness interception.** how to get token-faithful traces (prompt ids, response ids, loss mask, logprobs, reward) out of black-box coding agents like claude code, opencode and pi, so trl can train on them.
+- **posttrain_env and the environment services rfc.** an environment where the agent's job is to post-train a model. it trains on hf jobs through a broker that holds the only token, under a per-rollout budget, with no network of its own. a separate grader-only job scores the result on a hidden split, so the agent never sees what it's graded on.
+
+## environments built on it
+
+- **qed math** (with sourasish and shopno). a math-proof environment, our round-one entry in the openenv hackathon and later merged into openenv itself: mcp tools, an llm-judge rubric that scores proofs 0–7, `math_verify` answer checks, and reward shaping that follows [qed-nano](https://github.com/CMU-AIRe/QED-Nano). the lesson that stuck: if the reward is even slightly off, the agent finds the shortcut first.
+- **mario.** my first openenv environment, from october 2025: an openenv wrapper around super mario bros with frame stacking, rich ram features (enemies, obstacles, powerups) and three action sets. i trained two kinds of agent on it: a cnn ppo agent from pixels across 16+ parallel environments, and an llm agent trained with grpo.

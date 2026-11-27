@@ -1,0 +1,13 @@
+---
+title: 'rlm-harness'
+description: 'a coding harness that teaches a small model to treat recursion as a tool'
+date: '2026-05-14'
+featured: false
+links:
+  - label: 'github'
+    href: 'https://github.com/rycerzes/rlm-harness'
+---
+
+an experimental recursive language model harness. the agent has the usual file and shell tools plus one more, `sub_agent()`, which spawns a child agent with a fresh context window and the same tools, up to a depth limit.
+
+the goal is to train a small model to decompose work by calling `sub_agent()` the way a programmer calls a function. the harness works with any openai-compatible api and collects the recursive trajectories for sft, with grpo as the next step.

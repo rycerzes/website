@@ -1,0 +1,11 @@
+---
+title: 'agent memory'
+description: 'hybrid vector and graph memory for ai agents'
+date: '2025-08-01'
+featured: false
+links:
+  - label: 'github'
+    href: 'https://github.com/rycerzes/agent-memory'
+---
+
+a memory layer for agents that queries a vector store (chromadb) and a knowledge graph (neo4j) in parallel and merges the results. it handles semantic, episodic and procedural memory. an llm decides whether new information adds to, updates or contradicts what's stored, and every change is logged in postgres so the history can be audited.

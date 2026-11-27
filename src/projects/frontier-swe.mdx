@@ -1,0 +1,31 @@
+---
+title: 'frontier swe'
+description: 'a long-horizon swe environment, and a lora trained on its trajectories'
+date: '2026-05-06'
+tag: 'hackathon'
+featured: true
+links:
+  - label: 'github'
+    href: 'https://github.com/3xcaffeine/frontier-swe-openenv'
+  - label: 'model'
+    href: 'https://huggingface.co/rycerzes/fswe-hcapo-pg-01-qwen36-27b'
+  - label: 'blog'
+    href: '/blog/frontier-swe-openenv'
+---
+
+our round-two entry for the openenv hackathon, built with sourasish and shopno. round one was qed math, where we learned how fast an agent finds a shortcut in a misaligned reward. so for round two we wanted a domain where shortcuts are harder and competence has to be real: long-horizon software engineering, adapted from proximal labs' [FrontierSWE](https://frontierswe.com).
+
+## the environment
+
+each episode is a sandbox with a pinned repo snapshot, an issue-style task, and the same tools a coding agent actually uses: `read`, `bash`, `edit`, `write`. we wired it to the pi coding harness, so every step is a structured tool call with its input, output, diff and error status logged. that let us replay trajectories and ask why a run failed, not just whether it did.
+
+scoring is layered, because one pass/fail bit says nothing over a 45 to 90 minute episode:
+
+- **hard gates:** the patch applies cleanly, the task's tests pass, nothing unrelated breaks
+- **shaping:** credit for reducing failing tests, small penalties for no-op calls and broad destructive edits
+
+the failure modes we kept seeing were hardcoding a test's expected value, sweeping find-and-replace edits, thrashing through shell commands without a plan, and submitting at the first green signal.
+
+## training
+
+episodes that long make online rl too slow and noisy, so we went offline. i built the pipeline: collect trajectories, backfill rewards, compute hindsight per-step scores, build an hcapo-style dataset, fine-tune. the first run was 20 episodes of qwen3.6-27b served with sglang on 2×a100, then a lora (trl + unsloth) on the result, tracked in trackio. the trajectories, dataset and model are on hugging face.

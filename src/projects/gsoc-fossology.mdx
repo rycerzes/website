@@ -1,0 +1,21 @@
+---
+title: 'gsoc @ fossology'
+description: 'license identification for nirjas and atarashi, and benchmarks that caught a leaked threshold'
+date: '2026-09-29'
+featured: false
+links:
+  - label: 'blog'
+    href: '/blog/gsoc-fossology-license-identification'
+  - label: 'dataset pipeline'
+    href: 'https://github.com/rycerzes/minerva-dataset-pipeline'
+  - label: 'nirjas gate'
+    href: 'https://huggingface.co/rycerzes/nirjas-gate'
+---
+
+google summer of code 2026 with fossology, 350 hours across two of its tools: nirjas, which pulls comments out of source files, and atarashi, which says which license a piece of text is.
+
+- **nirjas.** moved comment extraction for 25 languages from regex to tree-sitter, and trained a recall-first model2vec gate that decides whether a comment is license-related, chosen from 15 candidate models.
+- **atarashi.** an spdx-first matcher with a gradient-boosted ranker and calibrated abstention, so every answer comes with the text span that proves it.
+- **evaluation.** the original test split was circular: most test fragments were substrings of their own references. i built independent sets from debian, spdx tags and software heritage. they surfaced the defects that moved dep-5 precision from 0.652 to 0.885, and a threshold that had leaked from the test set, which turned an apparent win over scancode into a tie.
+
+the training data comes from the minerva pipeline, which merges scancode and fossology license texts, augments them into fragments and adds hard negatives. the full story is in the blog post.

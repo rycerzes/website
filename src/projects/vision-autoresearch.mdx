@@ -1,0 +1,13 @@
+---
+title: 'vision autoresearch'
+description: 'agents that run one-change experiments on vision finetunes and keep what wins'
+date: '2026-06-15'
+featured: false
+links:
+  - label: 'github'
+    href: 'https://github.com/rycerzes/vision-autoresearch'
+---
+
+an autonomous experiment loop for vision finetuning, adapted from ben burtenshaw's [multiautoresearch](https://github.com/burtenshaw/multiautoresearch).
+
+agents propose a hypothesis, change one config knob, run the finetune, and promote the result only when the metric beats the current best. one change per run keeps every result attributable. it covers classification (vit on food101), detection (d-fine on cppe-5) and segmentation (sam 2.1), and runs on a local gpu or on hf jobs.
