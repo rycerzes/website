@@ -5,6 +5,8 @@ excerpt: 'one overridden loss in trl turns qwen3.5-4b into a decision model that
 tags: ['trl', 'transformers', 'decision-models', 'post-training', 'qwen', 'open-source']
 ---
 
+<script lang="ts">import Figure from '$lib/components/figures/Figure.svelte';</script>
+
 _The recipe: [huggingface/trl#7784](https://github.com/huggingface/trl/pull/7784), in `examples/sft_decision_model`. Model: [rycerzes/Qwen3.5-4B-Decision](https://huggingface.co/rycerzes/Qwen3.5-4B-Decision). Training curves: [trackio dashboard](https://huggingface.co/spaces/rycerzes/sft-decision-model-4b-trackio)._
 
 > [!TLDR]
@@ -109,18 +111,28 @@ The training data is 40k questions from [tasksource/tasksource-jev-typed-decisio
 
 LoRA (r=16) on every linear layer of the text model, one epoch, then the adapter is merged so the output directory loads like any other model. On one L4: 961 steps of 32 questions, 6.8 s/step, 10.6 GB peak, 108 minutes. The training loss goes from 0.98 to 0.59.
 
-![Training curves](https://huggingface.co/datasets/trl-lib/documentation-images/resolve/main/sft_decision_model_metrics.png)
+<Figure
+	height={468}
+	caption="Training loss, accuracy and Brier score on the training batches, logged every 25 steps (each point is the mean over those steps' batches of 32 questions). Hover, or move the slider, to read the values at a step."
+	load={() => import('$lib/components/figures/DecisionTrainingCurves.svelte')}
+/>
 
 Qwen3.5 has a catch. Training it needs the `flash-linear-attention` and `causal-conv1d` kernels for its linear attention layers. Without `causal-conv1d`, padding-free batches raise an error, because the reference implementation can't keep the packed prompts apart.
 
 ## results
 
-Evaluation goes through a running `transformers serve`, the way the model would actually be used. There are two held-out sets: the test split of [LocalLLaMA/typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) (400 states, 5 questions each, soft gold from 3 annotators) and [JevBench](https://huggingface.co/datasets/JevBench/jevbench) (240 states, 8–12 questions each, leaving out the 302 questions whose gold is `unknown`). None of their 640 states is in the training data, and none shares a 13-word sequence with it.
+The model is evaluated on two held-out sets: the test split of [LocalLLaMA/typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) (400 states, 5 questions each, soft gold from 3 annotators) and [JevBench](https://huggingface.co/datasets/JevBench/jevbench) (240 states, 8–12 questions each, leaving out the 302 questions whose gold is `unknown`). None of their 640 states is in the training data, and none shares a 13-word sequence with it.
 
 |                | typed-decisions accuracy | Brier     | JevBench accuracy | Brier     |
 | -------------- | ------------------------ | --------- | ----------------- | --------- |
 | Qwen3.5-4B     | 56.0%                    | 0.331     | 87.4%             | 0.184     |
 | after training | **67.3%**                | **0.137** | **89.1%**         | **0.141** |
+
+<Figure
+	height={360}
+	caption="Accuracy before (square) and after (circle) training, overall and by question type. The number is the gain in points."
+	load={() => import('$lib/components/figures/DecisionResults.svelte')}
+/>
 
 By question type, `score` gains the most on typed-decisions (44.9% → 61.4%). It is still the weakest type on JevBench (40.8% → 42.9%). On JevBench the base model already gets most `noul` and `choice` questions right, so the gain there is mostly calibration: Brier drops 23%, against 59% on typed-decisions.
 
