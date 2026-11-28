@@ -1,7 +1,7 @@
 ---
-title: 'training a decision model with an sfttrainer subclass'
+title: 'training a decision model by sft on an llm'
 date: '28-11-2026'
-excerpt: 'one overridden loss turns qwen3.5-4b into a decision model that transformers serve runs as is, and what changed under it on the way to approval in trl'
+excerpt: 'one overridden loss in trl turns qwen3.5-4b into a decision model that transformers serve runs as is'
 tags: ['trl', 'transformers', 'decision-models', 'post-training', 'qwen', 'open-source']
 ---
 
@@ -12,25 +12,53 @@ _The recipe: [huggingface/trl#7784](https://github.com/huggingface/trl/pull/7784
 > - Qwen3.5-4B goes from **56.0% to 67.3%** accuracy on typed-decisions (Brier **0.331 → 0.137**), and from 87.4% to 89.1% on JevBench.
 > - One epoch of LoRA, **108 minutes on one L4**, 10.6 GB peak.
 > - The trainer is stock TRL `SFTTrainer` with one overridden `compute_loss`. The trained model is served by `transformers serve` with no extra code.
-> - Approved by Quentin Gallouédec and Sergio Paniego, waiting to be merged.
 
 ## what a decision model is
 
-Aritra's [Decision Models in Hugging Face](https://huggingface.co/blog/decision) post explains them properly. The short version: you give the model a state (a support ticket, an agent trace, an invoice) and a set of typed questions about it, and it answers each one with a probability per option, in one forward pass and with no generation. There are three types:
+Aritra's [Decision Models in Hugging Face](https://huggingface.co/blog/decision) post explains them properly. The short version: you give the model a state (a support ticket, an agent trace, an invoice) and a set of typed questions about it, and it answers each one with a probability per option, in one forward pass and with no generation. There are three question types:
 
 - `noul`: yes or no.
 - `choice`: pick one of a few named options.
 - `score`: an ordinal scale, like "can wait / this week / today / right now".
 
-`transformers serve` already answers these with any chat model on its `/v1/systemone` endpoint. It writes the question into the prompt with one label per option (`Yes`/`No`, or `A`, `B`, `C`, ...), and reads the next-token logits of those labels at the end of the prompt. A softmax over them gives the option probabilities.
+## how a decision model is made
 
-So a base chat model is already a decision model. It's just not a very good one: Qwen3.5-4B gets 56.0% on typed-decisions. The question was whether you could train it on exactly the position the endpoint reads, and serve the result without touching the server.
+Every decision model has the same outline: a backbone reads the state and the questions once, something turns that into one logit per option, and a softmax over a question's options gives its probabilities. What differs is the part in the middle, the thing that scores the options. The models on the Hub, and the ones being added to transformers, fall into a handful of families:
 
-## from an issue to an example
+```mermaid
+flowchart LR
+    S["state + typed questions"] --> P["prompt<br/><i>one per request</i>"]
+    P --> B["backbone<br/><i>one forward pass</i>"]
+    B --> A["A. no head<br/><i>lm-head logits of the option labels</i>"]
+    B --> R["B. linear readout<br/><i>on the hidden state where the answer is read</i>"]
+    B --> C["C. pointer / candidate head<br/><i>scores an embedding per option</i>"]
+    B --> D["D. encoder<br/><i>bidirectional, cross-encoder or span-style</i>"]
+    B --> E["E. contrastive<br/><i>state and options embedded apart</i>"]
+    A --> O["one logit per option"]
+    R --> O
+    C --> O
+    D --> O
+    E --> O
+    O --> X["softmax → probabilities"]
 
-I first opened [trl#7623](https://github.com/huggingface/trl/issues/7623) asking for `SFTTrainer` primitives for this. Quentin replied that most of it was already reachable on main: `remove_unused_columns=False`, your own collator, and an overridden `compute_loss`, in what he estimated as a ~40-line subclass. He suggested adding the recipe to `examples/`. That became [#7784](https://github.com/huggingface/trl/pull/7784).
+    style A fill:#323c3f,stroke:#a6e3a1,color:#cdd6f4
+    style B fill:#181825,stroke:#585b70,color:#cdd6f4
+    style X fill:#2e354d,stroke:#89b4fa,color:#cdd6f4
+```
 
-He was right. Everything the recipe needs is already in TRL. The work is in getting a few settings right and writing one loss.
+| family                      | how the options are scored                                                                   | examples                        |
+| --------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------- |
+| A. no head                  | the language model's own next-token logits for each option's label (`Yes`, `A`, `B`, ...)    | JevK5, LiquidAI d1-3B           |
+| B. linear readout           | a small trained projection on the hidden state, often initialised from rows of the `lm_head` | pplx-decider, vllm-sr d3, `Jev` |
+| C. pointer / candidate head | a head that compares the state against a representation of each option                       | Kev, Clef, Jeva                 |
+| D. encoder                  | a bidirectional encoder over the state and options                                           | Von, d1-omni                    |
+| E. contrastive              | state and options embedded separately, scored by similarity                                  | CLM                             |
+
+[multimodalart's decision index](https://huggingface.co/spaces/multimodalart/jev-decision-index) tracks most of them. Almost all of the families train on the same core objective: a cross-entropy against a soft target over each question's option logits, sometimes with an extra term (Brier, a ranked probability score for `score` questions, label smoothing). The contrastive family is the exception, since it needs negatives from the rest of the batch.
+
+Family A is the one this post is about. It needs no new weights: `transformers serve` already answers decision questions with any chat model on its `/v1/systemone` endpoint. It writes the question into the prompt with one label per option, and reads the next-token logits of those labels at the end of the prompt.
+
+So a base chat model is already a decision model. It's just not a very good one: Qwen3.5-4B gets 56.0% on typed-decisions. The idea is to train it at exactly the position the endpoint reads, so that the result is served without touching the server.
 
 ## the loss
 
@@ -62,8 +90,7 @@ The rest of the recipe is these settings:
 - **`remove_unused_columns=False`** and a collator built on `DataCollatorForLanguageModeling`. Without them, `label_ids` and `target` never reach `compute_loss`.
 - **Padding-free batches with `logits_to_keep`.** The prompts of a batch are packed into one sequence, and `logits_to_keep` is set to the last token of each prompt (from `cu_seq_lens_q`). Qwen3.5's vocabulary has 248k tokens, so computing logits only where the answer is read saves a lot of memory.
 - **`skip_prepare_dataset=True`.** The default preparation truncates prompts at `max_length`, which would cut off the very token the answer is read at. The script tokenizes and drops prompts over 512 tokens itself.
-
-And one more: **`loss_is_scaled_for_ga = False`**. A subclass that returns a per-batch mean has to set it, or the loss is summed across gradient-accumulation steps instead of averaged.
+- **`loss_is_scaled_for_ga = False`.** A subclass that returns a per-batch mean has to set it, or the loss is summed across gradient-accumulation steps instead of averaged.
 
 The prompts come from `transformers.decision`, the same code the endpoint uses:
 
@@ -88,7 +115,7 @@ Qwen3.5 has a catch. Training it needs the `flash-linear-attention` and `causal-
 
 ## results
 
-Evaluation goes through a running `transformers serve`, the way the model would actually be used. There are two held-out sets: the test split of [LocalLLaMA/typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) (400 states, 5 questions each, soft gold from 3 annotators) and [JevBench](https://huggingface.co/datasets/JevBench/jevbench) (240 states, 8–12 questions each). None of their 640 states is in the training data, and none shares a 13-word sequence with it.
+Evaluation goes through a running `transformers serve`, the way the model would actually be used. There are two held-out sets: the test split of [LocalLLaMA/typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) (400 states, 5 questions each, soft gold from 3 annotators) and [JevBench](https://huggingface.co/datasets/JevBench/jevbench) (240 states, 8–12 questions each, leaving out the 302 questions whose gold is `unknown`). None of their 640 states is in the training data, and none shares a 13-word sequence with it.
 
 |                | typed-decisions accuracy | Brier     | JevBench accuracy | Brier     |
 | -------------- | ------------------------ | --------- | ----------------- | --------- |
@@ -114,24 +141,16 @@ curl http://localhost:8000/v1/systemone -H "Content-Type: application/json" -d '
 
 (the full request and response are in the README, in the [PR's files](https://github.com/huggingface/trl/pull/7784/files))
 
-## what went wrong on the way
-
-**My JevBench numbers were wrong.** In his first review, Quentin pointed out that 302 of JevBench's 2,240 questions have `unknown` as their gold. That isn't one of their options, so they were being scored against an all-zero target and still counted. I hadn't looked at the data behind the number. With them left out, the first version of the recipe (Qwen3.5-2B) scored 86.6% on JevBench, not the 77.2% I had posted, and the base model 82.7%, not 73.1%. Every JevBench number since leaves those 302 out.
-
-**The recipe changed models.** The first version trained Qwen3.5-2B on my laptop GPU. With those review fixes I moved it to Qwen3.5-4B, which still fits on one L4 and is the size the README describes.
-
-**The API moved under the PR.** The first version built its prompts with helpers imported from `transformers serve`'s System One code. While the PR waited, the decision support in transformers was reworked and those helpers were removed. Sergio asked me to align the example with the new `transformers.decision` before merge. The prompt builder was renamed once more before it shipped in transformers 5.23, as `DecisionConfig.prepare_inputs`.
-
-Each time, the check I ran was whether the new code produces the same prompts. On transformers 5.24, 39,999 of the 40,000 training prompts are token-identical to the ones the model was trained on. The one that differs has a literal `<|endoftext|>` in its state. I re-ran both evaluations of the published model through `transformers serve` 5.24 (on a different GPU than the L4) and got 67.2% / 0.138 and 89.2% / 0.141, within 0.1 point of the README. So there was no need to retrain.
-
-**Building the prompts got slow.** With Qwen3.5's tokenizer, `prepare_inputs` takes about 130 ms per prompt in transformers 5.23 and 5.24. The recipe tokenizes with 8 processes to work around it, and I opened [transformers#51156](https://github.com/huggingface/transformers/pull/51156) to stop the vocabulary from being rebuilt on every request.
-
 ## things that didn't make it in
 
 With the same data and settings, I tried a temperature per question type, a ranked probability score for the ordinal `score` questions, and shuffling the option order. I compared them with a paired bootstrap over the same eval questions. None of them changed accuracy. The Brier gains were small and on typed-decisions only (at most −0.013 for the 4B model, and nothing on JevBench). So the recipe keeps the plain cross-entropy. The table is in the PR description.
 
-## status
+## references
 
-Quentin approved the PR on 20 October. After the `transformers.decision` switch, Sergio checked it against transformers 5.24.1 and approved it on 27 November. It is waiting to be merged. When Kashif pointed to his draft experimental `DecisionTrainer` ([trl#8040](https://github.com/huggingface/trl/pull/8040)), which trains models with a dedicated decision head, Quentin asked to keep this one as an example, and said #8040 can build on it once the native models land.
-
-Thanks to Quentin, Sergio and Kashif for the reviews.
+- [Decision Models in Hugging Face](https://huggingface.co/blog/decision), Aritra's introduction to decision models and the `noul` / `choice` / `score` types.
+- [huggingface/trl#7784](https://github.com/huggingface/trl/pull/7784), the recipe, and [huggingface/trl#7623](https://github.com/huggingface/trl/issues/7623), the issue it came from.
+- [huggingface/trl#8040](https://github.com/huggingface/trl/pull/8040), the experimental `DecisionTrainer` for models with a decision head.
+- [huggingface/transformers#50054](https://github.com/huggingface/transformers/pull/50054), which added `transformers.decision` and `Jev`.
+- [multimodalart/jev-decision-index](https://huggingface.co/spaces/multimodalart/jev-decision-index), an index of decision models on the Hub.
+- Data: [tasksource/tasksource-jev-typed-decisions](https://huggingface.co/datasets/tasksource/tasksource-jev-typed-decisions) (training), [LocalLLaMA/typed-decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) and [JevBench/jevbench](https://huggingface.co/datasets/JevBench/jevbench) (evaluation).
+- [rycerzes/Qwen3.5-4B-Decision](https://huggingface.co/rycerzes/Qwen3.5-4B-Decision), the trained model, and its [trackio dashboard](https://huggingface.co/spaces/rycerzes/sft-decision-model-4b-trackio).
